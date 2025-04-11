@@ -4,9 +4,8 @@
 #[
   #show outline.entry.where(level: 1): it => {
     linebreak()
-    link(it.element.location(), strong(it.body))
-    h(1fr)
-    link(it.element.location(), strong(it.page))
+    link(it.element.location(), strong(it))
+//    h(1fr)
   }
   #outline(
     indent: auto,
