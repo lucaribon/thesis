@@ -35,11 +35,11 @@ Questo è legato al precedente.
 
 ### Supporto PDF/A
 
-È possibile ottenere un PDF/A con il comando:
+È possibile ottenere un PDF/A con il comando
 ```
 typst c thesis.typ --pdf-standard a-3b
 ```
-Tutte le versioni di PDF/A disponibili sono consultabili [sulle docs di Typst](https://typst.app/docs/reference/pdf/)
+Tutte le versioni di PDF/A disponibili sono consultabili [sulle docs di Typst](https://typst.app/docs/reference/pdf/).
 Per controllare il risultato invece esistono validatori come ad esempio [pdfforge](https://www.pdfforge.org/online/it/convalida-pdfa).
 
 ## Utilizzo
