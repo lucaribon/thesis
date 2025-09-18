@@ -11,7 +11,7 @@ Il template e stato realizzato con [Typst](https://typst.app/) e ispirandosi al 
 - [x] Gestione "Capitolo x - Titolo capitolo"
 - [x] Capitoli su pagina dispari
 - [ ] Supporto alla stampa
-- [ ] Supporto PDF/A
+- [x] Supporto PDF/A
 
 ### Aggiungere glossario
 
@@ -35,9 +35,12 @@ Questo è legato al precedente.
 
 ### Supporto PDF/A
 
-Non è ancora stato integrato in Typst.
-
-Per aggirare il problema è possibile utilizzare un tool di conversione, ad esempio quello di [iLovePDF](https://www.ilovepdf.com/it/pdf-in-pdfa). Per controllare il risultato invece esistono validatori come ad esempio [pdfforge](https://www.pdfforge.org/online/it/convalida-pdfa).
+È possibile ottenere un PDF/A con il comando
+```
+typst c thesis.typ --pdf-standard a-3b
+```
+Tutte le versioni di PDF/A disponibili sono consultabili [sulle docs di Typst](https://typst.app/docs/reference/pdf/).
+Per controllare il risultato invece esistono validatori come ad esempio [pdfforge](https://www.pdfforge.org/online/it/convalida-pdfa).
 
 ## Utilizzo
 
