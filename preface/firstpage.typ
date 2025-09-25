@@ -28,16 +28,11 @@
         #v(40pt)
 
         // Relatore e laureando
-        #align(left, text(12pt, weight: 400, style: "italic", supervisor))
+        #text(12pt, weight: 400, style: "italic", supervisor) #h(1fr) #text(12pt, weight: 400, style: "italic", undergraduate)
         #v(5pt)
-        #align(left, text(11pt, profTitle + myProf))
-
-        #align(right, text(12pt, weight: 400, style: "italic", undergraduate))
-        #v(5pt)
-        #align(right, text(11pt, myName))
-        #v(5pt)
+        #text(11pt, profTitle + myProf) #h(1fr) #text(11pt, myName)
         #align(right, text(11pt, [_ #ID _ ] + myMatricola))
-        #v(30pt)
+        #v(90pt)
     ],
     // Piè di pagina
     [

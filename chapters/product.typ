@@ -1,7 +1,7 @@
 #pagebreak(to:"odd")
 
-= Progettazione e codifica
-<cap:progettazione-codifica>
+= Descrizione del lavoro svolto
+<cap:descrizione-lavoro-svolto>
 
 #v(1em)
 #text(style: "italic", [
@@ -10,6 +10,7 @@
 
 #v(1em)
 
+// Non so se i seguenti capitoli siano gisti da mettere qui:
 == Tecnologie e strumenti
 <sec:tecnologie-strumenti>
 

@@ -1,7 +1,7 @@
 #pagebreak(to:"odd")
 
-= Verifica e validazione
-<cap:verifica-validazione>
+= Introduzione teorica
+<cap:introduzione-teorica>
 
 #v(1em)
 #text(style: "italic", [
