@@ -14,11 +14,11 @@
 
 #linebreak()
 
-#text(style: "italic", "Desidero ringraziare con affetto i miei genitori per il sostegno, il grande aiuto e per essermi stati vicini in ogni momento durante gli anni di studio.")
+#text(style: "italic", "Desidero ringraziare con affetto la mia famiglia per il sostegno, il grande aiuto e per essermi stati vicini in ogni momento durante gli anni di studio.")
 
 #linebreak()
 
-#text(style: "italic", "Ci tengo a ringraziare poi i miei amici per ....")
+#text(style: "italic", "Infine tengo a ringraziare tutti i miei amici per aver contribuito a rendere memorabile ogni momento passato assieme, che fosse di svago o produttivo.")
 
 #v(2em)
 

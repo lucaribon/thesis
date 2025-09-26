@@ -9,7 +9,7 @@
 #let myFaculty = "Corso di Laurea in Informatica"
 #let profTitle = "Prof. "
 #let myProf = "Marco Zanella"
-#let myCompany = "KanbanBOX"
+#let myCompany = "KanbanBOX S.r.l."
 #let myTutor = "Nome Cognome"
 #let myLocation = "Padova"
 #let myAA = "2025-2026"

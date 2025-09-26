@@ -28,11 +28,12 @@
         #v(40pt)
 
         // Relatore e laureando
+        #v(20pt)
         #text(12pt, weight: 400, style: "italic", supervisor) #h(1fr) #text(12pt, weight: 400, style: "italic", undergraduate)
         #v(5pt)
         #text(11pt, profTitle + myProf) #h(1fr) #text(11pt, myName)
         #align(right, text(11pt, [_ #ID _ ] + myMatricola))
-        #v(90pt)
+        #v(60pt)
     ],
     // Piè di pagina
     [
