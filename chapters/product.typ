@@ -2,6 +2,7 @@
 
 = Descrizione del lavoro svolto
 <cap:descrizione-lavoro-svolto>
+// TODO: capitoli di sicuro da sistemare (aggiungere/togliere/cambiare capitoli) 
 // contenuti e lunghezza molto variabili in base all'argomento scelto, indicativamente tra le 20 e le 40 pagine (comprensive di tabelle e immagini), distribuite tra 1-3 capitoli
 
 // in particolare le problematiche riscontrate e le soluzioni adottate
