@@ -2,7 +2,8 @@
 //#pagebreak(to:"odd")
 #import "../utils.typ" : *
 
-= Introduzione // 2 pagine 
+= Introduzione // 2 pagine
+<cap:introduzione> 
 Introduzione al contesto applicativo.
 
 // TODO: aggiungere riferimenti a:
@@ -14,12 +15,14 @@ Al momento glossario e citazioni devo ancora capirli.
 
 == Organizzazione del testo
 
+Il documento è strutturato in sei capitoli principali:
 #set par(first-line-indent: 0pt)
-/ #link(<cap:descrizione-stage>)[Il secondo capitolo]: descrive.
-/ #link(<cap:analisi-requisiti>)[Il terzo capitolo]: descrive.
-/ #link(<cap:introduzione-teorica>)[Il quarto capitolo]: descrive.
-/ #link(<cap:descrizione-lavoro-svolto>)[Il quinto capitolo]: descrive.
-/ #link(<cap:conclusioni>)[Il sesto capitolo]: descrive.
++ #link(<cap:introduzione>)[*Introduzione*]: descrive.
++ #link(<cap:descrizione-stage>)[*Descrizione dello stage*]: descrive.
++ #link(<cap:analisi-requisiti>)[*Analisi dei requisiti*]: descrive.
++ #link(<cap:introduzione-teorica>)[*Introduzione teorica*]: descrive.
++ #link(<cap:descrizione-lavoro-svolto>)[*Descrizione del lavoro svolto*]: descrive.
++ #link(<cap:conclusioni>)[*Conclusioni*]: descrive.
 
 Riguardo la stesura del testo, relativamente al documento sono state adottate le seguenti convenzioni tipografiche:
 

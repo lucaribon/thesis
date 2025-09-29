@@ -85,7 +85,7 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
         columns: (auto, auto, auto),
         align: (center, left, center),
         [*Requisito*], [*Descrizione*], [*Use Case*],
-        [RVQ-1], [La libreria per l'esecuzione dei test automatici deve essere riutilizzabil], [#sym.dash],
+        [RVQ-1], [La libreria per l'esecuzione dei test automatici deve essere riutilizzabili], [#sym.dash],
     ),
     caption: "Tabella del tracciamento dei requisti funzionali",
 )
