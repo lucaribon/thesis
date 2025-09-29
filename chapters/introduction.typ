@@ -18,16 +18,15 @@ Al momento glossario e citazioni devo ancora capirli.
 / #link(<cap:descrizione-stage>)[Il secondo capitolo]: descrive.
 / #link(<cap:analisi-requisiti>)[Il terzo capitolo]: descrive.
 / #link(<cap:introduzione-teorica>)[Il quarto capitolo]: descrive.
-/ #link(<cap:descrizione-lavoro-svolto>)[Il quint capitolo]: descrive.
+/ #link(<cap:descrizione-lavoro-svolto>)[Il quinto capitolo]: descrive.
 / #link(<cap:conclusioni>)[Il sesto capitolo]: descrive.
 
 Riguardo la stesura del testo, relativamente al documento sono state adottate le seguenti convenzioni tipografiche:
 
-- gli acronimi, le abbreviazioni e i termini ambigui o di uso non comune sono identificabili tramite #gloss[questo] e vengono definiti nel glossario, situato alla fine del presente documento;
-- per la prima occorrenza dei termini riportati nel glossario viene utilizzata la seguente nomenclatura: _parola_ (glsfirstoccur);
+- gli acronimi, le abbreviazioni e i termini ambigui o di uso non comune vengono definiti nel glossario, situato alla fine del presente documento; per la prima occorrenza dei termini riportati nel glossario viene utilizzato il seguente stile: #gloss[parola];
 - i termini in lingua straniera o facenti parti del gergo tecnico sono evidenziati con il carattere _corsivo_.
 
-La bibliografia è gestita nel file `bibliography.typ` con il nuovo formato Hayagriva, ma si può utilizzare il formato Bibtex. Per citare un elemento in bibliografia basta usare una semplice citazione `@citazione`, ad esempio per citare *il miglior libro di sempre* @p1 basta usare `@p1`.
+// La bibliografia è gestita nel file `bibliography.typ` con il nuovo formato Hayagriva, ma si può utilizzare il formato Bibtex. Per citare un elemento in bibliografia basta usare una semplice citazione `@citazione`, ad esempio per citare *il miglior libro di sempre* @p1 basta usare `@p1`.
 
 == L'azienda
 

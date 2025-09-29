@@ -1,7 +1,14 @@
-#let gloss(body) = {
-  link("https://codehex16.github.io/glossario#" + toIdCase(body.text))[#text(
-    blue,
-    size: 12pt,
-    font: "Noto Sans",
-  )[#underline[#body]\*]]
-}
+#pagebreak(to: "odd")
+
+#set page(numbering: "1")
+#set align(left)
+#set heading(numbering: none)
+#show heading: it => [
+  #it
+]
+
+= Glossario
+
+//GLOSSARIO
+== P
+=== Parola

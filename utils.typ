@@ -1,5 +1,6 @@
 #let gloss(body) = {
-  link("https://codehex16.github.io/glossario#")[#text(
+  //TODO: link che punta ad ancora nel glossario
+  link("")[#text(
     blue,
-  )[#underline[#body]\*]]
+  )[#underline[#body]#sub[\G]]]
 }
