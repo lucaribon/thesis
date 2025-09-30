@@ -1,5 +1,6 @@
 #pagebreak(to:"odd")
 
+#set par(justify: false)
 = Descrizione del lavoro svolto
 <cap:descrizione-lavoro-svolto>
 // TODO: capitoli di sicuro da sistemare (aggiungere/togliere/cambiare capitoli) 

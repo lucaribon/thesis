@@ -1,5 +1,6 @@
 #import "../config/constants.typ": figuresList, tablesList
 #set page(numbering: "i")
+#show link: it => it.body
 
 #[
   #show outline.entry.where(level: 1): it => {

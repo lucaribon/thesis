@@ -19,9 +19,10 @@
     [
         // Logo
         #align(center, image(logo, width: 50%))
-        #v(30pt)
+        #v(40pt)
 
         // Titolo
+        #set par(justify: false)
         #align(center, text(18pt, hyphenate: false, weight: "semibold", myTitle))
         #v(10pt)
         #align(center, text(12pt, weight: "light", style: "italic", myDegree))
@@ -29,6 +30,7 @@
 
         // Relatore e laureando
         #v(20pt)
+        #set par(first-line-indent: 0pt)
         #text(12pt, weight: 400, style: "italic", supervisor) #h(1fr) #text(12pt, weight: 400, style: "italic", undergraduate)
         #v(5pt)
         #text(11pt, profTitle + myProf) #h(1fr) #text(11pt, myName)

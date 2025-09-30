@@ -1,17 +1,14 @@
 // Non su primo capitolo
 //#pagebreak(to:"odd")
-#import "../utils.typ" : *
+#import "../config/thesis-config.typ" : gloss
 
 = Introduzione // 2 pagine
 <cap:introduzione> 
-Introduzione al contesto applicativo.
 
 // TODO: aggiungere riferimenti a:
 // Termine nel glossario
 // Citazione in linea
 // Citazione nel pie' di pagina
-
-Al momento glossario e citazioni devo ancora capirli.
 
 == Organizzazione del testo
 
