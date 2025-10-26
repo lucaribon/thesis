@@ -9,5 +9,5 @@
 
 #v(2em)
 #set par(first-line-indent: 0pt)
-Il presente documento descrive il lavoro svolto durante il periodo di stage, della durata di circa ??? ore, dal laureando #text(myName) presso l'azienda #text(myCompany)
+Il presente documento descrive il lavoro svolto durante il periodo di stage, della durata di circa 320 ore, dal laureando #text(myName) presso l'azienda #text(myCompany)
 #v(1fr)

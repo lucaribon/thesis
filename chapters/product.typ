@@ -15,7 +15,7 @@
 
 #v(1em)
 
-// Non so se i seguenti capitoli siano gisti da mettere qui:
+// Non so se i seguenti capitoli siano giusti da mettere qui:
 // == Tecnologie e strumenti
 // <sec:tecnologie-strumenti>
 

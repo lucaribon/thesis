@@ -30,7 +30,7 @@ Riguardo la stesura del testo, relativamente al documento sono state adottate le
 
 == L'azienda
 
-Descrizione dell'azienda.
+// TODO
 
 == Il progetto
 
