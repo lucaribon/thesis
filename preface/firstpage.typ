@@ -18,8 +18,9 @@
     // Corpo
     [
         // Logo
-        #align(center, image(logo, width: 50%))
-        #v(40pt)
+        #v(110pt)
+        #align(center, image(logo, width: 40%))
+        #v(30pt)
 
         // Titolo
         #set par(justify: false)
@@ -29,7 +30,6 @@
         #v(40pt)
 
         // Relatore e laureando
-        #v(20pt)
         #set par(first-line-indent: 0pt)
         #text(12pt, weight: 400, style: "italic", supervisor) #h(1fr) #text(12pt, weight: 400, style: "italic", undergraduate)
         #v(5pt)
