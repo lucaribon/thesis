@@ -21,7 +21,7 @@ Il documento è strutturato in sei capitoli principali:
 + #link(<cap:descrizione-lavoro-svolto>)[*Descrizione del lavoro svolto*]: descrive.
 + #link(<cap:conclusioni>)[*Conclusioni*]: descrive.
 
-Riguardo la stesura del testo, relativamente al documento sono state adottate le seguenti convenzioni tipografiche:
+Riguardo la stesura del testo, sono state adottate le seguenti convenzioni tipografiche:
 
 - gli acronimi, le abbreviazioni e i termini ambigui o di uso non comune vengono definiti nel glossario, situato alla fine del presente documento; per la prima occorrenza dei termini riportati nel glossario viene utilizzato il seguente stile: #gloss[parola];
 - i termini in lingua straniera o facenti parti del gergo tecnico sono evidenziati con il carattere _corsivo_.
@@ -29,8 +29,12 @@ Riguardo la stesura del testo, relativamente al documento sono state adottate le
 // La bibliografia è gestita nel file `bibliography.typ` con il nuovo formato Hayagriva, ma si può utilizzare il formato Bibtex. Per citare un elemento in bibliografia basta usare una semplice citazione `@citazione`, ad esempio per citare *il miglior libro di sempre* @p1 basta usare `@p1`.
 
 == L'azienda
-
 // TODO
+KanbanBOX S.r.l. è un'azienda con sede a Vicenza che si occupa dello sviluppo, della commercializzazione e della consulenza relativi alla piattaforma web KanbanBOX.
+
+KanbanBOX è uno strumento progettato per supportare le aziende nell'implementazione di metodologie Lean nella gestione della produzione e della logistica delle aziende.
+Più nello specifico, la piattaforma consente di tracciare e gestire lo stato dei materiali grezzi, semilavorati e finiti, durante le fasi di approvvigionamento e produzione.
+Ciò è reso possibile attraverso l'utilizzo di cartellini Kanban elettronici, che possono essere letti tramite uno scanner di codici a barre o un lettore RFID, permettendo di identificare e tracciare i prodotti man mano che vengono consumati o resi disponibili dai processi aziendali.
 
 == Il progetto
 
