@@ -29,13 +29,23 @@ Riguardo la stesura del testo, sono state adottate le seguenti convenzioni tipog
 // La bibliografia è gestita nel file `bibliography.typ` con il nuovo formato Hayagriva, ma si può utilizzare il formato Bibtex. Per citare un elemento in bibliografia basta usare una semplice citazione `@citazione`, ad esempio per citare *il miglior libro di sempre* @p1 basta usare `@p1`.
 
 == L'azienda
-// TODO
 KanbanBOX S.r.l. è un'azienda con sede a Vicenza che si occupa dello sviluppo, della commercializzazione e della consulenza relativi alla piattaforma web KanbanBOX.
 
-KanbanBOX è uno strumento progettato per supportare le aziende nell'implementazione di metodologie Lean nella gestione della produzione e della logistica delle aziende.
+KanbanBOX è uno strumento progettato per supportare le aziende nell'implementazione di metodologie Lean nella gestione della produzione e della logistica delle aziende.\
 Più nello specifico, la piattaforma consente di tracciare e gestire lo stato dei materiali grezzi, semilavorati e finiti, durante le fasi di approvvigionamento e produzione.
-Ciò è reso possibile attraverso l'utilizzo di cartellini Kanban elettronici, che possono essere letti tramite uno scanner di codici a barre o un lettore RFID, permettendo di identificare e tracciare i prodotti man mano che vengono consumati o resi disponibili dai processi aziendali.
+Ciò è reso possibile attraverso l'utilizzo di cartellini Kanban elettronici, che permettono di identificare e tracciare i prodotti man mano che vengono consumati o resi disponibili dai processi aziendali.
 
 == Il progetto
+// Introduzione allo scopo dello stage e la motivazione per cui l'avete scelto (il vostro interesse per la materia o l'argomento trattato, ecc.).
+KanbanBOX prevede due metodi di lettura dei cartellini Kanban:
+- scansione di *codici a barre*: per ogni cartellino vengono stampata un'etichetta su cui sono presenti dei codici a barre che possono essere scansionati tramite appositi lettori ottici o tramite la fotocamera di comuni dispositivi mobili; 
+- lettura di chip *RFID*: per ogni cartellino viene stampata un'etichetta RFID, ovvero un'etichetta dotata di un chip che può essere letto da apposite antenne RFID.
 
-Introduzione allo scopo dello stage e la motivazione per cui l'avete scelto (il vostro interesse per la materia o l'argomento trattato, ecc.).
+In entrambi i casi le operazioni svolte sui cartellini vengono comunicate a KanbanBOX tramite delle API RESTful che sfruttano il protocollo HTTP per la trasmissione dei dati.
+In particolare, nel caso della lettura tramite RFID, il lettore RFID mette a disposizione delle API HTTP, eseguite in locale sul lettore stesso, che consentono la comunicazione con esso. \ 
+I modelli di lettori RFID utilizzati da KanbanBOX supportano anche la comunicazione tramite protocollo MQTT, un protocollo di comunicazione del livello applicativo, basato su un meccanismo _publish/subscribe_; in aggiunta i lettori implementano nativamente un metodo di connessione sicuro e pratico al servizio AWS IoT Core. \
+MQTT è particolarmente adatto per la comunicazione con dispositivi _IoT_, in quanto progettato per essere meno oneroso in termini di consumo di banda e risorse computazionali rispetto a HTTP; inoltre prevede dei meccanismi di _Quality of Service (QoS)_ e di memorizzazione dei messaggi che lo rendono più affidabile in scenari in cui la connettività di rete non è stabile.
+
+Per questi motivi il progetto di stage si è focalizzato sulla sostituzione del protocollo HTTP con MQTT per la trasmissione dei tag letti tra lettori RFID e KanbanBOX con l'obbiettivo di migliorare l'affidabilità e l'efficienza della comunicazione; inoltre è stata prevista l'implementazione di funzionalità di configurazione dei lettori direttamente all'interno di KanbanBOX, operazioni che in precedenza dovevano essere eseguite manualmente tramite l'interfaccia web fornita dal produttore del lettore.    
+
+Ho scelto questo progetto perché prometteva di approfondire e di maturare esperienza con temi e tecnologie che mi incuriosiscono, come l'Internet of Things, i protocolli di comunicazione e le infrastrutture cloud. Un altro fattore interessante è stato il contatto diretto e concreto con il prodotto su cui ho lavorato che ho potuto vedere all'opera in un contesti reali.
