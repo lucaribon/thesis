@@ -11,7 +11,7 @@ Sono stato inserito nel team sviluppatori software con il quale ho, fin da subit
 - *Dev+ weekly*: riunione settimanale del team di sviluppo a cui partecipa anche un consulente esterno, con esperienza rilevante nel mondo PHP open source, con cui si affrontano i problemi più ostici e si analizzano approfonditamente potenziali soluzioni;
 - *Analisi issue Sentry*: riunione settimanale tra tutti i membri del team in cui si analizza il report delle issue tracciate da Sentry, uno strumento di monitoraggio degli errori in produzione; l'obbiettivo dell'incontro è quello di identificare i bug più critici e frequenti e di assegnarli ai membri del team per la risoluzione.
 
-Per tutta la durata dello stage ho avuto a disposizione il supporto del mio tutor aziendale, il quale mi ha guidato nell'inserimento all'interno del team e del prodotto KanbanBOX su cui ho lavorato. \
+Per tutta la durata dello stage ho avuto a disposizione il supporto del mio tutor aziendale e del mio _buddy_, i quali mi ha guidato nell'inserimento all'interno dell'azienda, del team e del prodotto KanbanBOX su cui ho lavorato. \
 Inoltre, ho avuto modo di collaborare anche con altri membri del team per discutere con chi aveva maggiore esperienza in merito agli argomenti o alle tecnologie con cui ero meno familiare.
 
 
