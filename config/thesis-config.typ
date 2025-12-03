@@ -16,7 +16,7 @@
     set page(margin: 1.5in, numbering: myNumbering, number-align: center)
     // set par(leading: 0.55em, first-line-indent: 1.8em, justify: true)
     set par(
-        first-line-indent: 1.8em,
+        // first-line-indent: 1.8em,
         leading: 0.55em,
         spacing: 1.5em,
         justify: true,
@@ -35,8 +35,32 @@
             if it.numbering != none {
                 text(size: 1.5em)[#chapter #counter(heading).display()]
             },
-            text(size: 2em, hyphenate: false, it.body),
-            [],
+            text(size: 2.1em, hyphenate: false, it.body),
+            v(0.5em),
+        )
+    }
+
+    show heading.where(level: 2): it => {
+        stack(
+            if it.numbering != none {
+                text(size: 1.4em)[#counter(heading).display() #it.body]
+            },
+        )
+    }
+
+    show heading.where(level: 3): it => {
+        stack(
+            if it.numbering != none {
+                text(size: 1.3em)[#counter(heading).display() #it.body]
+            },
+        )
+    }
+
+    show heading.where(level: 4): it => {
+        stack(
+            if it.numbering != none {
+                text(size: 1.15em)[#counter(heading).display() #it.body]
+            },
         )
     }
 
