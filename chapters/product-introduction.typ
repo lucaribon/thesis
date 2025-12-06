@@ -3,7 +3,7 @@
 = Introduzione teorica // max 20 pagine indicativamente
 <cap:introduzione-teorica>
 
-== Tecnologie utilizzate
+== Tecnologie analizzate
 
 == Aspetti teorici rilevanti
 

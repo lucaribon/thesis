@@ -10,32 +10,19 @@
 
 #v(1em)
 #text(style: "italic", [
-    Breve introduzione al capitolo
+    // Breve introduzione al capitolo
 ])
 
 #v(1em)
 
-// Non so se i seguenti capitoli siano giusti da mettere qui:
-// == Tecnologie e strumenti
-// <sec:tecnologie-strumenti>
+// == Ciclo di vita del software
+// <sec:ciclo-vita-software>
 
-// Di seguito viene data una panoramica delle tecnologie e strumenti utilizzati.
+// == Progettazione
+// <sec:progettazione>
 
-// === Tecnologia 1
-// Descrizione Tecnologia 1.
+// == Design Pattern utilizzati
+// <sec:design-pattern>
 
-// === Tecnologia 2
-// Descrizione Tecnologia 2
-
-
-== Ciclo di vita del software
-<sec:ciclo-vita-software>
-
-== Progettazione
-<sec:progettazione>
-
-== Design Pattern utilizzati
-<sec:design-pattern>
-
-== Codifica
-<sec:codifica>
+// == Codifica
+// <sec:codifica>

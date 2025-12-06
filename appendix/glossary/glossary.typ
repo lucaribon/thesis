@@ -10,5 +10,3 @@
 = Glossario
 
 //GLOSSARIO
-== P
-=== Parola

@@ -10,7 +10,7 @@
 // Citazione in linea
 // Citazione nel pie' di pagina
 
-== Organizzazione del testo
+== Organizzazione del testo (WIP)
 
 Il documento è strutturato in sei capitoli principali:
 #set par(first-line-indent: 0pt)
