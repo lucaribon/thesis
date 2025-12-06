@@ -86,9 +86,10 @@
     )
 }
 
-#let gloss(body) = {
-    //TODO: link che punta ad ancora nel glossario
-    // link("")[#text(
-    //     blue,
-    // )[#underline[#body]#sub[\G]]]
+#let gloss(body, label-name: none) = {
+    let target = if label-name != none { label-name } else { "glossary-" + body }
+    show link: it => it.body
+    link(label(target))[
+        #text(blue)[#underline[#body]#sub[\G]]
+    ]
 }

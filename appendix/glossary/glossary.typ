@@ -10,3 +10,8 @@
 = Glossario
 
 //GLOSSARIO
+== H
+=== HTTP <glossary-HTTP>
+
+== W
+=== Word

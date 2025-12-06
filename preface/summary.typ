@@ -1,5 +1,6 @@
 #import "../config/constants.typ": abstract
 #import "../config/variables.typ": myName, myTitle, myCompany
+#import "../config/thesis-config.typ": gloss
 #set page(numbering: "i")
 #counter(page).update(1)
 
@@ -10,7 +11,7 @@
 #set par(first-line-indent: 0pt)
 Il presente documento descrive il lavoro svolto durante il periodo di stage, della durata di circa 320 ore, dal laureando #text(myName) presso l'azienda #text(myCompany)
 
-L'obbiettivo finale dello stage è stato quello di sostituire il protocollo HTTP, utilizzato dalla piattaforma KanbanBOX per comunicare con i lettori RFID, con MQTT, un protocollo più adatto ad essere utilizzato con dispositivi IoT. \
+L'obbiettivo finale dello stage è stato quello di sostituire il protocollo #gloss("HTTP"), utilizzato dalla piattaforma KanbanBOX per comunicare con i lettori RFID, con MQTT, un protocollo più adatto ad essere utilizzato con dispositivi IoT. \
 In particolare è stata progetta un'architettura capace di integrare i seguenti componenti:
 - *lettore RFID*, dispositivi hardware che leggono i tag RFID applicati sui prodotti
 - *AWS IoT Core*, un servizio cloud che integra un broker capace di gestire la comunicazione tra molteplici dispositivi tramite MQTT
