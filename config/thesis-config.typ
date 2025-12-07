@@ -10,7 +10,9 @@
     set document(author: myAuthor, title: myTitle)
     show math.equation: set text(weight: 400)
 
-    show link: it => underline(it.body)
+    show link: it => {
+        underline(it)
+    }
 
     // LaTeX look (secondo la doc di Typst)
     set page(margin: 1.5in, numbering: myNumbering, number-align: center)
@@ -86,10 +88,5 @@
     )
 }
 
-#let gloss(body, label-name: none) = {
-    let target = if label-name != none { label-name } else { "glossary-" + body }
-    show link: it => it.body
-    link(label(target))[
-        #text(blue)[#underline[#body]#sub[\G]]
-    ]
-}
+#let gloss(body, target) = link(target)[#body#sub[\G]]
+

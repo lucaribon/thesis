@@ -3,15 +3,89 @@
 #set page(numbering: "1")
 #set align(left)
 #set heading(numbering: none)
-#show heading: it => [
-  #it
-]
+#show heading: it => block(above: 1.4em, below: 1em, text(it.body))
 
 = Glossario
+<glossary>
 
 //GLOSSARIO
+
+
+== A
+=== API
+<glossary-api>
+Application Programming Interface, è un insieme di regole e protocolli che consentono a diverse applicazioni software di comunicare tra loro.\
+Le API definiscono i metodi e i formati per trasmettere richieste e risposte tra componenti software o hardware, facilitando la comunicazione tra sistemi diversi.\
+
+== B
+=== Broker
+<glossary-broker>
+Un broker è un componente software che funge da intermediario nella comunicazione tra dispositivi in un'architettura publish/subscribe, come quella utilizzata dal protocollo MQTT.\
+
+== C
+
+== D
+
+== E
+
+== F
+
+== G
+
 == H
-=== HTTP <glossary-HTTP>
+=== HTTP
+<glossary-HTTP>
+Hypertext Transport Protocol, è un protocollo di comunicazione basato su architettura client-server, utilizzato principalmente per la trasmissione di dati sul web.\
+È il protocollo che è stato utilizzato fin dall'inizio in KanbanBOX per la comunicazione tra i lettori RFID e la piattaforma stessa.
+
+== I
+=== IDE
+<glossary-ide>
+
+== J
+
+== K
+=== Kanban
+<glossary-kanban>
+Kanban è un sistema di gestione della produzione e del flusso di lavoro che utilizza schede visive (chiamate "kanban") per rappresentare le attività, i materiali o i prodotti in un processo produttivo.\
+
+== L
+=== Lean
+<glossary-lean>
+Lean è una metodologia di gestione della produzione e dei processi aziendali che mira a massimizzare il valore per il cliente riducendo gli sprechi e migliorando l'efficienza.\
+Originariamente sviluppata nel settore manifatturiero, la filosofia Lean si basa su principi come il miglioramento continuo, il rispetto per le persone e l'ottimizzazione del flusso di lavoro.\
+
+== M
+=== MQTT
+<glossary-MQTT>
+Message Queuing Telemetry Transport, è un protocollo di messaggistica basata su un architettura publish/subscribe, progettato per essere leggero ed efficiente, particolarmente adatto per dispositivi con risorse limitate e reti con larghezza di banda ridotta.\
+
+== N
+
+== O
+
+== P
+
+== Q
+
+== R
+=== RFID
+<glossary-RFID>
+Radio-Frequency Identification, è una tecnologia di identificazione che utilizza onde radio per trasmettere dati tra un lettore e un dispositivo chiamato "tag" o "etichetta" RFID.\
+
+== S
+
+== T
+
+== U
+
+== V
 
 == W
 === Word
+
+== X
+
+== Y
+
+== Z
