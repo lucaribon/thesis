@@ -5,11 +5,6 @@
 = Introduzione // 2 pagine
 <cap:introduzione> 
 
-// TODO: aggiungere riferimenti a:
-// Termine nel glossario
-// Citazione in linea
-// Citazione nel pie' di pagina
-
 == Organizzazione del testo (WIP)
 
 Il documento è strutturato in sei capitoli principali:
