@@ -85,13 +85,13 @@ All'interno dell'azienda sono presenti sia canali generali per la comunicazione 
 
 
 == Analisi dei rischi
-  // TODO: rischi mqtt: ricezione messaggi -> Qos, questioni sicurezza tra licenze -> certificati, ...
-  I rischi individuati e analizzati nella fase iniziale del progetto vengono identificati usando la seguente codifica:
-  #align(center, [*R[categoria] - [numero]*])
-  Dove:
-  - *R*: indica che si tratta di un rischio;
-  - *[categoria]*: indica la categoria di appartenenza del rischio (O: organizzativo, T: tecnico, A: di analisi e progettazione);
-  - *[numero]*: indica il numero progressivo del rischio all'interno della categoria.
+// TODO: rischi mqtt: ricezione messaggi -> Qos, questioni sicurezza tra licenze -> certificati, ...
+I rischi individuati e analizzati nella fase iniziale del progetto vengono identificati usando la seguente codifica:
+#align(center, [*R[categoria] - [numero]*])
+Dove:
+- *R*: indica che si tratta di un rischio;
+- *[categoria]*: indica la categoria di appartenenza del rischio (O: organizzativo, T: tecnico, A: di analisi e progettazione);
+- *[numero]*: indica il numero progressivo del rischio all'interno della categoria.
 
 I rischi di analisi e progettazione derivano principalmente dal fatto che le tecnologie usate non sono ancora approfonditamente esplorate dal team di sviluppo, quindi è necessaria una fase di studio e sperimentazione per comprenderne al meglio le potenzialità, i limiti e le opzioni di integrazione con il prodotto.
 
@@ -114,3 +114,33 @@ I rischi di analisi e progettazione derivano principalmente dal fatto che le tec
 === RT-02 Scelte progettuali non adeguate
 *Descrizione*: durante la fase di integrazione e sviluppo potrebbero emergere nuove esigenze, limitazioni od opportunità date dalle tecnologie scelte.\
 *Soluzione*: intervallare le fasi di integrazione o sviluppo con momenti di studio e sperimentazione mirati in modo da accertarsi che le scelte fatte siano adeguate, sfruttando anche le nuove informazioni derivanti dalle fasi di integrazione o sviluppo di altre tecnologie, svolte precedentemente.
+
+#show par: set block(breakable: false)
+
+#v(200pt)
+=== Specifica dei Rischi
+#figure(
+    table(
+        columns: (1fr, 2fr),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+        [*Descrizione*],
+        [Una comunicazione scarsa o inefficace tra i membri del team può portare a fraintendimenti, errori e rallentamenti nei tempi di esecuzione.],
+
+        [*Probabilità*], [Alta],
+        [*Pericolosità*], [Alta],
+        [*Rilevamento*],
+        [Monitoraggio della qualità e frequenza delle riunioni di aggiornamento, analisi dei, misurazione delle performance del team.],
+
+        [*Piano di contingenza*],
+        [Implementare strumenti di comunicazione efficaci (, riunioni regolari di aggiornamento, definire chiaramente i canali di comunicazione.],
+
+        [*Aggiornamento*],
+        [Sprint 1: emerse criticità su rotazione dei ruoli troppo rapida. \
+            Sprint 2-3: difficoltà nell'uso di GitHub e branch protection, parzialmente risolte. \
+            Sprint 9-10: definita leadership più chiara e sessioni di tutoraggio che hanno migliorato la comunicazione, pur restando margini di miglioramento con più membri in parallelo. \
+            Sprint 13-15: migliorato il coordinamento interno attraverso check frequenti in chat e riunioni di allineamento pre-consegna, soprattutto per sincronizzare lo sviluppo e le verifiche.],
+    ),
+    caption: "Dettagli realtivi ai rischi identificati",
+)
