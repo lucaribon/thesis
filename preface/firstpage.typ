@@ -35,7 +35,7 @@
         #v(5pt)
         #text(11pt, profTitle + myProf) #h(1fr) #text(11pt, myName)
         #align(right, text(11pt, [_ #ID _ ] + myMatricola))
-        #v(60pt)
+        #v(45pt)
     ],
     // Piè di pagina
     [
