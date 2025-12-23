@@ -85,67 +85,235 @@ All'interno dell'azienda sono presenti sia canali generali per la comunicazione 
 
 
 == Analisi dei rischi
-// TODO: rischi mqtt: ricezione messaggi -> Qos, questioni sicurezza tra licenze -> certificati, ...
-// TODO: indicare se le soluzioni sono misure preventive, correttive o diagnostiche
 I rischi individuati e analizzati nella fase iniziale del progetto vengono identificati usando la seguente codifica:
 #align(center, [*R[categoria] - [numero]*])
 Dove:
 - *R*: indica che si tratta di un rischio;
-- *[categoria]*: indica la categoria di appartenenza del rischio (O: organizzativo, T: tecnico, A: di analisi e progettazione);
+- *[categoria]*: indica la categoria di appartenenza del rischio (A: di analisi e progettazione, O: organizzativo, T: tecnico);
 - *[numero]*: indica il numero progressivo del rischio all'interno della categoria.
 
 I rischi di analisi e progettazione derivano principalmente dal fatto che le tecnologie usate non sono ancora approfonditamente esplorate dal team di sviluppo, quindi è necessaria una fase di studio e sperimentazione per comprenderne al meglio le potenzialità, i limiti e le opzioni di integrazione con il prodotto.
 
+=== RA-01 - Variazione dei requisti
+*Descrizione*: durante la fase di studio potrebbero emergere nuove informazioni che potrebbero essere incongruenti con le aspettative o rendere obsoleti i requisiti inizialmente definiti.\
+*Soluzione preventiva*: mantenere una comunicazione costante con il tutor aziendale per discutere eventuali cambiamenti nei requisiti.
+
+=== RA-02 - Scelte progettuali non adeguate
+*Descrizione*: durante la fase di integrazione e sviluppo potrebbero emergere nuove esigenze, limitazioni od opportunità date dalle tecnologie scelte.\
+*Soluzione diagnostica*: intervallare le fasi di integrazione o sviluppo con momenti di studio e sperimentazione mirati in modo da accertarsi che le scelte fatte siano adeguate, sfruttando anche le nuove informazioni derivanti dalle fasi di integrazione o sviluppo di altre tecnologie, svolte precedentemente.
+
 === RO-01 - Gestione del tempo non ottimale
 *Descrizione*: durante lo svolgimento dello stage potrebbe non essere sempre possibile gestire il tempo in modo ottimale a causa di attività aziendali ausiliarie o imprevisti.\
-*Soluzione*: pianificazione intelligente degli appuntamenti di importanza secondaria in modo che non vadano a interferire con le attività principali dello stage.
+*Soluzione preventiva*: pianificazione intelligente degli appuntamenti di importanza secondaria in modo che non vadano a interferire con le attività principali dello stage.
 
-=== RT-01 Inesperienza con tecnologie usate in azienda
+=== RT-01 - Inesperienza con tecnologie usate in azienda
 *Descrizione*: durante lo svolgimento dello stage potrebbero presentarsi dei rallentamenti dovuti alla mia inesperienza con alcune tecnologie o metodologie usate in azienda.\
-*Soluzione*: dedicare la fase iniziale alla comprensione approfondita delle tecnologie ed interfacciarsi con i membri del team per chiedere supporto in caso di difficoltà bloccanti.
+*Soluzione preventiva e correttiva*: dedicare la fase iniziale alla comprensione approfondita delle tecnologie ed interfacciarsi con i membri del team per chiedere supporto in caso di difficoltà bloccanti.
 
-=== RT-02 Influenze esterne
+=== RT-02 - Influenze esterne
 *Descrizione*: durante lo svolgimento dello stage potrebbero sorgere problemi tenici dovuti a fattori esterni all'azienda, come ad esempio bug o disservizi di dipendenze esterne del prodotto.\
-*Soluzione*: analizzare il problema per identificare il prima possibile la reale causa, successivamente cercare di mitigarlo, se necessario coinvolgendo altri membri del team con maggiore esperienza; nel caso in cui il problema risultasse non risolvibile internamente ripianificare le attività in modo da minimizzare l'impatto sullo svolgimento dello stage.
+*Soluzione correttiva*: analizzare il problema per identificare il prima possibile la reale causa, successivamente cercare di mitigarlo, se necessario coinvolgendo altri membri del team con maggiore esperienza; nel caso in cui il problema risultasse non risolvibile internamente ripianificare le attività in modo da minimizzare l'impatto sullo svolgimento dello stage.
 
-=== RA-01 Variazione dei requisti
-*Descrizione*: durante la fase di studio potrebbero emergere nuove informazioni che potrebbero essere incongruenti con le aspettative o rendere obsoleti i requisiti inizialmente definiti.\
-*Soluzione*: mantenere una comunicazione costante con il tutor aziendale per discutere eventuali cambiamenti nei requisiti.
+=== RT-03 - Messaggi duplicati
+*Descrizione*: durante la fase di fornitura potrebbero emergere problemi legati alla ricezione di messaggi MQTT duplicati causati da malfunzionamenti o configurazioni poco precise dei lettori RFID.\
+*Soluzione preventiva*:
+- implementazione di un sistema di _debounce_ lato backend di KanbanBOX che filtri i messaggi duplicati in base ad un identificativo univoco e ad una finestra temporale configurabile;
+- configurazione dei lettori RFID per minimizzare la probabilità di letture duplicate, ad esempio regolando la potenza di trasmissione o la sensibilità dell'antenna.\
 
-=== RT-02 Scelte progettuali non adeguate
-*Descrizione*: durante la fase di integrazione e sviluppo potrebbero emergere nuove esigenze, limitazioni od opportunità date dalle tecnologie scelte.\
-*Soluzione*: intervallare le fasi di integrazione o sviluppo con momenti di studio e sperimentazione mirati in modo da accertarsi che le scelte fatte siano adeguate, sfruttando anche le nuove informazioni derivanti dalle fasi di integrazione o sviluppo di altre tecnologie, svolte precedentemente.
+=== RT-04 - Perdita di messaggi
+*Descrizione*: durante la fase di fornitura potrebbero emergere problemi legati alla perdita di messaggi MQTT causati da malfunzionamenti della rete o dei servizi _middleware_.\
+*Soluzione preventiva*:
+- configurazione del _Quality of Service (QoS)_ di MQTT a livello 1 (ogni messaggio viene ricevuto almeno una volta) sia nei dispositivi che nel broker;
+- configurazione della _message retention_ nel broker MQTT in modo da conservare i messaggi non recapitati per un periodo di tempo configurabile.
 
-=== RT-03 Messaggi duplicati o non ricevuti
-*Descrizione*: durante la fase di integrazione potrebbero emergere problemi legati alla ricezione di messaggi duplicati o non ricevuti a causa di disservizi o malfunzionamenti di rete.\
-*Soluzione - Misura preventiva*:  configurazione dei meccanismi di _Quality of Service_ (QoS) di livello 1, di MQTT, sia lato client che lato server, che garantisce la consegna almeno una volta di ogni messaggio inviato. Non è stato scelto il QoS livello 2 perché non è supportato da AWS IoT, inoltre l'implementazione attuale gestisce già la ricezione di cartellini duplicati.   
+=== RT-05 - Sicurezza della comunicazione MQTT
+*Descrizione*: in fase di progettazione sono stati individuati dei potenziali rischi legati alla sicurezza della connessione e comunicazione tra i client del broker, data dall'utilizzo di un solo broker MQTT (integrato in AWS IoT) condiviso tra tutti i clienti.\
+Infatti, il broker di AWS IoT nella sua configurazione base permette a tutti i client di connettersi e comunicare tramite #gloss("topic", <glossary-topic>) liberamente.\
+*Soluzione preventiva*: (vedi {reference a sezione dedicata}/*#ref(<sez:sicurezza-mqtt>)*/ per una descrizione più dettagliata)
+- utilizzo di certificati X.509 per l'autenticazione dei client MQTT, in modo da garantire che solo i client autorizzati possano connettersi e comunicare;
+- creazione di policy dinamiche (che variano in base al dispositivo), basate su dei template, per limitare i permessi e l'accesso ai topic del dispositivo;
+- utilizzo di topic granulari e specifici per ogni dispositivo, in modo da limitare la visibilità dei messaggi solo ai dispositivi autorizzati.
 
+=== RT-06 - Debugging difficoltoso
+*Descrizione*: durante la fase di sviluppo e testing potrebbero emergere difficoltà nel monitorare ed eseguire il _debug_ i messaggi MQTT scambiati tra i dispositivi e il broker, e successivamente tra la coda SQS e il backend di KanbanBOX.\
+*Soluzione preventiva*: \
+- sfruttare il sistema di _logging_, già presente nel progetto, nel nuovo codice sviluppato;
+- usare strumenti di test o simulazione come il test client di AWS IoT o ElasticMQ per simulare una coda in locale.
+
+=== RT-07 - Errata configurazione dei lettori RFID
+*Descrizione*: una configurazione non corretta dei lettori RFID (endpoint MQTT, certificati, QoS, topic, modalità operativa) potrebbe causare malfunzionamenti nella trasmissione dei messaggi o comportamenti non coerenti tra dispositivi diversi.\
+*Soluzione preventiva*: fornire una configurazione standard funzionante che può essere facilmente usata e adattata dagli installatori.\
+
+=== RT-08 - Disconnessioni dei dispositivi fisici
+*Descrizione*: disconnessioni frequenti o prolungate dei lettori RFID potrebbero causare interruzioni nella trasmissione dei dati e perdita di messaggi importanti.\
+*Soluzione preventiva*: implementare meccanismi di riconnessione automatica nei dispositivi, definendo parametri come il tempo di _keep-alive_ e il numero di tentativi di riconnessione nei dispositivi.\
 
 
 #show par: set block(breakable: false)
 // TODO: terminare con una tabella riassuntiva che riporta codice, nome breve, tipologia probabilità e impatto
 === Specifica dei Rischi
+
 #figure(
     table(
         columns: (1fr, 2fr),
         inset: 8pt,
         align: (x, y) => if y > 0 { left } else { center + horizon },
         fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
-        table.cell(colspan: 2)[*RO-01 - Gestione del tempo non ottimale*],
 
-        [*Probabilità*], [Alta],
-        [*Pericolosità*], [Alta],
-        [*Rilevamento*],
-        [Monitoraggio della qualità e frequenza delle riunioni di aggiornamento, analisi dei, misurazione delle performance del team.],
-
-        [*Piano di contingenza*],
-        [Implementare strumenti di comunicazione efficaci (, riunioni regolari di aggiornamento, definire chiaramente i canali di comunicazione.],
-
-        [*Aggiornamento*],
-        [Sprint 1: emerse criticità su rotazione dei ruoli troppo rapida. \
-            Sprint 2-3: difficoltà nell'uso di GitHub e branch protection, parzialmente risolte. \
-            Sprint 9-10: definita leadership più chiara e sessioni di tutoraggio che hanno migliorato la comunicazione, pur restando margini di miglioramento con più membri in parallelo. \
-            Sprint 13-15: migliorato il coordinamento interno attraverso check frequenti in chat e riunioni di allineamento pre-consegna, soprattutto per sincronizzare lo sviluppo e le verifiche.],
+        table.cell(colspan: 2)[*RA-01 - Variazione dei requisiti*],
+        [*Tipologia*], [Analisi e progettazione],
+        [*Probabilità*], [Media],
+        [*Impatto*], [Alto],
     ),
-    caption: "Dettagli relativi ai rischi identificati",
+    caption: "Dettagli relativi al rischio RA-01",
+)
+
+#figure(
+    table(
+        columns: (1fr, 2fr),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+
+        table.cell(colspan: 2)[*RA-02 - Scelte progettuali non adeguate*],
+        [*Tipologia*], [Analisi e progettazione],
+        [*Probabilità*], [Media],
+        [*Impatto*], [Alto],
+    ),
+    caption: "Dettagli relativi al rischio RA-02",
+)
+
+#figure(
+    table(
+        columns: (1fr, 2fr),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+
+        table.cell(colspan: 2)[*RO-01 - Gestione del tempo non ottimale*],
+        [*Tipologia*], [Organizzativo],
+        [*Probabilità*], [Alta],
+        [*Impatto*], [Alto],
+    ),
+    caption: "Dettagli relativi al rischio RO-01",
+)
+
+#figure(
+    table(
+        columns: (1fr, 2fr),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+
+        table.cell(colspan: 2)[*RT-01 - Inesperienza con tecnologie usate in azienda*],
+        [*Tipologia*], [Tecnico],
+        [*Probabilità*], [Alta],
+        [*Impatto*], [Basso],
+    ),
+    caption: "Dettagli relativi al rischio RT-01",
+)
+
+#figure(
+    table(
+        columns: (1fr, 2fr),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+
+        table.cell(colspan: 2)[*RT-02 - Influenze esterne*],
+        [*Tipologia*], [Tecnico],
+        [*Probabilità*], [Bassa],
+        [*Impatto*], [Alto],
+    ),
+    caption: "Dettagli relativi al rischio RT-02",
+)
+
+#figure(
+    table(
+        columns: (1fr, 2fr),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+
+        table.cell(colspan: 2)[*RT-03 - Messaggi duplicati*],
+        [*Tipologia*], [Tecnico],
+        [*Probabilità*], [Bassa],
+        [*Impatto*], [Medio],
+    ),
+    caption: "Dettagli relativi al rischio RT-03",
+)
+
+#figure(
+    table(
+        columns: (1fr, 2fr),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+
+        table.cell(colspan: 2)[*RT-04 - Perdita di messaggi*],
+        [*Tipologia*], [Tecnico],
+        [*Probabilità*], [Bassa],
+        [*Impatto*], [Alto],
+    ),
+    caption: "Dettagli relativi al rischio RT-04",
+)
+
+#figure(
+    table(
+        columns: (1fr, 2fr),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+
+        table.cell(colspan: 2)[*RT-05 - Sicurezza della comunicazione MQTT*],
+        [*Tipologia*], [Tecnico],
+        [*Probabilità*], [Bassa],
+        [*Impatto*], [Alto],
+    ),
+    caption: "Dettagli relativi al rischio RT-05",
+)
+
+#figure(
+    table(
+        columns: (1fr, 2fr),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+
+        table.cell(colspan: 2)[*RT-06 - Debugging difficoltoso*],
+        [*Tipologia*], [Tecnico],
+        [*Probabilità*], [Alta],
+        [*Impatto*], [Medio],
+    ),
+    caption: "Dettagli relativi al rischio RT-06",
+)
+
+#figure(
+    table(
+        columns: (1fr, 2fr),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+
+        table.cell(colspan: 2)[*RT-07 - Errata configurazione dei lettori RFID*],
+        [*Tipologia*], [Tecnico],
+        [*Probabilità*], [Bassa],
+        [*Impatto*], [Alto],
+    ),
+    caption: "Dettagli relativi al rischio RT-07",
+)
+
+#figure(
+    table(
+        columns: (1fr, 2fr),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+
+        table.cell(colspan: 2)[*RT-08 - Disconnessioni dei dispositivi fisici*],
+        [*Tipologia*], [Tecnico],
+        [*Probabilità*], [Media],
+        [*Impatto*], [Alto],
+    ),
+    caption: "Dettagli relativi al rischio RT-08",
 )

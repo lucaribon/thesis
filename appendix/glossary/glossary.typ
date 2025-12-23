@@ -76,13 +76,16 @@ Radio-Frequency Identification, è una tecnologia di identificazione che utilizz
 == S
 
 == T
+=== Topic
+<glossary-topic>
+In MQTT, un topic è un canale di comunicazione dove i dispositivi MQTT possono pubblicare messaggi su un specifico topic; tutti i dispositivi iscritti ad un topic riceveranno i messaggi pubblicati in esso.\
+Ogni topic consiste in una stringa che può essere suddivisa in livelli utilizzando il carattere "/" come separatore, consentendo di organizzare i messaggi in una struttura gerarchica.\
 
 == U
 
 == V
 
 == W
-=== Word
 
 == X
 
