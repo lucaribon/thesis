@@ -57,7 +57,7 @@ Per ogni pull request aperta su GitHub vengono eseguite automaticamente le segue
 - *PSALM*: analisi statica del codice PHP per individuare potenziali _bug_ e problemi di sicurezza.
 
 Tutti i test vengono eseguiti sia simulando il nuovo prodotto nella sua interezza, sia nelle seguenti casistiche meno comuni:
-- esecuzione di nuove implementazioni o integrazioni nel codice in ambienti con le configurazioni della release stabile corrente; questo permette di individuare potenziali *problemi di retrocompatibilità*;
+- esecuzione di nuove implementazioni o integrazioni nel codice in ambienti con le configurazioni della release stabile corrente; questo permette di individuare potenziali *problemi di retro-compatibilità*;
 - esecuzione del vecchio codice con in ambienti con le nuove configurazioni previste per la prossima release; questo permette di misurare la capacità di fare *_rollback_* in caso di problemi con la nuova release.
 
 Anche per i test vengono usati dei _container_ in modo da isolare l'ambiente di esecuzione e garantire che i test siano più semplici da automatizzare e sempre riproducibili in modo consistente.
@@ -86,6 +86,7 @@ All'interno dell'azienda sono presenti sia canali generali per la comunicazione 
 
 == Analisi dei rischi
 // TODO: rischi mqtt: ricezione messaggi -> Qos, questioni sicurezza tra licenze -> certificati, ...
+// TODO: indicare se le soluzioni sono misure preventive, correttive o diagnostiche
 I rischi individuati e analizzati nella fase iniziale del progetto vengono identificati usando la seguente codifica:
 #align(center, [*R[categoria] - [numero]*])
 Dove:
@@ -115,9 +116,14 @@ I rischi di analisi e progettazione derivano principalmente dal fatto che le tec
 *Descrizione*: durante la fase di integrazione e sviluppo potrebbero emergere nuove esigenze, limitazioni od opportunità date dalle tecnologie scelte.\
 *Soluzione*: intervallare le fasi di integrazione o sviluppo con momenti di studio e sperimentazione mirati in modo da accertarsi che le scelte fatte siano adeguate, sfruttando anche le nuove informazioni derivanti dalle fasi di integrazione o sviluppo di altre tecnologie, svolte precedentemente.
 
-#show par: set block(breakable: false)
+=== RT-03 Messaggi duplicati o non ricevuti
+*Descrizione*: durante la fase di integrazione potrebbero emergere problemi legati alla ricezione di messaggi duplicati o non ricevuti a causa di disservizi o malfunzionamenti di rete.\
+*Soluzione - Misura preventiva*:  configurazione dei meccanismi di _Quality of Service_ (QoS) di livello 1, di MQTT, sia lato client che lato server, che garantisce la consegna almeno una volta di ogni messaggio inviato. Non è stato scelto il QoS livello 2 perché non è supportato da AWS IoT, inoltre l'implementazione attuale gestisce già la ricezione di cartellini duplicati.   
 
-#v(200pt)
+
+
+#show par: set block(breakable: false)
+// TODO: terminare con una tabella riassuntiva che riporta codice, nome breve, tipologia probabilità e impatto
 === Specifica dei Rischi
 #figure(
     table(
@@ -125,8 +131,7 @@ I rischi di analisi e progettazione derivano principalmente dal fatto che le tec
         inset: 8pt,
         align: (x, y) => if y > 0 { left } else { center + horizon },
         fill: (x, y) => if y == 0 { luma(180) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
-        [*Descrizione*],
-        [Una comunicazione scarsa o inefficace tra i membri del team può portare a fraintendimenti, errori e rallentamenti nei tempi di esecuzione.],
+        table.cell(colspan: 2)[*RO-01 - Gestione del tempo non ottimale*],
 
         [*Probabilità*], [Alta],
         [*Pericolosità*], [Alta],
@@ -142,5 +147,5 @@ I rischi di analisi e progettazione derivano principalmente dal fatto che le tec
             Sprint 9-10: definita leadership più chiara e sessioni di tutoraggio che hanno migliorato la comunicazione, pur restando margini di miglioramento con più membri in parallelo. \
             Sprint 13-15: migliorato il coordinamento interno attraverso check frequenti in chat e riunioni di allineamento pre-consegna, soprattutto per sincronizzare lo sviluppo e le verifiche.],
     ),
-    caption: "Dettagli realtivi ai rischi identificati",
+    caption: "Dettagli relativi ai rischi identificati",
 )
