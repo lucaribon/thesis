@@ -4,42 +4,73 @@
 
 = Analisi dei requisiti // 10-20 pagine
 <cap:analisi-requisiti>
-// versione estesa piano di lavoro (dalla mail del prof) secondo me va sotto il capitolo descrizione dello stage
+== Attori
+*Sistema di lettura RFID*: rappresenta l'insieme di dispositivi hardware che si occupano di leggere e trasmettere le informazioni dei tag RFID che attraversano la loro area di copertura.
 
-// #v(1em)
-// #text(style: "italic", [
-//     Breve introduzione al capitolo
-// ])
+*Amministratore*: nel backend di KanbanBOX sono presenti diversi ruoli utilizzati per definire i permessi all'interno della piattaforma. Nonostante ciò, le funzionalità che ho implementato sono accessibili in egual modo da tutti i ruoli da sviluppatore, amministratore o supporto applicativo, poiché è necessario che possano essere utilizzate da qualsiasi figura tecnica che si occupi di sviluppo o manutenzione dell'applicativo.\ 
+Per questo motivo, in questa sede, ho deciso di raggruppare tutti i ruoli al di sotto dell'attore "Amministratore".
 
-// #v(1em)
+== Casi d'uso
+Per lo studio dei casi di utilizzo del prodotto sono stati creati dei diagrammi.
+I diagrammi dei casi d'uso (in inglese _Use Case Diagram_) sono diagrammi di tipo UML dedicati alla descrizione delle funzioni o servizi offerti da un sistema, così come sono percepiti e utilizzati dagli attori che interagiscono col sistema stesso.
+Essendo il progetto finalizzato alla creazione di un tool per l'automazione di un processo, le interazioni da parte dell'utilizzatore devono essere ovviamente ridotte allo stretto necessario. Per questi motivi i diagrammi dei casi d'uso risultano semplici e in numero ridotto.
 
-// == Attori
-// // Forse, se servono
-// == Casi d'uso
+#figure(
+    image("../images/usecase/scenario-principale.png", width: 100%),
+    caption: "Use Case - UC0: Scenario principale"
+) <uc:scenario-principale>
 
-// Per lo studio dei casi di utilizzo del prodotto sono stati creati dei diagrammi.
-// I diagrammi dei casi d'uso (in inglese _Use Case Diagram_) sono diagrammi di tipo _UML_ (*TODO* AGGIUNGI GLOSSARIO in qualche modo) dedicati alla descrizione delle funzioni o servizi offerti da un sistema, così come sono percepiti e utilizzati dagli attori che interagiscono col sistema stesso.
-// Essendo il progetto finalizzato alla creazione di un tool per l'automazione di un processo, le interazioni da parte dell'utilizzatore devono essere ovviamente ridotte allo stretto necessario. Per questi motivi i diagrammi dei casi d'uso risultano semplici e in numero ridotto.
+// L'ordine e i nomi delle chiavi sono arbitrari, vedere la funzione nel file ..config/thesis-config.typ
+#useCase(
+    (
+        number: 0,
+        name: "Aggiunta reader RFID",
+        "Attore principale": "Sviluppatore applicativi",
+        "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
+        "Postcondizioni": "Il sistema ha salvato la configurazione del test automatico",
+        "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione"
+    )
+)
+<uc:0>
 
-// #figure(
-//     image("../images/usecase/scenario-principale.png", width: 100%),
-//     caption: "Use Case - UC0: Scenario principale"
-// ) <uc:scenario-principale>
+#useCase(
+    (
+        number: 1,
+        name: "Configurazione reader RFID",
+        "Attore principale": "Sviluppatore applicativi",
+        "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
+        "Postcondizioni": "Il sistema ha salvato la configurazione del test automatico",
+        "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione"
+    )
+)
+<uc:1>
 
-// // L'ordine e i nomi delle chiavi sono arbitrari, vedere la funzione nel file ..config/thesis-config.typ
-// #useCase(
-//     (
-//         number: 0,
-//         name: "Apertura plugin",
-//         "Attore principale": "Sviluppatore applicativi",
-//         "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
-//         "Postcondizioni": "Il sistema è pronto per permettere una nuova interazione",
-//         "Scenario principale": "La finestra di simulazione mette a disposizione i comandi per configurare, registrare o eseguire un test"
-//     )
-// )
-// <uc:0>
+#useCase(
+  (
+      number: 2,
+      name: "Eliminazione reader RFID",
+      "Attore principale": "Sviluppatore applicativi",
+      "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
+      "Postcondizioni": "Il sistema ha salvato la configurazione del test automatico",
+      "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione",
+  )
+)
+<uc:2>
 
-// == Tracciamento dei requisiti
+#useCase(
+    (
+        number: 3,
+        name: "Download del certificato associato al reader",
+        "Attore principale": "Sviluppatore applicativi",
+        "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
+        "Postcondizioni": "Il sistema ha salvato la configurazione del test automatico",
+        "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione",
+    ),
+)
+<uc:3>
+
+
+== Tracciamento dei requisiti
 
 // Da un'attenta analisi dei requisiti e degli use case effettuata sul progetto è stata stilata la tabella che traccia i requisiti in rapporto agli use case.
 
@@ -91,4 +122,4 @@
 // )
 // <tab:requisiti-vincolo>
 
-// == Panoramica funzionalità
+== Panoramica funzionalità
