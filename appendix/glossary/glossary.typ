@@ -82,6 +82,9 @@ In MQTT, un topic è un canale di comunicazione dove i dispositivi MQTT possono 
 Ogni topic consiste in una stringa che può essere suddivisa in livelli utilizzando il carattere "/" come separatore, consentendo di organizzare i messaggi in una struttura gerarchica.\
 
 == U
+=== UML
+<glossary-uml>
+Unified Modeling Language, è un linguaggio di modellazione standardizzato utilizzato per visualizzare e documentare i componenti di un sistema software.\
 
 == V
 

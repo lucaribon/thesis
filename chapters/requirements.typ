@@ -1,23 +1,26 @@
 #import "../config/thesis-config.typ": useCase
+#import "../config/thesis-config.typ": gloss
 
-#pagebreak(to:"odd")
+#pagebreak(to: "odd")
 
 = Analisi dei requisiti // 10-20 pagine
 <cap:analisi-requisiti>
 == Attori
 *Sistema di lettura RFID*: rappresenta l'insieme di dispositivi hardware che si occupano di leggere e trasmettere le informazioni dei tag RFID che attraversano la loro area di copertura.
 
-*Amministratore*: nel backend di KanbanBOX sono presenti diversi ruoli utilizzati per definire i permessi all'interno della piattaforma. Nonostante ciò, le funzionalità che ho implementato sono accessibili in egual modo da tutti i ruoli da sviluppatore, amministratore o supporto applicativo, poiché è necessario che possano essere utilizzate da qualsiasi figura tecnica che si occupi di sviluppo o manutenzione dell'applicativo.\ 
+*Amministratore*: nel backend di KanbanBOX sono presenti diversi ruoli utilizzati per definire i permessi all'interno della piattaforma. Nonostante ciò, le funzionalità che ho implementato sono accessibili in egual modo da tutti i ruoli da sviluppatore, amministratore o supporto applicativo, poiché è necessario che possano essere utilizzate da qualsiasi figura tecnica che si occupi di sviluppo o manutenzione dell'applicativo.\
 Per questo motivo, in questa sede, ho deciso di raggruppare tutti i ruoli al di sotto dell'attore "Amministratore".
 
 == Casi d'uso
-Per lo studio dei casi di utilizzo del prodotto sono stati creati dei diagrammi.
-I diagrammi dei casi d'uso (in inglese _Use Case Diagram_) sono diagrammi di tipo UML dedicati alla descrizione delle funzioni o servizi offerti da un sistema, così come sono percepiti e utilizzati dagli attori che interagiscono col sistema stesso.
-Essendo il progetto finalizzato alla creazione di un tool per l'automazione di un processo, le interazioni da parte dell'utilizzatore devono essere ovviamente ridotte allo stretto necessario. Per questi motivi i diagrammi dei casi d'uso risultano semplici e in numero ridotto.
+In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che rappresentano i casi d'uso principali del sistema e le loro descrizioni.
+
+// Per lo studio dei casi di utilizzo del prodotto sono stati creati dei diagrammi.
+// I diagrammi dei casi d'uso (in inglese _Use Case Diagram_) sono diagrammi di tipo UML dedicati alla descrizione delle funzioni o servizi offerti da un sistema, così come sono percepiti e utilizzati dagli attori che interagiscono col sistema stesso.
+// Essendo il progetto finalizzato alla creazione di un tool per l'automazione di un processo, le interazioni da parte dell'utilizzatore devono essere ovviamente ridotte allo stretto necessario. Per questi motivi i diagrammi dei casi d'uso risultano semplici e in numero ridotto.
 
 #figure(
     image("../images/usecase/scenario-principale.png", width: 100%),
-    caption: "Use Case - UC0: Scenario principale"
+    caption: "Use Case - UC0: Scenario principale",
 ) <uc:scenario-principale>
 
 // L'ordine e i nomi delle chiavi sono arbitrari, vedere la funzione nel file ..config/thesis-config.typ
@@ -25,49 +28,54 @@ Essendo il progetto finalizzato alla creazione di un tool per l'automazione di u
     (
         number: 0,
         name: "Aggiunta reader RFID",
-        "Attore principale": "Sviluppatore applicativi",
-        "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
-        "Postcondizioni": "Il sistema ha salvato la configurazione del test automatico",
-        "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione"
-    )
+        attore_principale: "Amministratore",
+        precondizioni: (
+            "Il reader RFID è configurato per comunicare con AWS IoT",
+        ),
+        postcondizioni: (
+            "Il reader RFID risulta censito nel sistema",
+            "La configurazione è stata salvata correttamente",
+        ),
+        scenario_principale: "L'amministratore inserisce i dati del reader RFID nell'interfaccia, valida i parametri e conferma il salvataggio.",
+    ),
 )
 <uc:0>
 
-#useCase(
-    (
-        number: 1,
-        name: "Configurazione reader RFID",
-        "Attore principale": "Sviluppatore applicativi",
-        "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
-        "Postcondizioni": "Il sistema ha salvato la configurazione del test automatico",
-        "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione"
-    )
-)
-<uc:1>
+// #useCase(
+//     (
+//         number: 1,
+//         name: "Configurazione reader RFID",
+//         "Attore principale": "Sviluppatore applicativi",
+//         "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
+//         "Postcondizioni": "Il sistema ha salvato la configurazione del test automatico",
+//         "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione",
+//     ),
+// )
+// <uc:1>
 
-#useCase(
-  (
-      number: 2,
-      name: "Eliminazione reader RFID",
-      "Attore principale": "Sviluppatore applicativi",
-      "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
-      "Postcondizioni": "Il sistema ha salvato la configurazione del test automatico",
-      "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione",
-  )
-)
-<uc:2>
+// #useCase(
+//     (
+//         number: 2,
+//         name: "Eliminazione reader RFID",
+//         "Attore principale": "Sviluppatore applicativi",
+//         "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
+//         "Postcondizioni": "Il sistema ha salvato la configurazione del test automatico",
+//         "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione",
+//     ),
+// )
+// <uc:2>
 
-#useCase(
-    (
-        number: 3,
-        name: "Download del certificato associato al reader",
-        "Attore principale": "Sviluppatore applicativi",
-        "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
-        "Postcondizioni": "Il sistema ha salvato la configurazione del test automatico",
-        "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione",
-    ),
-)
-<uc:3>
+// #useCase(
+//     (
+//         number: 3,
+//         name: "Download del certificato associato al reader",
+//         "Attore principale": "Sviluppatore applicativi",
+//         "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
+//         "Postcondizioni": "Il sistema ha salvato la configurazione del test automatico",
+//         "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione",
+//     ),
+// )
+// <uc:3>
 
 
 == Tracciamento dei requisiti

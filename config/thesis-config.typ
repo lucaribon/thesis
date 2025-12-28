@@ -69,22 +69,53 @@
     body
 }
 
-#let useCase(useCaseDetails) = {
-    let n = 1
-    if useCaseDetails.number != "" and useCaseDetails.name != "" {
-        text(12pt, [ *UC#useCaseDetails.number: #useCaseDetails.name* ])
-    }
-    let result = for (k, v) in useCaseDetails {
-        if k != "number" and k != "name" {
-            (text(k, weight: "bold"), v)
+#let _usecase_value(v) = {
+    if type(v) == array {
+        if v.len() == 0 {
+            "—"
+        } else if v.all(item => type(item) == str) {
+            let src = v.map(item => "- " + item).join("\n")
+            eval(src, mode: "markup")
+        } else {
+            // Fallback for non-string items.
+            list(
+                tight: true,
+                ..v.map(item => [#item]),
+            )
         }
-        n = n + 1
+    } else {
+        v
     }
+}
+
+#let useCase(useCaseDetails) = {
+    if useCaseDetails.name != none and useCaseDetails.name != "" {
+        text(12pt, [*UC#useCaseDetails.number: #useCaseDetails.name*])
+    }
+
+    let rows = for (k, v) in useCaseDetails {
+        if k != "number" and k != "name" {
+            let label = k.replace("_", " ")
+            let label_clusters = label.clusters()
+            let label_head = label_clusters.at(0)
+            let label_tail = label_clusters.slice(1).join("")
+            (
+                text(
+                    [
+                        #upper(label_head)#label_tail
+                    ],
+                    weight: "bold",
+                ),
+                _usecase_value(v),
+            )
+        }
+    }
+
     table(
         inset: 8pt,
         stroke: none,
         columns: 2,
-        ..result
+        ..rows,
     )
 }
 
