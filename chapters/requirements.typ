@@ -61,7 +61,7 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
                 - modello;
                 - indirizzo MAC;
                 - abilitazione.",
-            "L'amministratore l'invio dei dati tramite il pulsante di salvataggio.",
+            "L'amministratore invia i dati del reader tramite il pulsante di salvataggio.",
         ),
         estensioni: (
             "Errore: sistema non raggiungibile",
@@ -76,14 +76,25 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
         number: 2,
         name: "Aggiornamento dati del reader RFID",
         attore_principale: "Amministratore",
+        descrizione: "Il sistema consente all'amministratore di aggiornare i dati di un reader RFID già registrato nella piattaforma.",
         precondizioni: (
-            "Il reader RFID è configurato per comunicare con AWS IoT",
+            "Il reader RFID è configurato per poter comunicare in rete e con AWS IoT.",
+            "Il reader RFID è già registrato nella piattaforma KanbanBox.",
         ),
         postcondizioni: (
-            "Il reader RFID risulta censito nel sistema",
-            "La configurazione è stata salvata correttamente",
+            "Il sistema ha aggiornato i dati del reader RFID nella piattaforma KanbanBox.",
         ),
-        scenario_principale: "L'amministratore inserisce i dati del reader RFID nell'interfaccia, valida i parametri e conferma il salvataggio.",
+        scenario_principale: (
+            "L'amministratore, dalla tabella dei reader, preme il bottone per modificare i dati del reader scelto.",
+            "L'amministratore modifica i dati del reader RFID negli appositi campi di testo:
+                - nome;
+                - produttore;
+                - modello;
+                - indirizzo MAC;
+                - abilitazione.",
+            ".",
+            "L'amministratore invia i dati aggiornati del reader tramite il pulsante di salvataggio.",
+        ),
     ),
 )
 <uc:2>
@@ -234,3 +245,4 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
 //     caption: "Tabella del tracciamento dei requisti funzionali",
 // )
 // <tab:requisiti-vincolo>
+                                                                                                                                 
