@@ -38,7 +38,7 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
 
 // Per lo studio dei casi di utilizzo del prodotto sono stati creati dei diagrammi.
 // I diagrammi dei casi d'uso (in inglese _Use Case Diagram_) sono diagrammi di tipo UML dedicati alla descrizione delle funzioni o servizi offerti da un sistema, così come sono percepiti e utilizzati dagli attori che interagiscono col sistema stesso.
-// TODO: Essendo il progetto finalizzato alla creazione di un tool per l'automazione di un processo, le interazioni da parte dell'utilizzatore devono essere ovviamente ridotte allo stretto necessario. Per questi motivi i diagrammi dei casi d'uso risultano semplici e in numero ridotto.
+// TODO: Essendo il progetto finalizzato alla creazione di un tool per l'automazione di un processo E in più molte funzionalità appartenenti allo stesso dominio su cui si è lavorato erano già state implementate e sono risultate compatibili con la nuova architettura del sistema, le interazioni da parte dell'utilizzatore devono essere ovviamente ridotte allo stretto necessario. Per questi motivi i diagrammi dei casi d'uso risultano semplici e in numero ridotto.
 
 // FIXME: integrare la figure nello use case in modo che venga mostrata sotto al titolo del caso d'uso. A MENO CHE non si decida/riesca a fare una solo figure per più use case, visto che sono molto legati e pochi.
 #figure(
@@ -55,17 +55,18 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
         precondizioni: "Il reader RFID è configurato per poter comunicare in rete e con AWS IoT.",
         postcondizioni: "Il reader RFID viene registrato nella piattaforma KanbanBox.",
         scenario_principale: (
-            "L'amministratore inserisce i dati del reader RFID negli appositi campi di testo:
+            "L'amministratore inserisce i dati del reader RFID negli appositi campi:
                 - nome;
                 - produttore;
                 - modello;
                 - indirizzo MAC;
-                - abilitazione.",
+                - abilitazione.
+            Tutti i campi sono configurati in modo da accettare solo dati nel formato valido.",
             "L'amministratore invia i dati del reader tramite il pulsante di salvataggio.",
         ),
         estensioni: (
-            "Errore: sistema non raggiungibile",
-            "Errore: servizi cloud esterni non raggiungibili",
+            "Errore: sistema non raggiungibile;",
+            "Errore: servizi cloud esterni non raggiungibili.",
         ),
     ),
 )
@@ -86,14 +87,18 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
         ),
         scenario_principale: (
             "L'amministratore, dalla tabella dei reader, preme il bottone per modificare i dati del reader scelto.",
-            "L'amministratore modifica i dati del reader RFID negli appositi campi di testo:
+            "L'amministratore modifica i dati del reader RFID negli appositi campi:
                 - nome;
                 - produttore;
                 - modello;
                 - indirizzo MAC;
-                - abilitazione.",
-            ".",
+                - abilitazione.
+                Tutti i campi sono configurati in modo da accettare solo dati nel formato valido.",
             "L'amministratore invia i dati aggiornati del reader tramite il pulsante di salvataggio.",
+        ),
+        estensioni: (
+            "Errore: sistema non raggiungibile;",
+            "Errore: servizi cloud esterni non raggiungibili.",
         ),
     ),
 )
@@ -101,20 +106,39 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
 
 #useCase(
     (
-        number: 2,
+        number: 3,
         name: "Configurazione reader RFID",
-        "Attore principale": "Sviluppatore applicativi",
-        "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
-        "Postcondizioni": "Il sistema ha salvato la configurazione del test automatico",
-        "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione",
-        Inclusioni: (
+        attore_principale: "Amministratore",
+        descrizione: "Il sistema consente all'amministratore di configurare un reader RFID già registrato nella piattaforma.",
+        precondizioni: (
+            "Il reader RFID è configurato per poter comunicare in rete e con AWS IoT.",
+            "Il reader RFID è già registrato nella piattaforma KanbanBox.",
+        ),
+        postcondizioni: (
+            parts: (
+                "Il sistema ha aggiornato la configurazione di sistema e/o della modalità operativa del reader RFID e ne ha creato un ",
+                (body: "backup", target: <glossary-backup>),
+                " salvato a database.",
+            ),
+        ),
+        scenario_principale: (
+            "L'amministratore, dalla tabella dei reader, preme il bottone per configurare il reader scelto.",
+            "L'amministratore inserisce le configurazioni di sistema, della modalità operativa e dell'ambiente di comunicazione del reader, separatamente, negli appositi campi di testo.",
+            "L'amministratore invia le configurazioni del reader tramite il pulsante di salvataggio.",
+        ),
+        estensioni: (
+            "Errore: sistema non raggiungibile;",
+            "Errore: servizi cloud esterni non raggiungibili.",
+            "Errore: configurazione non valida.",
+        ),
+        inclusioni: (
             "Inserimento configurazione di sistema del reader RFID",
             "Inserimento configurazione della modalità operativa del reader RFID",
             "Scelta dell'ambiente in cui il reader deve comunicare i dati dei cartellini",
         ),
     ),
 )
-<uc:1>
+<uc:3>
 
 #useCase(
     (
@@ -189,6 +213,14 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
     (
         number: 99,
         name: "Errore: servizi cloud esterni non raggiungibili",
+    ),
+)
+<uc:3>
+
+#useCase(
+    (
+        number: 99,
+        name: "Errore: configurazione non valida",
     ),
 )
 <uc:3>

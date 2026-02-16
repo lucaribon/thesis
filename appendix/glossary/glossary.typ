@@ -18,6 +18,10 @@ Application Programming Interface, è un insieme di regole e protocolli che cons
 Le API definiscono i metodi e i formati per trasmettere richieste e risposte tra componenti software o hardware, facilitando la comunicazione tra sistemi diversi.\
 
 == B
+=== Backup
+<glossary-backup>
+Il backup è una copia esatta di dati, in un formato qualsiasi (compatibile con il formato dei dati originari), che viene creata per proteggere le informazioni in caso di perdita, danneggiamento o malfunzionamento del sistema originale.\
+
 === Broker
 <glossary-broker>
 Un broker è un componente software che funge da intermediario nella comunicazione tra dispositivi in un'architettura publish/subscribe, come quella utilizzata dal protocollo MQTT.\

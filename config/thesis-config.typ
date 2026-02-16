@@ -70,7 +70,19 @@
 }
 
 #let _usecase_value(v) = {
-    if type(v) == array {
+    if type(v) == dictionary {
+        let gloss_body = v.at("body", default: none)
+        let gloss_target = v.at("target", default: none)
+        let parts = v.at("parts", default: none)
+
+        if gloss_body != none and gloss_target != none {
+            link(gloss_target)[#gloss_body#sub[\G]]
+        } else if type(parts) == array {
+            [#for part in parts { _usecase_value(part) }]
+        } else {
+            v
+        }
+    } else if type(v) == array {
         if v.len() == 0 {
             "—"
         } else if v.all(item => type(item) == str) {
@@ -80,7 +92,7 @@
             // Fallback for non-string items.
             list(
                 tight: true,
-                ..v.map(item => [#item]),
+                ..v.map(item => [#_usecase_value(item)]),
             )
         }
     } else {
