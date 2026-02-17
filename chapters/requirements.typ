@@ -6,6 +6,7 @@
 = Analisi dei requisiti // 10-20 pagine
 <cap:analisi-requisiti>
 == Attori
+// FIXME: ha senso il sistema? mi sa di no?
 *Sistema di lettura RFID*: rappresenta l'insieme di dispositivi hardware che si occupano di leggere e trasmettere le informazioni dei tag RFID che attraversano la loro area di copertura.
 
 *Amministratore*: nel backend di KanbanBOX sono presenti diversi ruoli utilizzati per definire i permessi all'interno della piattaforma. Nonostante ciò, le funzionalità implementate sono accessibili in egual modo dai ruoli sviluppatore, amministratore o consulente applicativo, poiché è necessario che possano essere utilizzate da qualsiasi figura tecnica che si occupi di sviluppo o manutenzione dell'applicativo.\
@@ -21,10 +22,10 @@ di integrazione.
 - O03: Sviluppo del driver di interfacciamento tra antenna RFID Zebra e AWS IoT Core, con
 gestione della comunicazione tramite MQTT.
 - O04: Test e validazione funzionale del driver sviluppato.
-- O05: Realizzazione di una demo funzionante che dimostri l’integrazione completa tra RFID,
+- O05: Realizzazione di una demo funzionante che dimostri l'integrazione completa tra RFID,
 AWS IoT Core e sistema aziendale.
 • Desiderabili
-- D01: Redazione della documentazione tecnica relativa all’architettura del progetto, configurazioni e utilizzo del driver.
+- D01: Redazione della documentazione tecnica relativa all'architettura del progetto, configurazioni e utilizzo del driver.
 - D02: Ottimizzazione delle performance del driver e gestione avanzata degli errori e dei log.
 • Facoltativi
 - F01: Sperimentazione di scenari avanzati di lettura multipla di tag RFID e gestione dei conflitti.
@@ -87,14 +88,14 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
         ),
         scenario_principale: (
             "L'amministratore, dalla tabella dei reader, preme il bottone per modificare i dati del reader scelto.",
-            "L'amministratore modifica i dati del reader RFID negli appositi campi:
+            "L'amministratore inserisce i dati aggiornati del reader RFID negli appositi campi:
                 - nome;
                 - produttore;
                 - modello;
                 - indirizzo MAC;
                 - abilitazione.
                 Tutti i campi sono configurati in modo da accettare solo dati nel formato valido.",
-            "L'amministratore invia i dati aggiornati del reader tramite il pulsante di salvataggio.",
+            "L'amministratore invia le modifiche da applicare al reader tramite il pulsante di salvataggio.",
         ),
         estensioni: (
             "Errore: sistema non raggiungibile;",
@@ -129,12 +130,10 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
         estensioni: (
             "Errore: sistema non raggiungibile;",
             "Errore: servizi cloud esterni non raggiungibili.",
-            "Errore: configurazione non valida.",
         ),
         inclusioni: (
-            "Inserimento configurazione di sistema del reader RFID",
-            "Inserimento configurazione della modalità operativa del reader RFID",
-            "Scelta dell'ambiente in cui il reader deve comunicare i dati dei cartellini",
+            "Modifica della configurazione di sistema del reader RFID",
+            "Modifica della modalità operativa del reader RFID",
         ),
     ),
 )
@@ -142,31 +141,55 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
 
 #useCase(
     (
-        number: 99,
-        name: "Inserimento configurazione di sistema del reader RFID",
+        number: 3.1,
+        name: "Modifica della configurazione di sistema del reader RFID",
+        attore_principale: "Amministratore",
+        descrizione: "Il sistema consente all'amministratore di modificare la configurazione di sistema del reader RFID, che include parametri utili per l'utilizzo di certificati di AWS IoT o la configurazione relativa a MQTT.",
+        precondizioni: (
+            "Il reader RFID è configurato per poter comunicare in rete e con AWS IoT.",
+            "Il reader RFID è già registrato nella piattaforma KanbanBox.",
+        ),
+        postcondizioni: (
+            "L'amministratore ha inserito la configurazione di sistema nel formato apposito.",
+        ),
+        scenario_principale: (
+            "L'amministratore, dalla tabella dei reader, preme il bottone per configurare il reader scelto.",
+            "L'amministratore inserisce la configurazione di sistema del reader in formato JSON, che può anche essere generato tramite un form creato basandosi su uno schema apposito.",
+        ),
+        estensioni: (
+            "Errore: configurazione non valida.",
+        ),
     ),
 )
-<uc:1>
+<uc:3.1>
 
 #useCase(
     (
-        number: 99,
-        name: "Inserimento configurazione della modalità operativa del reader RFID",
+        number: 3.2,
+        name: "Modifica della modalità operativa del reader RFID",
+        attore_principale: "Amministratore",
+        descrizione: "Il sistema consente all'amministratore di modificare la modalità operativa del reader RFID, che include parametri come la configurazione delle antenne radio, la frequenza di lettura dei tag, i dati inseriti nei messaggi MQTT e altri.",
+        precondizioni: (
+            "Il reader RFID è configurato per poter comunicare in rete e con AWS IoT.",
+            "Il reader RFID è già registrato nella piattaforma KanbanBox.",
+        ),
+        postcondizioni: (
+            "L'amministratore ha inserito la configurazione della modalità operativa nel formato apposito.",
+        ),
+        scenario_principale: (
+            "L'amministratore, dalla tabella dei reader, preme il bottone per configurare il reader scelto.",
+            "L'amministratore inserisce la modalità operativa del reader in formato JSON, che può anche essere generato tramite un form creato basandosi su uno schema apposito.",
+        ),
+        estensioni: (
+            "Errore: configurazione non valida.",
+        ),
     ),
 )
-<uc:1>
+<uc:3.2>
 
 #useCase(
     (
-        number: 99,
-        name: "Scelta dell'ambiente in cui il reader deve comunicare i dati dei cartellini",
-    ),
-)
-<uc:1>
-
-#useCase(
-    (
-        number: 3,
+        number: 4,
         name: "Eliminazione reader RFID",
         "Attore principale": "Sviluppatore applicativi",
         "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
@@ -174,11 +197,11 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
         "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione",
     ),
 )
-<uc:2>
+<uc:4>
 
 #useCase(
     (
-        number: 4,
+        number: 5,
         name: "Download del certificato associato al reader",
         "Attore principale": "Sviluppatore applicativi",
         "Precondizioni": "Lo sviluppatore è entrato nel plug-in di simulazione all'interno dell'IDE",
@@ -186,7 +209,7 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
         "Scenario principale": "Lo sviluppatore configura i parametri del test automatico tramite l'interfaccia grafica e salva la configurazione",
     ),
 )
-<uc:3>
+<uc:5>
 
 #useCase(
     (
