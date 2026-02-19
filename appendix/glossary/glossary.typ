@@ -18,6 +18,12 @@ Application Programming Interface, è un insieme di regole e protocolli che cons
 Le API definiscono i metodi e i formati per trasmettere richieste e risposte tra componenti software o hardware, facilitando la comunicazione tra sistemi diversi.\
 
 == B
+=== Backend
+<glossary-backend>
+Il backend è la parte di un sistema software che gestisce la logica di funzionamento del sistema, l'elaborazione dei dati e l'interazione con il database o altri servizi. Non include, invece, l'interfaccia con cui l'utente finale interagisce o la parte visibile del sistema, che è chiamata frontend. 
+
+Nel caso di KanbanBox il backend viene eseguito su una macchina server, ovvero un dispositivo diverso e fisicamente distante dalla macchina usata dall'utente finale per interagire con il sistema.\
+
 === Backup
 <glossary-backup>
 Il backup è una copia esatta di dati, in un formato qualsiasi (compatibile con il formato dei dati originari), che viene creata per proteggere le informazioni in caso di perdita, danneggiamento o malfunzionamento del sistema originale.\
@@ -47,6 +53,9 @@ Hypertext Transport Protocol, è un protocollo di comunicazione basato su archit
 <glossary-ide>
 
 == J
+=== JSON
+<glossary-json>
+JavaScript Object Notation, è un formato di file testuali utilizzato per l'archiviazione e lo scambio di dati, tramite sistemi informatici, che rimane comunque leggibile anche da esseri umani.\
 
 == K
 === Kanban

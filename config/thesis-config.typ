@@ -54,6 +54,8 @@
         stack(
             if it.numbering != none {
                 text(size: 1.3em)[#counter(heading).display() #it.body]
+            } else {
+                text(size: 1.3em)[#it.body]
             },
         )
     }
@@ -102,7 +104,7 @@
 
 #let useCase(useCaseDetails) = {
     if useCaseDetails.name != none and useCaseDetails.name != "" {
-        text(12pt, [*UC#useCaseDetails.number: #useCaseDetails.name*])
+        heading(level: 3, numbering: none)[UC#useCaseDetails.number: #useCaseDetails.name]
     }
 
     let rows = for (k, v) in useCaseDetails {
@@ -123,12 +125,16 @@
         }
     }
 
-    table(
-        inset: 8pt,
-        stroke: none,
-        columns: 2,
-        ..rows,
-    )
+    {
+        set par(justify: false)
+        table(
+            inset: (x: 0pt, y: 5pt),
+            stroke: none,
+            columns: (0.4fr, 1fr),
+            row-gutter: 0.35em,
+            ..rows,
+        )
+    }
 }
 
 #let gloss(body, target) = link(target)[#body#sub[\G]]
