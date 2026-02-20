@@ -7,32 +7,10 @@
 <cap:analisi-requisiti>
 == Attori
 // FIXME: ha senso il sistema? mi sa di no?
-*Sistema di lettura RFID*: rappresenta l'insieme di dispositivi hardware che si occupano di leggere e trasmettere le informazioni dei tag RFID che attraversano la loro area di copertura.
+// Sistema di lettura RFID*: rappresenta l'insieme di dispositivi hardware che si occupano di leggere e trasmettere le informazioni dei tag RFID che attraversano la loro area di copertura.
 
 *Amministratore*: nel backend di KanbanBOX sono presenti diversi ruoli utilizzati per definire i permessi all'interno della piattaforma. Nonostante ciò, le funzionalità implementate sono accessibili in egual modo dai ruoli sviluppatore, amministratore o consulente applicativo, poiché è necessario che possano essere utilizzate da qualsiasi figura tecnica che si occupi di sviluppo o manutenzione dell'applicativo.\
 Per questo motivo, in questa sede, ho deciso di raggruppare tutti i ruoli al di sotto dell'attore "Amministratore".
-
-== Obbiettivi
-Si prevede lo svolgimento dei seguenti obiettivi:
-• Obbligatori
-- O01: Studio e comprensione del protocollo MQTT e delle sue modalità di integrazione con
-dispositivi IoT.
-- O02: Analisi del sistema RFID aziendale e dei lettori Zebra, comprendendo flussi dati e punti
-di integrazione.
-- O03: Sviluppo del driver di interfacciamento tra antenna RFID Zebra e AWS IoT Core, con
-gestione della comunicazione tramite MQTT.
-- O04: Test e validazione funzionale del driver sviluppato.
-- O05: Realizzazione di una demo funzionante che dimostri l'integrazione completa tra RFID,
-AWS IoT Core e sistema aziendale.
-• Desiderabili
-- D01: Redazione della documentazione tecnica relativa all'architettura del progetto, configurazioni e utilizzo del driver.
-- D02: Ottimizzazione delle performance del driver e gestione avanzata degli errori e dei log.
-• Facoltativi
-- F01: Sperimentazione di scenari avanzati di lettura multipla di tag RFID e gestione dei conflitti.
-- F02: Implementazione di notifiche o alert automatici basati sugli eventi rilevati dai tag RFID
-tramite AWS IoT Core.
-
-== Panoramica funzionalità
 
 == Casi d'uso
 In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che rappresentano i casi d'uso principali del sistema e le loro descrizioni.
@@ -438,44 +416,87 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
         ),
     ),
 )
-<uc:3>
+<uc:11>
 
 
-== Tracciamento dei requisiti
+== Requisiti
+In questa sezione vengono elencati i requisiti dettati dal progetto. Essendo questo un progetto che ha richiesto un'ampia fase di esplorazione, i requisiti sono stati identificati in diversi momenti, partendo con un'analisi iniziale del piano di lavoro e, successivamente, approfondendo l'analisi attraverso riunioni interne con alcuni membri del team di sviluppo.
 
-// Da un'attenta analisi dei requisiti e degli ``use ``case effettuata sul progetto è stata stilata la tabella che traccia i requisiti in rapporto agli use case.
+Ogni requisti è identificato da un codice alfanumerico costruito seguendo la struttura:
+#align(center, [*R - [numero] - [tipo] - [priorità]*])
+dove:
+- *[numero]*: numero progressivo che identifica il requisito tra quelli dello stesso tipo e con la stessa priorità;
+- *[tipo]*: indica se il requisito è
+    - *F*: funzionale, indica una funzionalità che il sistema deve implementare;
+    - *Q*: di qualità, indica una caratteristica di qualità che il sistema deve soddisfare, come ad esempio prestazioni, sicurezza, usabilità, ecc.;
+    - *V*: di vincolo, indica una limitazione che il sistema deve rispettare, imposta dagli stakeholder o da fattori esterni, come ad esempio l'utilizzo di determinate tecnologie, l'aderenza a standard specifici, ecc.;
+- *[priorità]*: indica l'importanza del requisito, che può essere
+    - *O*: obbligatorio, ovvero che deve essere necessariamente soddisfatto perché si possa considerare il progetto completato;
+    - *D*: desiderabile, ovvero che sarebbe preferibile soddisfare, ma non è essenziale per considerare il progetto completato;
+    - *F*: facoltativo, ovvero un requisito migliorativo che può essere soddisfatto se ci sono risorse e tempo sufficienti.
 
-// Sono stati individuati diversi tipi di requisiti e si è quindi fatto utilizzo di un codice identificativo per distinguerli.
+Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requisiti-vincolo sono riassunti i requisiti e il loro tracciamento con gli use case delineati in fase di analisi.
 
-// Il codice dei requisiti è così strutturato R(F/Q/V)(N/D/O) dove:
+// • Obbligatori
+// - O01: Studio e comprensione del protocollo MQTT e delle sue modalità di integrazione con
+// dispositivi IoT.
+// - O02: Analisi del sistema RFID aziendale e dei lettori Zebra, comprendendo flussi dati e punti
+// di integrazione.
+// - O03: Sviluppo del driver di interfacciamento tra antenna RFID Zebra e AWS IoT Core, con
+// gestione della comunicazione tramite MQTT.
+// - O04: Test e validazione funzionale del driver sviluppato.
+// - O05: Realizzazione di una demo funzionante che dimostri l'integrazione completa tra RFID,
+// AWS IoT Core e sistema aziendale.
+// • Desiderabili
+// - D01: Redazione della documentazione tecnica relativa all'architettura del progetto, configurazioni e utilizzo del driver.
+// - D02: Ottimizzazione delle performance del driver e gestione avanzata degli errori e dei log.
+// • Facoltativi
+// - F01: Sperimentazione di scenari avanzati di lettura multipla di tag RFID e gestione dei conflitti.
+// - F02: Implementazione di notifiche o alert automatici basati sugli eventi rilevati dai tag RFID
+// tramite AWS IoT Core.
 
-// #set list(marker: none)
-// - R = requisito
-// - F = funzionale
-// - Q = qualitativo
-// - V = di vincolo
-// - N = obbligatorio (necessario)
-// - D = desiderabile
-// - Z = opzionale
+=== Requisiti funzionali
+#figure(
+    table(
+        columns: (auto, auto, auto),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
 
-// Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requisiti-vincolo sono riassunti i requisiti e il loro tracciamento con gli use case delineati in fase di analisi.
+        table.header([*Requisito*], [*Descrizione*], [*Fonti*]),
+        [RFN-1], [L'interfaccia permette di configurare il tipo di sonde del test], [UC1],
+        [RFN-1], [L'interfaccia permette di configurare il tipo di sonde del test], [UC1],
+    ),
+    caption: "Tabella del tracciamento dei requisti funzionali",
+)
+<tab:requisiti-funzionali>
 
-// #figure(
-//     table(
-//         columns: (auto, auto, auto),
-//         align: (center, left, center),
-//         [*Requisito*], [*Descrizione*], [*Use Case*],
-//         [RFN-1], [L'interfaccia permette di configurare il tipo di sonde del test], [UC1],
-//     ),
-//     caption: "Tabella del tracciamento dei requisti funzionali",
-// )
-// <tab:requisiti-funzionali>
+=== Requisiti di qualità
+#figure(
+    table(
+        columns: (auto, auto, auto),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
 
-// #figure(
-//     table(
-//         columns: (auto, auto, auto),
-//         align: (center, left, center),
-//         [*Requisito*], [*Descrizione*], [*Use Case*],
-//         [RQD-1], [Le prestazioni del simulatore hardware deve garantire la giusta esecuzione dei test e non la generazione di falsi negativi], [#sym.dash],
-//     ),
-//     caption:
+        table.header([*Requisito*], [*Descrizione*], [*Fonti*]),
+        [RFN-1], [L'interfaccia permette di configurare il tipo di sonde del test], [UC1],
+    ),
+    caption: "Tabella del tracciamento dei requisti di qualità",
+)
+<tab:requisiti-qualitativi>
+
+=== Requisiti di vincolo
+#figure(
+    table(
+        columns: (auto, auto, auto),
+        inset: 8pt,
+        align: (x, y) => if y > 0 { left } else { center + horizon },
+        fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+
+        table.header([*Requisito*], [*Descrizione*], [*Fonti*]),
+        [RFN-1], [L'interfaccia permette di configurare il tipo di sonde del test], [UC1],
+    ),
+    caption: "Tabella del tracciamento dei requisti di vincolo",
+)
+<tab:requisiti-vincolo>
