@@ -31,7 +31,7 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
 #useCase(
     (
         number: 1,
-        name: "Aggiunta reader RFID",
+        name: "Aggiunta di un reader RFID",
         attore_principale: "Amministratore",
         descrizione: "Il sistema consente all'amministratore di aggiungere un nuovo reader RFID alla piattaforma, configurando i parametri necessari per la comunicazione con AWS IoT.",
         precondizioni: (
@@ -425,7 +425,7 @@ In questa sezione vengono elencati i requisiti dettati dal progetto. Essendo que
 Ogni requisti è identificato da un codice alfanumerico costruito seguendo la struttura:
 #align(center, [*R - [numero] - [tipo] - [priorità]*])
 dove:
-- *[numero]*: numero progressivo che identifica il requisito tra quelli dello stesso tipo e con la stessa priorità;
+- *[numero]*: numero progressivo che identifica il requisito tra quelli dello stesso tipo;
 - *[tipo]*: indica se il requisito è
     - *F*: funzionale, indica una funzionalità che il sistema deve implementare;
     - *Q*: di qualità, indica una caratteristica di qualità che il sistema deve soddisfare, come ad esempio prestazioni, sicurezza, usabilità, ecc.;
@@ -433,7 +433,7 @@ dove:
 - *[priorità]*: indica l'importanza del requisito, che può essere
     - *O*: obbligatorio, ovvero che deve essere necessariamente soddisfatto perché si possa considerare il progetto completato;
     - *D*: desiderabile, ovvero che sarebbe preferibile soddisfare, ma non è essenziale per considerare il progetto completato;
-    - *F*: facoltativo, ovvero un requisito migliorativo che può essere soddisfatto se ci sono risorse e tempo sufficienti.
+    - *FA*: facoltativo, ovvero un requisito migliorativo che può essere soddisfatto se ci sono risorse e tempo sufficienti.
 
 Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requisiti-vincolo sono riassunti i requisiti e il loro tracciamento con gli use case delineati in fase di analisi.
 
@@ -455,17 +455,55 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
 // - F02: Implementazione di notifiche o alert automatici basati sugli eventi rilevati dai tag RFID
 // tramite AWS IoT Core.
 
+
+// TODO: domandare a relatore: ho escluso i requisti relativi a studio o comunque azioni che dovevo svolgere io, tenendo solo quelli relativi al sistema, va bene? oppure devo includere anche quelli relativi a me come studente? (es. O01, O02, D01, ecc.)
+
+// TODO: forse dare più spazio alla descrizione, quindi fare capitolo requisiti e poi tracciamento?
 === Requisiti funzionali
 #figure(
     table(
-        columns: (auto, auto, auto),
+        columns: (auto, auto, auto, auto),
         inset: 8pt,
         align: (x, y) => if y > 0 { left } else { center + horizon },
         fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
 
-        table.header([*Requisito*], [*Descrizione*], [*Fonti*]),
-        [RFN-1], [L'interfaccia permette di configurare il tipo di sonde del test], [UC1],
-        [RFN-1], [L'interfaccia permette di configurare il tipo di sonde del test], [UC1],
+        table.header([*Requisito*], [*Descrizione*], [*Fonti*], [*Stato*]),
+        [R-01-F-O],
+        [Sviluppo del driver di interfacciamento tra antenna RFID Zebra e AWS IoT Core, congestione della comunicazione tramite MQTT],
+        [Piano di lavoro, UC3, UC3.1, UC3.2, UC6],
+        [Raggiunto],
+
+        [R-02-F-O],
+        [L'amministratore deve poter aggiungere un reader al backend di KanbanBox e ad AWS IoT],
+        [UC1],
+        [Raggiunto],
+
+        [R-03-F-O],
+        [L'amministratore deve poter aggiornare i dati di un reader già registrato nel sistema],
+        [UC2],
+        [Raggiunto],
+
+        [R-04-F-O],
+        [L'amministratore deve poter configurare il sistema è la modalità operativa di un reader già registrato nel sistema],
+        [UC3, UC3.1, UC3.2],
+        [Raggiunto],
+
+        [R-05-F-O], [L'amministratore deve poter eliminare un reader già registrato nel sistema], [UC4], [Raggiunto],
+
+        [R-06-F-O],
+        [L'amministratore deve poter scaricare il certificato associato ad un reader, una sola volta],
+        [UC5],
+        [Raggiunto],
+
+        [R-07-F-O],
+        [Il sistema deve implementare una dashboard da cui è possibile vedere i cartellini letti dai reader e il loro stato],
+        [UC6, UC6.1, UC6.2],
+        [Raggiunto],
+
+        [R-08-F-O],
+        [Il sistema deve notificare all'amministratore l'impossibilità di completare l'operazione richiesta e l'errore riscontrato],
+        [UC7, UC8, UC9, UC10, UC11],
+        [Raggiunto],
     ),
     caption: "Tabella del tracciamento dei requisti funzionali",
 )
@@ -474,13 +512,27 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
 === Requisiti di qualità
 #figure(
     table(
-        columns: (auto, auto, auto),
+        columns: (auto, auto, auto, auto),
         inset: 8pt,
         align: (x, y) => if y > 0 { left } else { center + horizon },
         fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
 
-        table.header([*Requisito*], [*Descrizione*], [*Fonti*]),
-        [RFN-1], [L'interfaccia permette di configurare il tipo di sonde del test], [UC1],
+        table.header([*Requisito*], [*Descrizione*], [*Fonti*], [*Stato*]),
+        [R-01-Q-O], [Test e validazione funzionale del driver sviluppato], [Piano di lavoro], [Raggiunto],
+        [R-02-Q-D],
+        [Ottimizzazione delle performance del driver e gestione avanzata degli errori e dei log],
+        [Piano di lavoro],
+        [Raggiunto],
+
+        [R-03-Q-FA],
+        [Redazione della documentazione tecnica relativa all'architettura del progetto, configurazioni e utilizzo del driver],
+        [Piano di lavoro],
+        [Raggiunto],
+
+        [R-04-Q-FA],
+        [Sperimentazione di scenari avanzati di lettura multipla di tag RFID e gestione dei conflitti],
+        [Piano di lavoro],
+        [Raggiunto],
     ),
     caption: "Tabella del tracciamento dei requisti di qualità",
 )
@@ -489,13 +541,31 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
 === Requisiti di vincolo
 #figure(
     table(
-        columns: (auto, auto, auto),
+        columns: (auto, auto, auto, auto),
         inset: 8pt,
         align: (x, y) => if y > 0 { left } else { center + horizon },
         fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
 
-        table.header([*Requisito*], [*Descrizione*], [*Fonti*]),
-        [RFN-1], [L'interfaccia permette di configurare il tipo di sonde del test], [UC1],
+        table.header([*Requisito*], [*Descrizione*], [*Fonti*], [*Stato*]),
+        [R-01-V-O],
+        [Utilizzo del protocollo MQTT per la comunicazione tra i reader RFID, AWS IoT Core e il backend di KanbanBox],
+        [Piano di lavoro, UC3, UC3.1, UC3.2],
+        [Raggiunto],
+
+        [R-02-V-O],
+        [Utilizzo di AWS IoT Core come servizio cloud per la gestione della comunicazione tra i reader RFID e il backend di KanbanBox],
+        [Piano di lavoro, UC6],
+        [Raggiunto],
+
+        [R-03-V-O],
+        [Utilizzo di AWS SQS come servizio cloud per la gestione delle letture dei tag RFID asincrona],
+        [Riunioni interne],
+        [Raggiunto],
+
+        [R-04-V-O],
+        [Utilizzo di PHP per l'implementazione delle funzionalità richieste],
+        [Riunioni interne],
+        [Raggiunto],
     ),
     caption: "Tabella del tracciamento dei requisti di vincolo",
 )
