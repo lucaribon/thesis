@@ -80,6 +80,9 @@ Message Queuing Telemetry Transport, è un protocollo di messaggistica basata su
 == P
 
 == Q
+=== Quality of Service
+<glossary-qos>
+Per il protocollo MQTT il Quality of Service definisce con che garanzia verranno consegnati i messaggi ai dispositivi "destinatari" per un certo topic. Esistono tre livelli di Quality of Service: 0 (al massimo una consegna), 1 (almeno una consegna) e 2 (esattamente una consegna).\
 
 == R
 === RFID
