@@ -150,7 +150,6 @@ Infatti, il broker di AWS IoT nella sua configurazione base permette a tutti i c
 
 
 #show par: set block(breakable: false)
-// TODO: terminare con una tabella riassuntiva che riporta codice, nome breve, tipologia probabilità e impatto
 === Specifica dei Rischi
 
 #figure(

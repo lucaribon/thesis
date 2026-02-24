@@ -5,24 +5,33 @@
 
 = Analisi dei requisiti // 10-20 pagine
 <cap:analisi-requisiti>
-== Attori
-// FIXME: ha senso il sistema? mi sa di no?
-// Sistema di lettura RFID*: rappresenta l'insieme di dispositivi hardware che si occupano di leggere e trasmettere le informazioni dei tag RFID che attraversano la loro area di copertura.
 
+== Panoramica delle funzionalità
+// TODO: forse dare più spazio alla descrizione, quindi fare capitolo requisiti e poi tracciamento?
+=== Gestione dei reader RFID
+
+=== Ricezione e visualizzazione dei cartellini letti dai reader
+
+=== Errori e notifiche all'utente
+In caso di *errori*, come ad esempio l'impossibilità di comunicare con il backend di KanbanBox o con i servizi cloud esterni, o l'inserimento di configurazioni non valide, il sistema deve notificare all'amministratore l'impossibilità di completare l'operazione richiesta e l'errore riscontrato tramite dei *pop-up* a scomparsa mostrati direttamente nella pagina in cui l'utente sta operando.
+
+Il contenuto dei messaggi di errore deve racchiudere una breve e comprensibile, anche per utenti non tecnici, descrizione dell'errore riscontrato; inoltre, ove possibile, deve fornire dettagli utili a comprendere il problema, come ad esempio l'identificativo della risorsa su cui si stava operando.
+
+=== Sicurezza della comunicazione
+
+== Attori
 *Amministratore*: nel backend di KanbanBOX sono presenti diversi ruoli utilizzati per definire i permessi all'interno della piattaforma. Nonostante ciò, le funzionalità implementate sono accessibili in egual modo dai ruoli sviluppatore, amministratore o consulente applicativo, poiché è necessario che possano essere utilizzate da qualsiasi figura tecnica che si occupi di sviluppo o manutenzione dell'applicativo.\
 Per questo motivo, in questa sede, ho deciso di raggruppare tutti i ruoli al di sotto dell'attore "Amministratore".
 
 == Casi d'uso
 In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che rappresentano i casi d'uso principali del sistema e le loro descrizioni.
 
-// Per lo studio dei casi di utilizzo del prodotto sono stati creati dei diagrammi.
-// I diagrammi dei casi d'uso (in inglese _Use Case Diagram_) sono diagrammi di tipo UML dedicati alla descrizione delle funzioni o servizi offerti da un sistema, così come sono percepiti e utilizzati dagli attori che interagiscono col sistema stesso.
+Il progetto è focalizzato principalmente sulla creazione di un driver di interfacciamento, ovvero un componente software che si occupa di gestire la comunicazione tra i reader RFID, AWS IoT Core e la piattaforma web KanbanBox, e sulla progettazione dell'architettura del sistema che include reader, servizi AWS e backend di KanbanBox.
+Inoltre molte delle funzionalità direttamente o indirettamente legate alle modifiche o aggiunte fatte erano già implementate in origine e sono rimaste invariate e funzionanti.
+Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 
-// TODO: Essendo il progetto finalizzato alla creazione di un tool per l'automazione di un processo E in più molte funzionalità appartenenti allo stesso dominio su cui si è lavorato erano già state implementate e sono risultate compatibili con la nuova architettura del sistema, le interazioni da parte dell'utilizzatore devono essere ovviamente ridotte allo stretto necessario. Per questi motivi i diagrammi dei casi d'uso risultano semplici e in numero ridotto.
-
-// FIXME: integrare la figure nello use case in modo che venga mostrata sotto al titolo del caso d'uso. A MENO CHE non si decida/riesca a fare una solo figure per più use case, visto che sono molto legati e pochi.
-
-// TODO: quando si scrive a relatore specificare che i diagrammi non ci sono perché aspetto che gli UC siano definitivi
+// TODO: quando si scrive al relatore specificare che i diagrammi non ci sono perché aspetto che gli UC siano definitivi
+// TODO: integrare la figure nello use case in modo che venga mostrata sotto al titolo del caso d'uso. A MENO CHE non si decida/riesca a fare una solo figure per più use case, visto che sono molto legati e pochi.
 #figure(
     image("../images/usecase/scenario-principale.png", width: 100%),
     caption: "Use Case - UC0: Scenario principale",
@@ -418,11 +427,10 @@ In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che ra
 )
 <uc:11>
 
-
 == Requisiti
 In questa sezione vengono elencati i requisiti dettati dal progetto. Essendo questo un progetto che ha richiesto un'ampia fase di esplorazione, i requisiti sono stati identificati in diversi momenti, partendo con un'analisi iniziale del piano di lavoro e, successivamente, approfondendo l'analisi attraverso riunioni interne con alcuni membri del team di sviluppo.
 
-Ogni requisti è identificato da un codice alfanumerico costruito seguendo la struttura:
+Ogni requisito è identificato da un codice alfanumerico costruito seguendo la struttura:
 #align(center, [*R - [numero] - [tipo] - [priorità]*])
 dove:
 - *[numero]*: numero progressivo che identifica il requisito tra quelli dello stesso tipo;
@@ -435,30 +443,10 @@ dove:
     - *D*: desiderabile, ovvero che sarebbe preferibile soddisfare, ma non è essenziale per considerare il progetto completato;
     - *FA*: facoltativo, ovvero un requisito migliorativo che può essere soddisfatto se ci sono risorse e tempo sufficienti.
 
-Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requisiti-vincolo sono riassunti i requisiti e il loro tracciamento con gli use case delineati in fase di analisi.
-
-// • Obbligatori
-// - O01: Studio e comprensione del protocollo MQTT e delle sue modalità di integrazione con
-// dispositivi IoT.
-// - O02: Analisi del sistema RFID aziendale e dei lettori Zebra, comprendendo flussi dati e punti
-// di integrazione.
-// - O03: Sviluppo del driver di interfacciamento tra antenna RFID Zebra e AWS IoT Core, con
-// gestione della comunicazione tramite MQTT.
-// - O04: Test e validazione funzionale del driver sviluppato.
-// - O05: Realizzazione di una demo funzionante che dimostri l'integrazione completa tra RFID,
-// AWS IoT Core e sistema aziendale.
-// • Desiderabili
-// - D01: Redazione della documentazione tecnica relativa all'architettura del progetto, configurazioni e utilizzo del driver.
-// - D02: Ottimizzazione delle performance del driver e gestione avanzata degli errori e dei log.
-// • Facoltativi
-// - F01: Sperimentazione di scenari avanzati di lettura multipla di tag RFID e gestione dei conflitti.
-// - F02: Implementazione di notifiche o alert automatici basati sugli eventi rilevati dai tag RFID
-// tramite AWS IoT Core.
-
+Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requisiti-vincolo sono riassunti i requisiti, le fonti da cui sono stati ricavati e il loro stato di raggiungimento.
 
 // TODO: domandare a relatore: ho escluso i requisti relativi a studio o comunque azioni che dovevo svolgere io, tenendo solo quelli relativi al sistema, va bene? oppure devo includere anche quelli relativi a me come studente? (es. O01, O02, D01, ecc.)
 
-// TODO: forse dare più spazio alla descrizione, quindi fare capitolo requisiti e poi tracciamento?
 === Requisiti funzionali
 #figure(
     table(
@@ -469,7 +457,7 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
 
         table.header([*Requisito*], [*Descrizione*], [*Fonti*], [*Stato*]),
         [R-01-F-O],
-        [Sviluppo del driver di interfacciamento tra antenna RFID Zebra e AWS IoT Core, congestione della comunicazione tramite MQTT],
+        [Sviluppo del driver di interfacciamento tra antenna RFID Zebra e AWS IoT Core],
         [Piano di lavoro, UC3, UC3.1, UC3.2, UC6],
         [Raggiunto],
 
@@ -519,10 +507,15 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
 
         table.header([*Requisito*], [*Descrizione*], [*Fonti*], [*Stato*]),
         [R-01-Q-O], [Test e validazione funzionale del driver sviluppato], [Piano di lavoro], [Raggiunto],
+
+        [R-02-Q-O],
+        [Implementazione di meccanismi atti a garantire la sicurezza della comunicazione],
+        [Riunioni interne],
+
         [R-02-Q-D],
         [Ottimizzazione delle performance del driver e gestione avanzata degli errori e dei log],
         [Piano di lavoro],
-        [Raggiunto],
+        [Raggiunto parzialmente],
 
         [R-03-Q-FA],
         [Redazione della documentazione tecnica relativa all'architettura del progetto, configurazioni e utilizzo del driver],
