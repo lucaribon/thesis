@@ -25,6 +25,7 @@ Dall'interfaccia di gestione dei reader RFID, strutturata come tabella, l'ammini
 
 === Errori e notifiche all'utente
 In caso di *errori*, il sistema deve notificare all'amministratore l'impossibilità di completare l'operazione richiesta e l'errore riscontrato tramite dei *pop-up* a scomparsa, mostrati direttamente nella pagina in cui l'utente sta operando.
+In caso di *errori*, il sistema deve notificare all'amministratore l'impossibilità di completare l'operazione richiesta e l'errore riscontrato tramite dei *pop-up* a scomparsa, mostrati direttamente nella pagina in cui l'utente sta operando.
 
 Il contenuto dei messaggi di errore deve racchiudere una breve e comprensibile, anche per utenti non tecnici, descrizione dell'errore riscontrato; inoltre, ove possibile, deve fornire dettagli utili a comprendere il problema, come ad esempio l'identificativo della risorsa su cui si stava operando.
 
