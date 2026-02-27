@@ -168,7 +168,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         ),
         scenario_principale: (
             "L'amministratore, dalla tabella dei reader, preme il bottone per configurare il reader scelto;",
-            "L'amministratore inserisce la configurazione di sistema del reader in formato JSON, che può anche essere generata tramite un form creato basandosi su uno schema apposito.",
+            "L'amministratore inserisce la configurazione di sistema del reader in formato JSON, che può anche essere generata tramite un form costruito basandosi su uno schema JSON apposito.",
         ),
         estensioni: (
             "Errore: configurazione non valida.",
@@ -193,7 +193,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         ),
         scenario_principale: (
             "L'amministratore, dalla tabella dei reader, preme il bottone per configurare il reader scelto;",
-            "L'amministratore inserisce la modalità operativa del reader in formato JSON, che può anche essere generata tramite un form creato basandosi su uno schema apposito.",
+            "L'amministratore inserisce la modalità operativa del reader in formato JSON, che può anche essere generata tramite un form costruito basandosi su uno schema JSON apposito.",
         ),
         estensioni: (
             "Errore: configurazione non valida.",
@@ -288,7 +288,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         number: 6.1,
         name: "Visualizzazione dei cartellini processati",
         attore_principale: "Amministratore",
-        descrizione: "Nella dashboard di visualizzazione dei cartellini letti è presente una colonna dedicata ai cartellini processati dai reader.",
+        descrizione: "Nella dashboard di visualizzazione dei cartellini letti è presente una colonna dedicata ai cartellini processati dalla piattaforma KanbanBox.",
         precondizioni: (
             "L'amministratore deve essere autenticato;",
             "Almeno un reader RFID è configurato per poter comunicare in rete e con AWS IoT;",
@@ -298,7 +298,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         postcondizioni: "Il cartellino processato viene mostrato nella colonna dedicata.",
         scenario_principale: (
             "L'amministratore accede alla dashboard dei cartellini letti dai reader;",
-            "I cartellini che riportano un identificatore del reader da cui sono stati letti conforme vengono mostrati nella colonna dedicata ai cartellini processati.",
+            "I cartellini che riportano un identificatore del reader da cui sono stati letti conforme, e che includono un codice del cartellino che trova corrispondenza tra i kanban nella piattaforma vengono mostrati nella colonna dedicata ai cartellini processati.",
         ),
     ),
 )
@@ -309,7 +309,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         number: 6.2,
         name: "Visualizzazione dei cartellini scartati",
         attore_principale: "Amministratore",
-        descrizione: "Nella dashboard di visualizzazione dei cartellini letti è presente una colonna dedicata ai cartellini scartati dai reader.",
+        descrizione: "Nella dashboard di visualizzazione dei cartellini letti è presente una colonna dedicata ai cartellini scartati dalla piattaforma KanbanBox.",
         precondizioni: (
             "L'amministratore deve essere autenticato;",
             "Almeno un reader RFID è configurato per poter comunicare in rete e con AWS IoT;",
@@ -319,7 +319,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         postcondizioni: "Il cartellino scartato viene mostrato nella colonna dedicata.",
         scenario_principale: (
             "L'amministratore accede alla dashboard dei cartellini letti dai reader;",
-            "I cartellini che riportano un identificatore del reader da cui sono stati letti non conforme vengono mostrati nella colonna dedicata ai cartellini scartati.",
+            "I cartellini che riportano un identificatore del reader da cui sono stati letti non conforme, o che non includono un codice del cartellino che trova corrispondenza tra i kanban nella piattaforma vengono mostrati nella colonna dedicata ai cartellini scartati.",
         ),
     ),
 )
@@ -466,7 +466,7 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
 === Requisiti funzionali
 #figure(
     table(
-        columns: (auto, auto, auto, auto),
+        columns: (1fr, 2.5fr, 1fr, 1fr),
         inset: 8pt,
         align: (x, y) => if y > 0 { left } else { center + horizon },
         fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
@@ -516,7 +516,7 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
 === Requisiti di qualità
 #figure(
     table(
-        columns: (auto, auto, auto, auto),
+        columns: (1fr, 2.5fr, 1fr, 1fr),
         inset: 8pt,
         align: (x, y) => if y > 0 { left } else { center + horizon },
         fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
@@ -551,7 +551,7 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
 === Requisiti di vincolo
 #figure(
     table(
-        columns: (auto, auto, auto, auto),
+        columns: (1fr, 2.5fr, 1fr, 1fr),
         inset: 8pt,
         align: (x, y) => if y > 0 { left } else { center + horizon },
         fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
