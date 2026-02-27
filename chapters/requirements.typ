@@ -7,31 +7,36 @@
 <cap:analisi-requisiti>
 
 == Panoramica delle funzionalità
-// TODO: forse dare più spazio alla descrizione, quindi fare capitolo requisiti e poi tracciamento?
 === Gestione dei reader RFID
 Dall'interfaccia di gestione dei reader RFID, strutturata come tabella, l'amministratore deve poter eseguire le seguenti operazioni:
 - *Aggiunta* di un nuovo reader RFID, inserendo i seguenti dati:
     - _nome_: nome che aiuta l'utente a identificare il reader;
     - _produttore_: nome dell'azienda che ha prodotto il reader, attualmente sono disponibili solo reader prodotti da Zebra;
     - _modello_: nome o numero di modello del reader, attualmente sono disponibili solo reader della serie FX7500 e FX9600;
-    - _indirizzo MAC_: indirizzo MAC del reader; campo opzionale poiché viene usato uno UUID generato dal sistema che risulta più affidabile, in quanto il MAC address può essere facilmente manipolato;
-    - _abilitazione_: indica se il reader è abilitato e quindi utilizzabile o meno, permette di rendere temporaneamente inutilizzabile un reader senza doverlo eliminare e riconfigurare successivamente;
-- *Aggiornamento* delle informazioni sopracitate di un reader già registrato nella piattaforma;
-- *Configurazione* di
-    - *sistema*: permette di configurare i parametri per la connessione al broker MQTT, in questo caso quello integrato in AWS IoT Core, e i parametri della comunicazione tramite MQTT (ad esempio topic o #gloss("Quality of Service", <glossary-qos>));
-    - *modalità operativa*: permette di determinare i parametri di lettura dei cartellini RFID, come ad esempio la frequenza di rilettura, il batching e la potenza dell'antenna radio.
+    - _indirizzo MAC_: indirizzo MAC del reader; campo opzionale poiché viene usato uno UUID generato dal backend di KanbanBox che risulta più affidabile, in quanto il MAC address può essere facilmente manipolato da chiunque abbia accesso al reader;
+    - _abilitazione_: indica se il reader è abilitato e quindi utilizzabile o meno, permette di rendere temporaneamente inutilizzabile un reader senza doverlo eliminare e riconfigurare successivamente.
+    L'aggiunta deve scaturire sia la registrazione del reader nel database di KanbanBox, che la creazione delle entità corrispondenti al reader e al certificato in Aws IoT.
+- *Aggiornamento* dei dati di un reader già registrato nel sistema, con parametri e modalità coerenti con la procedura di aggiunta;
+- *Configurazione*
+    - del *sistema*: permette di configurare i parametri per la connessione al broker MQTT, in questo caso integrato in AWS IoT Core, tra cui anche i certificati per autenticare il reader durante la comunicazione con AWS IoT;
+    - della *modalità operativa*: e i parametri della comunicazione tramite MQTT (ad esempio topic o #gloss("Quality of Service", <glossary-qos>));
+    - *modalità operativa*: permette di determinare i parametri di lettura dei tag RFID, come ad esempio la frequenza di rilettura, il batching e la potenza dell'antenna radio.
+    Le configurazioni, una volta applicate, dovranno essere salvate a database per poterle modificare più rapidamente in futuro.
+- *Eliminazione* di un reader, che comporta anche l'eliminazione delle entità corrispondenti al reader e al certificato in Aws IoT;
+- *Download  del certificato* associato al reader, necessario per la comunicazione con AWS IoT, che può essere scaricato una sola volta per motivi di sicurezza. \ Nello specifico il certificato deve essere facilmente fruibile per utenti con meno dimestichezza come i consulenti che si occupano di configurare i reader presso i clienti.
 
 === Ricezione e visualizzazione dei cartellini letti dai reader
+La piattaforma prevede già un'interfaccia per visualizzare i cartellini letti dai reader, con elementi grafici intuitivi e individuabili in modo chiaro, che permette di distinguere facilmente i cartellini processati da quelli scartati anche in ambienti meno agevoli come le linee di produzione delle aziende clienti.
+
+La migrazione da HTTP a MQTT comporta però un'incompatibilità nella comunicazione tra i reader e KanbanBox; è quindi necessario *adattare l'implementazione* del *_pull_* dei cartellini da AWS SQS e dell'*interpretazione* dei dati trasmessi attraverso i tag letti, in modo che questi rimangano associabili ai cartellini kanban e al loro cambio stato, e che continuino ad essere distinti tra cartellini processati e scartati.
 
 === Errori e notifiche all'utente
 In caso di *errori*, il sistema deve notificare all'amministratore l'impossibilità di completare l'operazione richiesta e l'errore riscontrato tramite dei *pop-up* a scomparsa, mostrati direttamente nella pagina in cui l'utente sta operando.
 
-Il contenuto dei messaggi di errore deve racchiudere una breve e comprensibile, anche per utenti non tecnici, descrizione dell'errore riscontrato; inoltre, ove possibile, deve fornire dettagli utili a comprendere il problema, come ad esempio l'identificativo della risorsa su cui si stava operando.
-
-=== Sicurezza della comunicazione
+Il contenuto dei messaggi di errore deve racchiudere una breve descrizione dell'errore riscontrato, comprensibile anche per utenti non tecnici; inoltre, ove possibile, deve fornire dettagli utili a comprendere il problema, come ad esempio l'identificativo della risorsa su cui si stava operando.
 
 == Attori
-*Amministratore*: nel backend di KanbanBOX sono presenti diversi ruoli utilizzati per definire i permessi all'interno della piattaforma. Nonostante ciò, le funzionalità implementate sono accessibili in egual modo dai ruoli sviluppatore, amministratore o consulente applicativo, poiché è necessario che possano essere utilizzate da qualsiasi figura tecnica che si occupi di sviluppo o manutenzione dell'applicativo.\
+*Amministratore*: nel backend di KanbanBOX sono presenti diversi ruoli utilizzati per definire i permessi all'interno della piattaforma. Nonostante ciò, le funzionalità implementate sono accessibili in egual modo dai ruoli sviluppatore, amministratore o consulente applicativo, poiché è necessario che possano essere utilizzate da qualsiasi figura tecnica che si occupi di sviluppo o manutenzione della piattaforma.\
 Per questo motivo, in questa sede, ho deciso di raggruppare tutti i ruoli al di sotto dell'attore "Amministratore".
 
 == Casi d'uso
@@ -43,10 +48,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 
 // TODO: quando si scrive al relatore specificare che i diagrammi non ci sono perché aspetto che gli UC siano definitivi
 // TODO: integrare la figure nello use case in modo che venga mostrata sotto al titolo del caso d'uso. A MENO CHE non si decida/riesca a fare una solo figure per più use case, visto che sono molto legati e pochi.
-#figure(
-    image("../images/usecase/scenario-principale.png", width: 100%),
-    caption: "Use Case - UC0: Scenario principale",
-) <uc:scenario-principale>
+// #figure(
+//     image("../images/usecase/scenario-principale.png", width: 100%),
+//     caption: "Use Case - UC0: Scenario principale",
+// ) <uc:scenario-principale>
 
 #useCase(
     (
@@ -522,6 +527,7 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
         [R-02-Q-O],
         [Implementazione di meccanismi atti a garantire la sicurezza della comunicazione],
         [Riunioni interne],
+        [Raggiunto],
 
         [R-02-Q-D],
         [Ottimizzazione delle performance del driver e gestione avanzata degli errori e dei log],
@@ -573,4 +579,4 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
     ),
     caption: "Tabella del tracciamento dei requisti di vincolo",
 )
-<tab:requisiti-vincolo>n 
+<tab:requisiti-vincolo>
