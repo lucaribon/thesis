@@ -36,7 +36,7 @@ In caso di *errori*, il sistema deve notificare all'amministratore l'impossibili
 Il contenuto dei messaggi di errore deve racchiudere una breve descrizione dell'errore riscontrato, comprensibile anche per utenti non tecnici; inoltre, ove possibile, deve fornire dettagli utili a comprendere il problema, come ad esempio l'identificativo della risorsa su cui si stava operando.
 
 == Attori
-*Amministratore*: nel backend di KanbanBOX sono presenti diversi ruoli utilizzati per definire i permessi all'interno della piattaforma. Nonostante ciò, le funzionalità implementate sono accessibili in egual modo dai ruoli sviluppatore, amministratore o consulente applicativo, poiché è necessario che possano essere utilizzate da qualsiasi figura tecnica che si occupi di sviluppo o manutenzione della piattaforma.\
+*Amministratore*: nel backend di KanbanBOX sono presenti diversi ruoli utilizzati per definire i permessi all'interno della piattaforma. Nonostante ciò, le funzionalità implementate durante questo progetto di tesi sono accessibili in egual modo dai ruoli sviluppatore, amministratore o consulente applicativo, poiché è necessario che possano essere utilizzate da qualsiasi figura tecnica che si occupi di sviluppo o manutenzione della piattaforma.\
 Per questo motivo, in questa sede, ho deciso di raggruppare tutti i ruoli al di sotto dell'attore "Amministratore".
 
 == Casi d'uso
