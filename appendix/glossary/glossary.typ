@@ -78,6 +78,14 @@ Message Queuing Telemetry Transport, è un protocollo di messaggistica basata su
 == O
 
 == P
+=== PEM
+<glossary-PEM>
+Privacy-Enhanced Mail, è un formato di file utilizzato per memorizzare e trasmettere certificati digitali o chiavi private crittografati.\
+È codificato in Base64 e in questo caso viene usato per trasmettere i certificati X.509 di AWS IoT.
+
+=== PFX
+<glossary-PFX>
+Personal Information Exchange, noto anche come PKCS#12, è un formato di file utile per incorporare più certificati e chiavi private in un unico file, che può essere protetto da una password.\ 
 
 == Q
 === Quality of Service
