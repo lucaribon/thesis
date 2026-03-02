@@ -5,3 +5,9 @@ p1:
     publisher: Libreria Progetto
     page-total: 195
     date: 2012-01-01
+
+hive-mq:
+    type: Web
+    title: HiveMQ
+    url: https://www.hivemq.com/mqtt/
+    date: 2026-03-02
