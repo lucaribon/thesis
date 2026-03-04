@@ -1,5 +1,7 @@
 // Non su primo capitolo
 //#pagebreak(to:"odd")
+
+// TODO: replace di tutti i KanbanBOX con KanbanBox, o viceversa
 #import "../config/thesis-config.typ" : gloss
 
 = Introduzione // 2 pagine

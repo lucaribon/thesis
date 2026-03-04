@@ -113,6 +113,9 @@ Unified Modeling Language, è un linguaggio di modellazione standardizzato utili
 == V
 
 == W
+=== Wildcard
+<glossary-wildcard>
+In MQTT, una wildcard è un carattere speciale che può essere utilizzato nei topic per fare in modo che il topic con la wildcard corrisponda a più topic contemporaneamente.\
 
 == X
 
