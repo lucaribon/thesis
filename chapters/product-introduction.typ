@@ -42,8 +42,13 @@ Come anticipato i *pacchetti* (messaggi) di MQTT hanno un overhead più essenzia
 // TODO: figure della struttura dei pacchetti MQTT VS HTTP
 
 == Strumenti scelti
-// sulla base di quali criteri, eccetera...
+In questa sezione vengono esposti i servizi e le tecnologie scelte per affrontare il progetto e i fattori che hanno portato a preferirli rispetto alle alternative disponibili.
+
 === Hosting del broker MQTT
+Per l'hosting del broker MQTT e dei servizi a supporto della comunicazione tra i reader RFID e KanbanBOX si è optato fin da subito per una soluzione *cloud*. Questa scelta è stata dettata da diversi fattori: innanzi tutto, l'azienda non disponeva di infrastruttura hardware adeguata a questo scopo; inoltre, uno degli obiettivi del progetto era quello di permettere la configurazione da *remoto* dei reader RFID tramite KanbanBOX. Questo richiede di accedere alle reti interne dei clienti (alle quali i reader si connettono per raggiungere la rete esterna) che sono tipicamente soggette a *regole di accesso molto restrittive*. Risulta quindi più agevole richiedere ai clienti di abilitare il traffico verso i server di un servizio cloud riconosciuto e affidabile, piuttosto che verso i server locali di KanbanBOX.
+
+Di conseguenza sono state valutate le principali piattaforme cloud che offrono servizi di hosting per broker MQTT, tra cui Google Cloud IoT Core, Microsoft Azure IoT e *AWS IoT Core*. La scelta è ricaduta su AWS IoT Core, principalmente per la già consolidata presenza di servizi AWS nell'infrastruttura di KanbanBOX; in questo modo è stato possibile integrare più facilmente AWS IoT Core con la piattaforma e con i servizi già in uso da KanbanBOX.
+
 
 === Coda asincrona
 
