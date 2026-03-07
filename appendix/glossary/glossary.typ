@@ -48,9 +48,15 @@ Un broker è un componente software che funge da intermediario nella comunicazio
 Hypertext Transport Protocol, è un protocollo di comunicazione basato su architettura client-server, utilizzato principalmente per la trasmissione di dati sul web.\
 È il protocollo che è stato utilizzato fin dall'inizio in KanbanBOX per la comunicazione tra i lettori RFID e la piattaforma stessa.
 
+=== IaaS
+<glossary-iass>
+Infrastructure as a Service, è un modello di servizio cloud che fornisce risorse di calcolo virtualizzate su richiesta, come server, storage e reti, consentendo agli utenti di gestire e controllare l'infrastruttura sottostante senza doversi preoccupare della gestione fisica dell'hardware.\
+
+
 == I
 === IDE
 <glossary-ide>
+Integrated Development Environment, è un software che fornisce strumenti e funzionalità per facilitare lo sviluppo di applicazioni software, come un editor di codice, un compilatore, un debugger e altre funzionalità utili per la scrittura, il test e il debug del codice.
 
 == J
 === JSON
