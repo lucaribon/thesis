@@ -33,8 +33,16 @@ Il backup è una copia esatta di dati, in un formato qualsiasi (compatibile con 
 Un broker è un componente software che funge da intermediario nella comunicazione tra dispositivi in un'architettura publish/subscribe, come quella utilizzata dal protocollo MQTT.\
 
 == C
+=== CLI
+<glossary-cli>
+Command Line Interface, è un'interfaccia utente che consente agli utenti di interagire con un sistema software o hardware tramite comandi testuali lanciati in una console o terminale.\
+In questo documento viene usata anche per riferirsi agli strumenti utilizzabili da riga di comando, come ad esempio la CLI di AWS.
 
 == D
+=== DTO
+<glossary-dto>
+Data Transfer Object, è un oggetto che permette di standardizzare l'accesso e il trasferimento, tra componenti software diversi, di dati che si vuole organizzare seguendo una struttura ben definita, che può essere rappresentata da una classe o da un'interfaccia.\  
+Spesso i DTO garantiscono anche di imporre vincoli di tipo sui dati (parametri di funzione, tipi di ritorno, ecc.), vantaggio ampiamente sfruttato in questo progetto. 
 
 == E
 

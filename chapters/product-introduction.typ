@@ -5,7 +5,7 @@
 = Introduzione teorica // max 20 pagine indicativamente
 <cap:introduzione-teorica>
 
-// TODO: forse utile:  è in formato #gloss("PFX", <glossary-PFX>), generato dal backend di KanbanBox, che include le chiavi e i certificati in formato #gloss("PEM", <glossary-PEM>) forniti da AWS IoT; si è deciso di fornire il certificato PFX tramite KanbanBox per semplificare la procedura di configurazione del reader agli installatori, in quanto è l'unico formato ammesso dai reader Zebra e la generazione non è immediata per utenti con poca dimestichezza. ???
+// TODO: capire se mettere qui le spiegazioni di IoT e SQS (thing, certificati, rule, ...)
 
 // == Tecnologie analizzate
 
@@ -41,6 +41,9 @@ Quindi si parla di un overhead minimo di *\~2 byte* per ogni messaggio MQTT, con
 
 // TODO: figure della struttura dei pacchetti MQTT VS HTTP
 
+=== Certificati per l'autenticazione dei dispositivi
+// TODO: forse utile:  è in formato #gloss("PFX", <glossary-PFX>), generato dal backend di KanbanBox, che include le chiavi e i certificati in formato #gloss("PEM", <glossary-PEM>) forniti da AWS IoT; si è deciso di fornire il certificato PFX tramite KanbanBox per semplificare la procedura di configurazione del reader agli installatori, in quanto è l'unico formato ammesso dai reader Zebra e la generazione non è immediata per utenti con poca dimestichezza. ???
+
 == Strumenti scelti
 In questa sezione vengono esposti i servizi e le tecnologie scelte per affrontare il progetto e i fattori che hanno portato a preferirli rispetto alle alternative disponibili.
 
@@ -70,3 +73,24 @@ Per questo si è passati al confronto delle code asincrone proposte da AWS, ovve
 - *AWS SNS* è un servizio di messaggistica basato sul modello _*push*_, in cui i messaggi vengono pubblicati su un topic e i _subscriber_ ricevono i messaggi in tempo reale; è più costoso di AWS SQS;
 - *AWS MQ* è un servizio di messaggistica basato su Apache ActiveMQ o RabbitMQ; è più costoso e meno scalabile di AWS SQS e AWS SNS, inoltre viene suggerito per scenari in cui è necessario migrare da un'infrastruttura _on-premises_ a una in cloud mantenendo la compatibilità con protocolli di messaggistica standard (come AMQP o MQTT).
 Alla luce di queste considerazioni, *AWS SQS* è risultato essere la scelta più adatta per questo progetto, principalmente per il suo modello di funzionamento *_pull_* che si adatta meglio al caso d'uso di KanbanBOX, dove vogliamo che sia il worker da noi implementato a gestire il _polling_ dei messaggi in coda.  
+
+=== Stack di sviluppo
+Per l'implementazione in PHP del driver di comunicazione MQTT e l'integrazione con i servizi di AWS ci si è affidati a delle librerie _open source_ di PHP e ad alcuni SDK ufficiali di AWS.
+
+In particolare abbiamo *php-mqtt (@php-mqtt)*, una libreria _open source_ che permette di implementare un client MQTT in PHP, include classi, tra cui #gloss("DTO", <glossary-dto>), e metodo che facilitano l'implementazione delle seguenti funzionalità:
+  - #underline[connessione] ad un broker MQTT;
+  - gestione delle #underline[impostazioni di connessione] al broker MQTT;
+  - #underline[pubblicazione] di un messaggio su un topic MQTT;
+  - #underline[sottoscrizione] a un topic MQTT e #underline[ricezione] dei messaggi pubblicati su quel topic;
+  - utilizzo di #underline[TLS] per crittografare la comunicazione tra il client e il broker MQTT;
+  - meccanismi di #underline[QoS] e #underline[retention] dei messaggi MQTT.
+Le alternative disponibili sono poche, tra le più rilevanti abbiamo *phpMQTT (@php-MQTT)* e *simps-mqtt (@simps-mqtt)*, che però risultano nettamente inferiori rispetto a php-mqtt; infatti la prima è una libreria non più mantenuta da diversi anni, con un numero di funzionalità molto limitato e una documentazione quasi inesistente, mentre la seconda è una libreria più recente ma ancora acerba, con un numero di funzionalità limitato e una documentazione non completa.\
+Dall'altra parte, invece, php-mqtt è una libreria *mantenuta* con costanza, più *curata* delle altre due, con un numero di funzionalità più ampio e una documentazione più completa, che include anche esempi di utilizzo per le funzionalità più rilevanti.
+
+L'*SDK ufficiale di AWS IoT (@aws-iot-sdk-php)*, nella sua versione per PHP, è stato utilizzato per manipolare tutte le entità di AWS IoT Core, utili per rappresentare i client lato AWS, per gestire i certificati e per la gestione e l'instradamento dei messaggi.
+
+Mentre l'*SDK ufficiale di AWS SQS (@aws-sqs-sdk-php)*, sempre nella sua versione per PHP, è stato utilizzato per interagire con il servizio di coda asincrona di AWS, in particolare per leggere i messaggi dalla coda.
+
+Nel caso degli SDK di AWS l'unica alternativa plausibile sarebbe stata quella di utilizzare la _#gloss("CLI", <glossary-cli>)_ di AWS, lanciando i comandi tramite PHP, ma è stata scartata fin da subito in quanto non presenta alcun vantaggio rispetto all'utilizzo degli SDK ufficiali e, anzi, avrebbe reso l'implementazione molto più ostica. 
+
+// TODO: chiedere se ha senso mettere anche tecnologie che non he scelto perché già presenti nel progetto, tipo docker per l'hosting, altre librerie per PHP
