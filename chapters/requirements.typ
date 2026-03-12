@@ -46,7 +46,6 @@ Il progetto è focalizzato principalmente sulla creazione di un driver di interf
 Inoltre molte delle funzionalità direttamente o indirettamente legate alle modifiche o aggiunte fatte erano già implementate in origine e sono rimaste invariate e funzionanti.
 Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 
-// TODO: quando si scrive al relatore specificare che i diagrammi non ci sono perché aspetto che gli UC siano definitivi
 // TODO: integrare la figure nello use case in modo che venga mostrata sotto al titolo del caso d'uso. A MENO CHE non si decida/riesca a fare una solo figure per più use case, visto che sono molto legati e pochi.
 // #figure(
 //     image("../images/usecase/scenario-principale.png", width: 100%),
@@ -460,8 +459,6 @@ dove:
     - *FA*: facoltativo, ovvero un requisito migliorativo che può essere soddisfatto se ci sono risorse e tempo sufficienti.
 
 Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requisiti-vincolo sono riassunti i requisiti, le fonti da cui sono stati ricavati e il loro stato di raggiungimento.
-
-// TODO: domandare a relatore: ho escluso i requisti relativi a studio o comunque azioni che dovevo svolgere io, tenendo solo quelli relativi al sistema, va bene? oppure devo includere anche quelli relativi a me come studente? (es. O01, O02, D01, ecc.)
 
 === Requisiti funzionali
 #figure(

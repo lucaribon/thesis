@@ -5,8 +5,6 @@
 = Introduzione teorica // max 20 pagine indicativamente
 <cap:introduzione-teorica>
 
-// TODO: capire se mettere qui le spiegazioni di IoT e SQS (thing, certificati, rule, ...)
-
 // TODO: chiedere se ha senso mettere anche tecnologie che non he scelto perché già presenti nel progetto, tipo docker per l'hosting, altre librerie per PHP
 
 // == Tecnologie analizzate
@@ -41,7 +39,18 @@ Come anticipato i *pacchetti* (messaggi) di MQTT hanno un overhead più essenzia
 - *payload*: di dimensione variabile, contiene i dati effettivi del messaggio, che in questo caso saranno le letture dei tag RFID.
 Quindi si parla di un overhead minimo di *\~2 byte* per ogni messaggio MQTT, contro i *\~200-500 byte* di overhead per ogni richiesta HTTP.
 
-// TODO: figure della struttura dei pacchetti MQTT VS HTTP
+// TODO: table della struttura dei pacchetti MQTT VS HTTP
+#figure(
+  table(
+      columns: (1fr, 2.5fr, 1fr, 1fr),
+      inset: 8pt,
+      align: (x, y) => if y > 0 { left } else { center + horizon },
+      fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
+      
+      table.header([*Fixed Header*], [*Variable Header*], [*Payload*]),
+      
+  )
+)
 
 === Certificati per l'autenticazione dei dispositivi
 Per garantire la sicurezza della comunicazione tra i reader RFID e il broker MQTT, è stato utilizzato il meccanismo di autenticazione basato su certificati _X.509_, integrato in AWS IoT Core.\
@@ -98,4 +107,4 @@ L'*SDK ufficiale di AWS IoT (@aws-iot-sdk-php)*, nella sua versione per PHP, è 
 
 Mentre l'*SDK ufficiale di AWS SQS (@aws-sqs-sdk-php)*, sempre nella sua versione per PHP, è stato utilizzato per interagire con il servizio di coda asincrona di AWS, in particolare per leggere i messaggi dalla coda.
 
-Nel caso degli SDK di AWS l'unica alternativa plausibile sarebbe stata quella di utilizzare la _#gloss("CLI", <glossary-cli>)_ di AWS, lanciando i comandi tramite PHP, ma è stata scartata fin da subito in quanto non presenta alcun vantaggio rispetto all'utilizzo degli SDK ufficiali e, anzi, avrebbe reso l'implementazio
+Nel caso degli SDK di AWS l'unica alternativa plausibile sarebbe stata quella di utilizzare la _#gloss("CLI", <glossary-cli>)_ di AWS, lanciando i comandi tramite PHP, ma è stata scartata fin da subito in quanto non presenta alcun vantaggio rispetto all'utilizzo degli SDK ufficiali e, anzi, avrebbe reso l'implementazione molto più ostica. 
