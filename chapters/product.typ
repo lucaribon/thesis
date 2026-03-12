@@ -2,7 +2,6 @@
 
 #set par(justify: false)
 // = Descrizione del lavoro svolto
-=== Struttura del topic
 
 = Architettura
 <cap:architettura>
@@ -15,6 +14,7 @@
 = Ricezione dei tag RFID letti
 <cap:ricezione-tag-rfid-letti>
 
+=== Struttura del topic
 // TODO: capitoli di sicuro da sistemare (aggiungere/togliere/cambiare capitoli) 
 // contenuti e lunghezza molto variabili in base all'argomento scelto, indicativamente tra le 20 e le 40 pagine (comprensive di tabelle e immagini), distribuite tra 1-3 capitoli
 

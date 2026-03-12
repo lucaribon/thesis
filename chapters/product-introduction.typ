@@ -1,6 +1,6 @@
 #import "../config/thesis-config.typ": gloss
 
-#pagebreak(to:"odd")
+#pagebreak(to: "odd")
 
 = Introduzione teorica // max 20 pagine indicativamente
 <cap:introduzione-teorica>
@@ -14,7 +14,7 @@
 === Protocolli di comunicazione
 I *protocolli di comunicazione* sono parte integrante del progetto in quanto, come anticipato, uno degli obiettivi principali è quello di sostituire l'attuale protocollo HTTP con un protocollo più efficiente e adatto alla comunicazione tra dispositivi IoT, ovvero MQTT.
 
-*HTTP* è il protocollo più diffuso per la comunicazione sul Web e costituisce la base delle #gloss("API", <glossary-api>) RESTful, sui cui si basava il metodo di comunicazione utilizzato nella precedentemente implementazione dei reader in KanbanBOX. 
+*HTTP* è il protocollo più diffuso per la comunicazione sul Web e costituisce la base delle #gloss("API", <glossary-api>) RESTful, sui cui si basava il metodo di comunicazione utilizzato nella precedentemente implementazione dei reader in KanbanBOX.
 Infatti i reader Zebra, una volta configurati, mettono a disposizione un'interfaccia che permette di inviare comandi e ricevere dati dei tag letti tramite richieste HTTP. Questa soluzione, sebbene semplice da implementare, presenta diverse limitazioni per il caso d'uso di KanbanBOX:
 - *overhead elevato*: ogni richiesta HTTP include un _header_ di dimensioni considerevoli rispetto al _payload_ effettivo; in scenari come questo dove i lettori RFID devono inviare frequentemente piccoli pacchetti di dati, l'aumento di overhead su grandi quantità di messaggi inizia a diventare significativo;
 - *assenza di comunicazione bidirezionale nativa*: HTTP non prevede un meccanismo nativo per cui il server possa inviare messaggi al client senza che quest'ultimo li richieda esplicitamente, rendendo complessa l'implementazione di operazioni come il _polling_ dei tag letti dal reader;
@@ -24,7 +24,7 @@ Queste limitazioni hanno motivato la migrazione a MQTT come protocollo per la co
 
 === MQTT
 Come anticipato *MQTT* è stato scelto proprio per ovviare alla limitazioni che HTTP presenta in questo contesto.
-Infatti MQTT è protocollo di comunicazione progettato specificamente per la comunicazione tra dispositivi IoT, con *ottime performance* anche con risorse limitate, *affidabile* e adatto a gestire *grandi quantità* di *dispositivi* e *messaggi*. 
+Infatti MQTT è protocollo di comunicazione progettato specificamente per la comunicazione tra dispositivi IoT, con *ottime performance* anche con risorse limitate, *affidabile* e adatto a gestire *grandi quantità* di *dispositivi* e *messaggi*.
 
 L'architettura di MQTT si basa su un modello di _*publish/subscribe*_, in cui i dispositivi (in questo caso i lettori RFID) pubblicano messaggi su specifici _*topic*_ e altri dispositivi (come ad esempio il backend di KanbanBOX) si sottoscrivono a questi topic per ricevere i messaggi. Il tutto viene orchestrato da un _*broker*_ MQTT, ovvero un server che gestisce la distribuzione dei messaggi tra i publisher e i subscriber tramite i topic definiti.
 
@@ -37,19 +37,56 @@ Come anticipato i *pacchetti* (messaggi) di MQTT hanno un overhead più essenzia
 - *fixed header*: obbligatorio e di 2 _byte_, contiene informazioni di controllo come il tipo di messaggio (CONNECT, PUBLISH, SUBSCRIBE, ecc.), altre _flag_ per il controllo di parametri come il livello di QoS o la retention del messaggio e il numero di byte rimanenti per quel messaggio;
 - *variable header*: opzionale e di dimensione variabile, contiene informazioni aggiuntive come il protocollo e la versione utilizzati, o un identificatore univoco del pacchetto;
 - *payload*: di dimensione variabile, contiene i dati effettivi del messaggio, che in questo caso saranno le letture dei tag RFID.
-Quindi si parla di un overhead minimo di *\~2 byte* per ogni messaggio MQTT, contro i *\~200-500 byte* di overhead per ogni richiesta HTTP.
+Quindi si parla di un overhead minimo di *\~2 byte* per ogni messaggio MQTT, contro gli almeno *\~85 byte* di overhead per ogni richiesta HTTP fatta dai reader.
 
 // TODO: table della struttura dei pacchetti MQTT VS HTTP
 #figure(
-  table(
-      columns: (1fr, 2.5fr, 1fr, 1fr),
-      inset: 8pt,
-      align: (x, y) => if y > 0 { left } else { center + horizon },
-      fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
-      
-      table.header([*Fixed Header*], [*Variable Header*], [*Payload*]),
-      
-  )
+    table(
+        columns: (1fr, 1fr, 1.5fr, 1.5fr, 1.5fr),
+        align: center + horizon,
+        stroke: 0.5pt,
+        inset: 10pt,
+
+        table.cell(colspan: 3, fill: luma(240))[*Fixed Header (2 byte)*],
+        table.cell(rowspan: 3, fill: luma(240))[*Variable Header* \ #set text(size: 0.8em); (Dimensione variabile)],
+        table.cell(rowspan: 3, fill: luma(240))[*Payload* \ #set text(size: 0.8em); (Dimensione variabile)],
+
+        table.cell(rowspan: 2)[Packet Type \ (4 bit)],
+        table.cell(rowspan: 2)[Flag \ (4 bit)],
+
+        table.cell(rowspan: 2)[
+            Remaining Length \
+            #set text(size: 0.8em)
+            (Dimensione variabile, lunghezza del _variable header_ e del _payload_)
+        ],
+    ),
+    caption: "Struttura di un messaggio MQTT con dimensione dei campi",
+)
+
+#figure(
+    table(
+        columns: (1fr, 1.5fr, 1.5fr),
+        align: center + horizon,
+        stroke: 0.5pt,
+        inset: 10pt,
+
+        table.cell(colspan: 3, fill: luma(240))[*Request Line*],
+
+        [Method \ #set text(size: 0.8em); (4 byte)],
+        [URI \ #set text(size: 0.8em); (Dimensione variabile)],
+        [HTTP Version \ #set text(size: 0.8em); (8 byte + 4 byte per il framing)],
+
+        table.cell(colspan: 3, fill: luma(240))[*Headers*],
+
+        [`Host` \ #set text(size: 0.8em); (6byte per il nome del campo + \~7 byte per l'IP/hostname)],
+        [`Content-Type` \ #set text(size: 0.8em); (14 byte per il nome del campo + 16 byte per il valore del campo)],
+        [`Content-Length` \ #set text(size: 0.8em); (16 byte per il nome del campo + 1-5 byte per il valore del campo e il framing)],
+
+        table.cell(colspan: 3, fill: luma(240))[*Empty Line ending headers (CRLF)* \ #set text(size: 0.8em); (2 byte)],
+
+        table.cell(colspan: 3, fill: luma(240))[*Payload* \ #set text(size: 0.8em); (Dimensione variabile)],
+    ),
+    caption: "Struttura di una richiesta HTTP con dimensione dei campi",
 )
 
 === Certificati per l'autenticazione dei dispositivi
@@ -79,7 +116,7 @@ Il sottostante dei due servizi è molto simile, infatti entrambi si basano su un
 Per la gestione dei messaggi in ingresso dai reader RFID, si è deciso di implementare una coda che permettesse di gestire i messaggi in modo più efficiente. In questo modo, i messaggi vengono inseriti in una coda e processati da un _worker_ dedicato, implementato in KanbanBOX, che distribuisce i messaggi ai servizi di KanbanBOX adibiti al consumo dei messaggi.\
 
 In questo caso il confronto iniziale è stato svolto tra l'utilizzo della *coda integrata nel broker MQTT* di AWS IoT Core e l'integrazione di una coda dedicata.\
-La prima opzione, però, è stata scartata fin da subito poiché presentava delle limitazioni, infatti la coda integrata da AWS IoT può essere considerata una coda asincrona ma nella pratica non è altro che una _persistent session_, ovvero un meccanismo che permette di mantenere lo stato e i messaggi di un dispositivo anche in caso di disconnessione, ma che presenta le seguenti limitazioni: 
+La prima opzione, però, è stata scartata fin da subito poiché presentava delle limitazioni, infatti la coda integrata da AWS IoT può essere considerata una coda asincrona ma nella pratica non è altro che una _persistent session_, ovvero un meccanismo che permette di mantenere lo stato e i messaggi di un dispositivo anche in caso di disconnessione, ma che presenta le seguenti limitazioni:
 - *durata massima della persistenza* dei messaggi in coda limitata ad un'ora;
 - *numero massimo di messaggi* in coda limitato a 10 per ogni sottoscrizione ad un topic, con un limite complessivo di 100 messaggi in coda di cui non è stata confermata la ricezione per ogni dispositivo.
 Inoltre, in KanbanBOX le code asincrone fornite da AWS erano già state utilizzate in altri domini della piattaforma, quindi il middleware per l'integrazione della coda era quasi interamente disponibile e testato, rendendo l'implementazione di una coda dedicata molto più semplice.
@@ -88,18 +125,18 @@ Per questo si è passati al confronto delle code asincrone proposte da AWS, ovve
 - *AWS SQS* è un servizio di coda asincrona basata sul modello _*pull*_, in cui i messaggi vengono inseriti in una coda e i _consumer_ devono interrogare la coda per ricevere i messaggi; ha dei costi più bassi relativamente alle altre opzioni ed è quella con le capacità di scalabilità più elevate;
 - *AWS SNS* è un servizio di messaggistica basato sul modello _*push*_, in cui i messaggi vengono pubblicati su un topic e i _subscriber_ ricevono i messaggi in tempo reale; è più costoso di AWS SQS;
 - *AWS MQ* è un servizio di messaggistica basato su Apache ActiveMQ o RabbitMQ; è più costoso e meno scalabile di AWS SQS e AWS SNS, inoltre viene suggerito per scenari in cui è necessario migrare da un'infrastruttura _on-premises_ a una in cloud mantenendo la compatibilità con protocolli di messaggistica standard (come AMQP o MQTT).
-Alla luce di queste considerazioni, *AWS SQS* è risultato essere la scelta più adatta per questo progetto, principalmente per il suo modello di funzionamento *_pull_* che si adatta meglio al caso d'uso di KanbanBOX, dove vogliamo che sia il worker da noi implementato a gestire il _polling_ dei messaggi in coda.  
+Alla luce di queste considerazioni, *AWS SQS* è risultato essere la scelta più adatta per questo progetto, principalmente per il suo modello di funzionamento *_pull_* che si adatta meglio al caso d'uso di KanbanBOX, dove vogliamo che sia il worker da noi implementato a gestire il _polling_ dei messaggi in coda.
 
 === Stack di sviluppo
 Per l'implementazione in PHP del driver di comunicazione MQTT e l'integrazione con i servizi di AWS ci si è affidati a delle librerie _open source_ di PHP e ad alcuni SDK ufficiali di AWS.
 
 In particolare abbiamo *php-mqtt (@php-mqtt)*, una libreria _open source_ che permette di implementare un client MQTT in PHP; include classi, tra cui alcuni _#gloss("DTO", <glossary-dto>)_, e metodi che facilitano l'implementazione delle seguenti funzionalità:
-  - #underline[connessione] ad un broker MQTT;
-  - gestione delle #underline[impostazioni di connessione] al broker MQTT;
-  - #underline[pubblicazione] di un messaggio su un topic MQTT;
-  - #underline[sottoscrizione] a un topic MQTT e #underline[ricezione] dei messaggi pubblicati su quel topic;
-  - utilizzo di #underline[TLS] per crittografare la comunicazione tra il client e il broker MQTT;
-  - meccanismi di #underline[QoS] e #underline[retention] dei messaggi MQTT.
+- connessione ad un broker MQTT;
+- gestione delle impostazioni di connessione al broker MQTT;
+- pubblicazione di un messaggio su un topic MQTT;
+- sottoscrizione a un topic MQTT e ricezione dei messaggi pubblicati su quel topic;
+- utilizzo di TLS per crittografare la comunicazione tra il client e il broker MQTT;
+- meccanismi di QoS e retention dei messaggi MQTT.
 Le alternative disponibili sono poche, tra le più rilevanti abbiamo *phpMQTT (@php-MQTT)* e *simps-mqtt (@simps-mqtt)*, che però risultano nettamente inferiori rispetto a php-mqtt; infatti la prima è una libreria non più mantenuta da diversi anni, con un numero di funzionalità molto limitato e una documentazione quasi inesistente, mentre la seconda è una libreria più recente ma ancora acerba, con un numero di funzionalità limitato e una documentazione superficiale.\
 Dall'altra parte, invece, php-mqtt è una libreria *mantenuta* con costanza, più *curata* delle altre due, con un numero di funzionalità più ampio e una documentazione più completa, che include anche esempi di utilizzo per le funzionalità più rilevanti.
 
