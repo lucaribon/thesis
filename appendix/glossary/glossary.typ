@@ -99,7 +99,7 @@ Privacy-Enhanced Mail, è un formato di file utilizzato per memorizzare e trasme
 
 === PFX
 <glossary-PFX>
-Personal Information Exchange, noto anche come PKCS#12, è un formato di file utile per incorporare più certificati e chiavi private in un unico file, che può essere protetto da una password.\ 
+Personal Information Exchange, noto anche come PKCS#12, è un formato di file utile per incorporare più certificati e chiavi private in un unico file, che può essere anche protetto da una password.\ 
 
 == Q
 === Quality of Service
@@ -129,7 +129,7 @@ Unified Modeling Language, è un linguaggio di modellazione standardizzato utili
 == W
 === Wildcard
 <glossary-wildcard>
-In MQTT, una wildcard è un carattere speciale che può essere utilizzato nei topic per fare in modo che il topic con la wildcard corrisponda a più topic contemporaneamente.\
+In MQTT, le wildcard sono caratteri speciali utilizzati nei topic per fare in modo che un client possa ricevere messaggi da più topic contemporaneamente, definendo un pattern gerarchico, dove uno o più livelli vengono resi variabili tramite i caratteri speciali "\#" per rappresentare più livelli e "\+" per rappresentare un singolo livello; per variabili si intende che ammettono qualsiasi stringa al loro posto. 
 
 == X
 
