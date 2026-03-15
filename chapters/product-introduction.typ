@@ -147,23 +147,30 @@ Mentre l'*SDK ufficiale di AWS SQS (@aws-sqs-sdk-php)*, sempre nella sua version
 Nel caso degli SDK di AWS l'unica alternativa plausibile sarebbe stata quella di utilizzare la _#gloss("CLI", <glossary-cli>)_ di AWS, lanciando i comandi tramite PHP, ma è stata scartata fin da subito in quanto non presenta alcun vantaggio rispetto all'utilizzo degli SDK ufficiali e, anzi, avrebbe reso l'implementazione molto più ostica.
 
 == Stack tecnologico preesistente
-In questa sezione vengono elencati e descritti gli strumenti e le tecnologie già utilizzate in azienda e che sono state sfruttate durante l'implementazione esposta in questo documento.
+In questa sezione vengono elencati e descritti gli strumenti e le tecnologie già utilizzati in azienda e che sono stati sfruttati durante l'implementazione esposta in questo documento.
 
 === Librerie e framework PHP
-- PHPUnit
-- Playwright
-- Infection
-- CodeIgniter
-- Psr???
-- Psl
-- Twig
-- Doctrine
-- UUID
-- Symfony
+*Framework e Core:*
+- *CodeIgniter*: framework MVC utilizzato come architettura di base nel codice legacy di KanbanBOX, che è ancora in fase di migrazione verso un'architettura più moderna basata su Symfony;
+- *Symfony*: framework PHP moderno verso cui si sta migrando in KanbanBOX; fornisce un'architettura modulare e _component-based_, con un ecosistema ricco di librerie che facilitano lo sviluppo di applicazioni web complesse e scalabili;
+- *Doctrine*: è un Object-Relational Mapper (ORM), ovvero una libreria che permette di mappare le entità del dominio di KanbanBOX a tabelle di un database relazionale, facilitando la gestione della persistenza dei dati e l'astrazione del database;
+- *Twig*: _template engine_ performante e flessibile utilizzato per la generazione di interfacce web dinamiche; permette di definire dei template HTML con una sintassi specifica e più intuitiva, i template vengono poi utilizzati nella logica di generazione delle pagine web di KanbanBOX. 
 
+*Standard e Utility:*
+- *Composer*: gestore di dipendenze standard de facto per PHP, utilizzato per l'installazione, aggiornamento e integrazione di librerie esterne e per la gestione dell'_autoloading_ delle classi;
+- *Guzzle*: client HTTP utilizzato per l'interazione con servizi web esterni e API RESTful; in KanbanBOX viene utilizzato anche per gestire richieste tra endpoint interni diversi, ad esempio per il download dei certificati dei reader;
+- *Psr (PHP Standard Recommendations)*: libreria che definisce una serie di standard e mette a disposizione interfacce per garantire l'interoperabilità tra le librerie e i framework PHP, facilitando l'integrazione di componenti di terze parti e promuovendo un'architettura modulare e scalabile;
+- *Psl (PHP Standard Library)*: libreria standard che aiuta ad imporre un approccio fortemente tipizzato e orientato agli oggetti nello sviluppo di applicazioni PHP;
+- *ramsey/UUID*: libreria per la generazione di UUID (Universally Unique Identifier), utilizzata per creare identificatori univoci per le entità del dominio di KanbanBOX, come ad esempio i reader RFID o i tag RFID letti;
+- *i18next*: libreria per la gestione dell'internazionalizzazione (i18n), utilizzata per supportare più lingue nell'interfaccia di KanbanBOX.
 
-- MySQL
-- Make
-- i18n
-- AWS IAM
-- Reader Zebra
+*Testing e Qualità:*
+- *PHPUnit*: framework principale per l'esecuzione di _unit test_, ovvero che permette di testare l'unità di codice minima nel progetto, fondamentale per validare la _business logic_;
+- *Playwright*: tool di automazione per il testing _end-to-end_, utilizzato per simulare le interazioni dell'utente nel browser e verificare che il risultato sia quello previsto in fase di progettazione;
+- *Infection*: strumento di _mutation testing_ che verifica la robustezza dei test implementati, introducendo modifiche al codice sorgente originale.
+
+=== Altre tecnologie
+- *MySQL*: database relazionale utilizzato per la persistenza dei dati in KanbanBOX;
+- *Make*: utility di automazione utile per gestire l'intero ciclo di vita del software, dalla fase di sviluppo a quella di testing e deployment, semplificando l'esecuzione di comandi complessi e ripetitivi che vengono raggruppati e mappati in comandi più semplici tramite un file di configurazione detto Makefile;
+- *AWS IAM*: servizio di gestione degli accessi di Amazon Web Services, utilizzato per configurare i ruoli e i relativi permessi di accesso alle varie funzionalità di AWS da parte dei servizi e degli sviluppatori di KanbanBOX; 
+- *Reader Zebra*: dispositivi hardware prodotti dal Zebra Technologies; nel caso di questo progetto si ha interagito principalmente con i reader RFID della serie FX7500 e FX9600 ma in KanbanBOX sono ampiamente utilizzati anche dispositivi come barcode scanner e stampanti di etichette.\ Nello specifico i reader hanno il compito di leggere i tag RFID in prossimita, tramite delle antenne esterne, e di trasmettere i dati dei tag letti agli endpoint configurati.
