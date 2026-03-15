@@ -164,13 +164,14 @@ In questa sezione vengono elencati e descritti gli strumenti e le tecnologie gi�
 - *ramsey/UUID*: libreria per la generazione di UUID (Universally Unique Identifier), utilizzata per creare identificatori univoci per le entità del dominio di KanbanBOX, come ad esempio i reader RFID o i tag RFID letti;
 - *i18next*: libreria per la gestione dell'internazionalizzazione (i18n), utilizzata per supportare più lingue nell'interfaccia di KanbanBOX.
 
-*Testing e Qualità:*
+*Testing e Qualità:* tutti i controlli elencati di seguito vengono eseguiti tramite l'integrazione continua configurata su *GitHub Actions*, che permette di eseguire i test e le analisi di qualità del codice per ogni pull request.
 - *PHPUnit*: framework principale per l'esecuzione di _unit test_, ovvero che permette di testare l'unità di codice minima nel progetto, fondamentale per validare la _business logic_;
 - *Playwright*: tool di automazione per il testing _end-to-end_, utilizzato per simulare le interazioni dell'utente nel browser e verificare che il risultato sia quello previsto in fase di progettazione;
 - *Infection*: strumento di _mutation testing_ che verifica la robustezza dei test implementati, introducendo modifiche al codice sorgente originale.
+- *PSALM*: analisi statica del codice PHP utile a individuare bug e problematiche potenziali prima di rilasciare le modifiche in produzione.
 
 === Altre tecnologie
 - *MySQL*: database relazionale utilizzato per la persistenza dei dati in KanbanBOX;
 - *Make*: utility di automazione utile per gestire l'intero ciclo di vita del software, dalla fase di sviluppo a quella di testing e deployment, semplificando l'esecuzione di comandi complessi e ripetitivi che vengono raggruppati e mappati in comandi più semplici tramite un file di configurazione detto Makefile;
 - *AWS IAM*: servizio di gestione degli accessi di Amazon Web Services, utilizzato per configurare i ruoli e i relativi permessi di accesso alle varie funzionalità di AWS da parte dei servizi e degli sviluppatori di KanbanBOX; 
-- *Reader Zebra*: dispositivi hardware prodotti dal Zebra Technologies; nel caso di questo progetto si ha interagito principalmente con i reader RFID della serie FX7500 e FX9600 ma in KanbanBOX sono ampiamente utilizzati anche dispositivi come barcode scanner e stampanti di etichette.\ Nello specifico i reader hanno il compito di leggere i tag RFID in prossimita, tramite delle antenne esterne, e di trasmettere i dati dei tag letti agli endpoint configurati.
+- *Reader Zebra*: dispositivi hardware prodotti dal Zebra Technologies; nel caso di questo progetto si ha interagito principalmente con i reader RFID della serie FX7500 e FX9600 ma in KanbanBOX sono ampiamente utilizzati anche dispositivi come barcode scanner e stampanti di etichette.\ Nello specifico i reader hanno il compito di leggere i tag RFID in prossimita, tramite delle antenne esterne, e di trasmettere i dati dei tag letti agli endpoint configurati
