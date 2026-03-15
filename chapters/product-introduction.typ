@@ -144,4 +144,26 @@ L'*SDK ufficiale di AWS IoT (@aws-iot-sdk-php)*, nella sua versione per PHP, è 
 
 Mentre l'*SDK ufficiale di AWS SQS (@aws-sqs-sdk-php)*, sempre nella sua versione per PHP, è stato utilizzato per interagire con il servizio di coda asincrona di AWS, in particolare per leggere i messaggi dalla coda.
 
-Nel caso degli SDK di AWS l'unica alternativa plausibile sarebbe stata quella di utilizzare la _#gloss("CLI", <glossary-cli>)_ di AWS, lanciando i comandi tramite PHP, ma è stata scartata fin da subito in quanto non presenta alcun vantaggio rispetto all'utilizzo degli SDK ufficiali e, anzi, avrebbe reso l'implementazione molto più ostica. 
+Nel caso degli SDK di AWS l'unica alternativa plausibile sarebbe stata quella di utilizzare la _#gloss("CLI", <glossary-cli>)_ di AWS, lanciando i comandi tramite PHP, ma è stata scartata fin da subito in quanto non presenta alcun vantaggio rispetto all'utilizzo degli SDK ufficiali e, anzi, avrebbe reso l'implementazione molto più ostica.
+
+== Stack tecnologico preesistente
+In questa sezione vengono elencati e descritti gli strumenti e le tecnologie già utilizzate in azienda e che sono state sfruttate durante l'implementazione esposta in questo documento.
+
+=== Librerie e framework PHP
+- PHPUnit
+- Playwright
+- Infection
+- CodeIgniter
+- Psr???
+- Psl
+- Twig
+- Doctrine
+- UUID
+- Symfony
+
+
+- MySQL
+- Make
+- i18n
+- AWS IAM
+- Reader Zebra
