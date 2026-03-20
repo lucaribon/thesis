@@ -41,9 +41,15 @@
 
 == Configurazione dei reader RFID
 
-== Ricezione dei tag RFID letti
+= Ricezione dei tag RFID letti
+== Architettura
 
 
+== Progettazione
 
+== Codifica
+=== ReadTagEventsMessageSerializer
+=== ReadTagEventsMessage
+=== ReadTagEventsMessageHandler
 
 = Verifica e validazione
