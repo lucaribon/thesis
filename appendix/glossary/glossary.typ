@@ -33,8 +33,16 @@ Il backup è una copia esatta di dati, in un formato qualsiasi (compatibile con 
 Un broker è un componente software che funge da intermediario nella comunicazione tra dispositivi in un'architettura publish/subscribe, come quella utilizzata dal protocollo MQTT.\
 
 == C
+=== CLI
+<glossary-cli>
+Command Line Interface, è un'interfaccia utente che consente agli utenti di interagire con un sistema software o hardware tramite comandi testuali lanciati in una console o terminale.\
+In questo documento viene usata anche per riferirsi agli strumenti utilizzabili da riga di comando, come ad esempio la CLI di AWS.
 
 == D
+=== DTO
+<glossary-dto>
+Data Transfer Object, è un oggetto che permette di standardizzare l'accesso e il trasferimento, tra componenti software diversi, di dati che si vuole organizzare seguendo una struttura ben definita, che può essere rappresentata da una classe o da un'interfaccia.\  
+Spesso i DTO garantiscono anche di imporre vincoli di tipo sui dati (parametri di funzione, tipi di ritorno, ecc.), vantaggio ampiamente sfruttato in questo progetto. 
 
 == E
 
@@ -48,9 +56,15 @@ Un broker è un componente software che funge da intermediario nella comunicazio
 Hypertext Transport Protocol, è un protocollo di comunicazione basato su architettura client-server, utilizzato principalmente per la trasmissione di dati sul web.\
 È il protocollo che è stato utilizzato fin dall'inizio in KanbanBOX per la comunicazione tra i lettori RFID e la piattaforma stessa.
 
+=== IaaS
+<glossary-iass>
+Infrastructure as a Service, è un modello di servizio cloud che fornisce risorse di calcolo virtualizzate su richiesta, come server, storage e reti, consentendo agli utenti di gestire e controllare l'infrastruttura sottostante senza doversi preoccupare della gestione fisica dell'hardware.\
+
+
 == I
 === IDE
 <glossary-ide>
+Integrated Development Environment, è un software che fornisce strumenti e funzionalità per facilitare lo sviluppo di applicazioni software, come un editor di codice, un compilatore, un debugger e altre funzionalità utili per la scrittura, il test e il debug del codice.
 
 == J
 === JSON
@@ -85,7 +99,7 @@ Privacy-Enhanced Mail, è un formato di file utilizzato per memorizzare e trasme
 
 === PFX
 <glossary-PFX>
-Personal Information Exchange, noto anche come PKCS#12, è un formato di file utile per incorporare più certificati e chiavi private in un unico file, che può essere protetto da una password.\ 
+Personal Information Exchange, noto anche come PKCS#12, è un formato di file utile per incorporare più certificati e chiavi private in un unico file, che può essere anche protetto da una password.\ 
 
 == Q
 === Quality of Service
@@ -113,6 +127,9 @@ Unified Modeling Language, è un linguaggio di modellazione standardizzato utili
 == V
 
 == W
+=== Wildcard
+<glossary-wildcard>
+In MQTT, le wildcard sono caratteri speciali utilizzati nei topic per fare in modo che un client possa ricevere messaggi da più topic contemporaneamente, definendo un pattern gerarchico, dove uno o più livelli vengono resi variabili tramite i caratteri speciali "\#" per rappresentare più livelli e "\+" per rappresentare un singolo livello; per variabili si intende che ammettono qualsiasi stringa al loro posto. 
 
 == X
 

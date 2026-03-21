@@ -1,5 +1,7 @@
 // Non su primo capitolo
 //#pagebreak(to:"odd")
+
+// TODO: replace di tutti i KanbanBOX con KanbanBox, o viceversa
 #import "../config/thesis-config.typ" : gloss
 
 = Introduzione // 2 pagine
@@ -13,7 +15,7 @@ Il documento è strutturato in sei capitoli principali:
 + #link(<cap:descrizione-stage>)[*Descrizione dello stage*]: descrive.
 + #link(<cap:analisi-requisiti>)[*Analisi dei requisiti*]: descrive.
 + #link(<cap:introduzione-teorica>)[*Introduzione teorica*]: descrive.
-+ #link(<cap:descrizione-lavoro-svolto>)[*Descrizione del lavoro svolto*]: descrive.
++ #link(<cap:architettura>)[*Descrizione del lavoro svolto*]: descrive.
 + #link(<cap:conclusioni>)[*Conclusioni*]: descrive.
 
 Riguardo la stesura del testo, sono state adottate le seguenti convenzioni tipografiche:

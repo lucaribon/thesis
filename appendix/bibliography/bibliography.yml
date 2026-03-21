@@ -1,7 +1,47 @@
-p1:
-    type: Book
-    title: Programmazione consapevole
-    author: Gilberto Filè
-    publisher: Libreria Progetto
-    page-total: 195
-    date: 2012-01-01
+hive-mq:
+    type: Web
+    title: HiveMQ
+    url: https://www.hivemq.com/mqtt/
+    date: 2026-02-03
+
+aws-iot-pricing:
+    type: Web
+    title: AWS IoT Pricing
+    url: https://aws.amazon.com/iot-core/pricing/
+    date: 2026-07-03
+
+aws-ec2-pricing:
+    type: Web
+    title: AWS EC2 Pricing
+    url: https://aws.amazon.com/ec2/pricing/on-demand/
+    date: 2026-07-03
+
+aws-iot-sdk-php:
+    type: Web
+    title: AWS IoT SDK for PHP
+    url: https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.Iot.IotClient.html
+    date: 2026-10-03
+
+aws-sqs-sdk-php:
+    type: Web
+    title: AWS SQS SDK for PHP
+    url: https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.Sqs.SqsClient.html
+    date: 2026-10-03
+
+php-mqtt:
+    type: Web
+    title: PHP MQTT Client Library
+    url: https://github.com/php-mqtt/client
+    date: 2026-10-03
+
+php-MQTT:
+    type: Web
+    title: phpMQTT Client Library
+    url: https://github.com/bluerhinos/phpMQTT
+    date: 2026-10-03
+
+simps-mqtt:
+    type: Web
+    title: Simps MQTT Client Library
+    url: https://github.com/simps/mqtt
+    date: 2026-10-03
