@@ -19,7 +19,7 @@
 
 === Reader RFID
 I reader RFID Zebra sono dei dispositivi hardware che, se muniti di uno o più moduli esterni che fungono da antenne, sono in grado di leggere i tag RFID presenti nell'ambiente circostante. \
-Per poter trasmettere e ricevere dati e comandi da e verso il reader è necessario configurare la connessione ad un endpoint esterno; nel nostro caso, in cui la scelta del broker MQTT è ricaduta su AWS IoT Core, è stato necessario configurare un endpoint di tipo *AWS IoT Connector*, ovvero un'interfaccia implementata da Zebra nei propri reader che consente di comunicare con AWS IoT Core tramite MQTT configurando un numero ridotto di parametri. \ 
+Per poter trasmettere e ricevere dati e comandi da e verso il reader è necessario configurare la connessione ad un endpoint esterno; nel nostro caso, in cui la scelta del broker MQTT è ricaduta su AWS IoT Core, è stato necessario configurare un endpoint di tipo *AWS IoT Connector*, ovvero un'interfaccia implementata da Zebra nei propri reader che consente di comunicare con AWS IoT Core tramite MQTT, configurando un numero ridotto di parametri. \ 
 La configurazione, infatti, richiede di definire:
 - il _domain name_ di AWS IoT Core;
 - la porta da utilizzare per la trasmissione;
@@ -35,18 +35,22 @@ Inoltre i reader Zebra permettono di definire quale topic utilizzare per le segu
     - _command_: comandi di controllo della lettura dei tag, quindi configurazione delle antenne come potenza, modalità di lettura, ecc.;
     - _response_: risposte ai comandi di controllo sopra elencati che comunicano il successo o il fallimento e il relativo messaggio di errore.
 
-I parametri di lettura possono essere configurati tramite un'apposita interfaccia web in esecuzione sui reader stessi, e quindi raggiungibile collegandosi direttamente all'IP del reader tramite un browser web; in alternativa è possibile configurare i reader tramite dei comandi trasmessi in formato JSON via una API REST, fornita dal reader, o via MQTT.
+Una volta configurati tutti i parametri elencati il reader potrà connettersi al broker MQTT integrato in AWS IoT Core e iniziare a trasmettere i messaggi in base alla configurazione dei topic sopra descritta. \
 
-=== Struttura dei topic
-// TODOL scrivere dopo aver descritto per intero il flusso di reader e AWS IoT, così si possono citare le IoT Rule spiegando perché per i topic dei tag data è stata usata una gerarchia più semplice (testing/events e production/events)
+Oltre ai parametri di connessione, anche la modalità di lettura (detta *modalità operativa*) è configurabile tramite un'apposita interfaccia web in esecuzione sui reader stessi, e quindi raggiungibile collegandosi direttamente all'IP del reader tramite un browser web; in alternativa è possibile configurare i parametri sopracitati tramite dei comandi che seguono uno schema specifico definito da Zebra; in questo casi i comandi vengono trasmessi sfruttando lo stesso sistema MQTT utilizzato per trasmettere messaggi dei tag e di diagnostica, per questo è necessario poter comunicare anche dal backend di KanbanBOX verso il reader, passando per AWS IoT Core. \
 
 == AWS
 === AWS IoT Core
 // TODO: scopo già spiegato in cap4 ma controllare cosa manca, di sicuro la descrizione di tutte le entità
-=== SQS
+Come già accennato in precedenza, AWS IoT Core è un servizio di Amazon Web Services che integra un broker MQTT e una serie di funzionalità a supporto della gestione di dispositivi IoT e della raccolta, elaborazione o distribuzione dei dati da essi generati. \
+// TODO: espandere
+In AWS IoT ogni reader RFID è rappresentato da una *thing*, ovvero un'entità che rappresenta un dispositivo fisico, e che può essere associata a una o più *certificate* per l'autenticazione, a una o più *policy* per definire i permessi di accesso alle risorse AWS e a una o più *IoT Rule* per definire le azioni da eseguire quando vengono ricevuti messaggi su determinati topic MQTT. \
+
+=== AWS SQS
 // TODO: scopo già spiegato in cap4 ma controllare cosa manca, di sicuro la descrizione di tutte le entità
 
-=== Struttura del topic
+=== Struttura dei topic
+// TODO: scrivere dopo aver descritto per intero il flusso di reader e AWS IoT, così si possono citare le IoT Rule spiegando perché per i topic dei tag data è stata usata una gerarchia più semplice (testing/events e production/events)
 
 
 
@@ -67,4 +71,11 @@ I parametri di lettura possono essere configurati tramite un'apposita interfacci
 == Architettura
 
 
-== Proget
+== Progettazione
+
+== Codifica
+=== ReadTagEventsMessageSerializer
+=== ReadTagEventsMessage
+=== ReadTagEventsMessageHandler
+
+= Verifica e validazione
