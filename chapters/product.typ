@@ -43,8 +43,13 @@ Oltre ai parametri di connessione, anche la modalità di lettura (detta *modalit
 === AWS IoT Core
 // TODO: scopo già spiegato in cap4 ma controllare cosa manca, di sicuro la descrizione di tutte le entità
 Come già accennato in precedenza, AWS IoT Core è un servizio di Amazon Web Services che integra un broker MQTT e una serie di funzionalità a supporto della gestione di dispositivi IoT e della raccolta, elaborazione o distribuzione dei dati da essi generati. \
-// TODO: espandere
-In AWS IoT ogni reader RFID è rappresentato da una *thing*, ovvero un'entità che rappresenta un dispositivo fisico, e che può essere associata a una o più *certificate* per l'autenticazione, a una o più *policy* per definire i permessi di accesso alle risorse AWS e a una o più *IoT Rule* per definire le azioni da eseguire quando vengono ricevuti messaggi su determinati topic MQTT. \
+
+In AWS IoT ogni reader RFID è rappresentato da una *Thing*, ovvero un'entità che rappresenta un dispositivo fisico; ogni _Thing_ registrata in un account AWS è identificata da un nome univoco a livello di regione AWS.
+Nell'infrastruttura di KanbanBOX avremo una _Thing_ che permette al backend di connettersi ad AWS IoT come se fosse un client MQTT in modo che questo possa inviare e ricevere i messaggi usando il broker integrato, e una _Thing_ per ogni reader RFID configurato. \
+
+Per ogni _Thing_ è possibile definire degli attributi, un gruppo di appartenenza e un tipo. In questo caso è risultato utile definire un *tipo di _Thing_* per ogni modello di reader RFID, attualmente Zebra FX7500 e Zebra FX9600, in modo da poter operare su tutti i reader di uno stesso modello in modo più pratico se necessario. Inoltre è stato definito *l'attributo licenseId* per ogni _Thing_ in modo da poter salvare anche su AWS IoT, al momento della creazione dell'entità, la licenza (che identifica uno specifico cliente) in cui è configurato il reader.  
+
+ e che può essere associata a una o più *certificate* per l'autenticazione, a una o più *policy* per definire i permessi di accesso alle risorse AWS e a una o più *IoT Rule* per definire le azioni da eseguire quando vengono ricevuti messaggi su determinati topic MQTT. \
 
 === AWS SQS
 // TODO: scopo già spiegato in cap4 ma controllare cosa manca, di sicuro la descrizione di tutte le entità
@@ -77,5 +82,3 @@ In AWS IoT ogni reader RFID è rappresentato da una *thing*, ovvero un'entità c
 === ReadTagEventsMessageSerializer
 === ReadTagEventsMessage
 === ReadTagEventsMessageHandler
-
-= Verifica e validazione
