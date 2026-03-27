@@ -46,9 +46,8 @@ Come già accennato in precedenza, AWS IoT Core è un servizio di Amazon Web Ser
 
 In AWS IoT ogni reader RFID è rappresentato da una *Thing*, ovvero un'entità che rappresenta un dispositivo fisico; ogni _Thing_ registrata in un account AWS è identificata da un nome univoco a livello di regione AWS.
 Nell'infrastruttura di KanbanBOX avremo una _Thing_ che permette al backend di connettersi ad AWS IoT come se fosse un client MQTT in modo che questo possa inviare e ricevere i messaggi usando il broker integrato, e una _Thing_ per ogni reader RFID configurato. \
-
-Per ogni _Thing_ è possibile definire degli attributi, un gruppo di appartenenza e un tipo. In questo caso è risultato utile definire un *tipo di _Thing_* per ogni modello di reader RFID, attualmente Zebra FX7500 e Zebra FX9600, in modo da poter operare su tutti i reader di uno stesso modello in modo più pratico se necessario.
-Gli attributi permettono di memorizzare delle informazioni sottoforma di coppie chiave valore, erano stati inizialmente utilizzati per memorizzare la licenza (identificativo delle llicenze software vendute agli utenti) da cui il reader è stato creato, in modo da poter usare l'attributo nella gerarchia dei topic, ma poi è stato deciso di non usarlo più in quanto si è deciso di usare direttamente il clientId nella gerarchia. \
+// TODO: decidere se sotitutire tutti i topic con la nuova gerarchia o lasciare quelli vecchi
+Per ogni _Thing_ è possibile definire degli attributi, un gruppo di appartenenza e un tipo. In questo caso è risultato utile definire un *tipo di _Thing_* per ogni modello di reader RFID, attualmente Zebra FX7500 e Zebra FX9600, in modo da poter operare su tutti i reader di uno stesso modello in modo più pratico se necessario. Inoltre è stato definito *l'attributo licenseId* per ogni _Thing_ in modo da poter salvare anche su AWS IoT, al momento della creazione dell'entità, la licenza (che identifica uno specifico cliente) in cui è configurato il reader. \
 
  e che può essere associata a una o più *certificate* per l'autenticazione, a una o più *policy* per definire i permessi di accesso alle risorse AWS e a una o più *IoT Rule* per definire le azioni da eseguire quando vengono ricevuti messaggi su determinati topic MQTT. \
 
