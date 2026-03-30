@@ -19,7 +19,7 @@
 
 === Reader RFID
 I reader RFID Zebra sono dei dispositivi hardware che, se muniti di uno o più moduli esterni che fungono da antenne, sono in grado di leggere i tag RFID presenti nell'ambiente circostante. \
-Per poter trasmettere e ricevere dati e comandi da e verso il reader è necessario configurare la connessione ad un endpoint esterno; nel nostro caso, in cui la scelta del broker MQTT è ricaduta su AWS IoT Core, è stato necessario configurare un endpoint di tipo *AWS IoT Connector*, ovvero un'interfaccia implementata da Zebra nei propri reader che consente di comunicare con AWS IoT Core tramite MQTT, configurando un numero ridotto di parametri. \ 
+Per poter trasmettere dati e comandi, da e verso il reader, è necessario configurare la connessione ad un endpoint esterno; nel nostro caso, in cui la scelta del broker MQTT è ricaduta su AWS IoT Core, è stato necessario configurare un endpoint di tipo *AWS IoT Connector*, ovvero un'interfaccia implementata da Zebra nei propri reader che consente di farli comunicare con AWS IoT Core tramite MQTT, configurando un numero ridotto di parametri. \ 
 La configurazione, infatti, richiede di definire:
 - il _domain name_ di AWS IoT Core;
 - la porta da utilizzare per la trasmissione;
@@ -37,7 +37,8 @@ Inoltre i reader Zebra permettono di definire quale topic utilizzare per le segu
 
 Una volta configurati tutti i parametri elencati il reader potrà connettersi al broker MQTT integrato in AWS IoT Core e iniziare a trasmettere i messaggi in base alla configurazione dei topic sopra descritta. \
 
-Oltre ai parametri di connessione, anche la modalità di lettura (detta *modalità operativa*) è configurabile tramite un'apposita interfaccia web in esecuzione sui reader stessi, e quindi raggiungibile collegandosi direttamente all'IP del reader tramite un browser web; in alternativa è possibile configurare i parametri sopracitati tramite dei comandi che seguono uno schema specifico definito da Zebra; in questo casi i comandi vengono trasmessi sfruttando lo stesso sistema MQTT utilizzato per trasmettere messaggi dei tag e di diagnostica, per questo è necessario poter comunicare anche dal backend di KanbanBOX verso il reader, passando per AWS IoT Core. \
+Oltre ai parametri di connessione, anche la modalità di lettura (detta *modalità operativa*) è configurabile tramite un'apposita interfaccia web in esecuzione sui reader stessi, e quindi raggiungibile collegandosi direttamente all'IP del reader tramite un browser web; in alternativa è possibile configurare i parametri sopracitati tramite dei comandi MQTT, inviati su appositi topic configurati nel reader, che seguono uno schema JSON definito da Zebra.
+Per poter configurare il reader (sia i parametri di connessione che la modalità operativa) *direttamente dall'interfaccia di KanbanBOX* abbiamo deciso di sfruttare i comandi MQTT, usando lo stesso flusso di dati MQTT utilizzato per trasmettere messaggi dei tag e di diagnostica, per questo è necessario poter trasmettere messaggi MQTT anche dal backend di KanbanBOX verso il reader, passando per AWS IoT Core. Per adempiere a questo requisito è stata sfruttata e la libreria *php-mqtt* (@php-mqtt). \
 
 == AWS
 === AWS IoT Core
@@ -46,10 +47,31 @@ Come già accennato in precedenza, AWS IoT Core è un servizio di Amazon Web Ser
 
 In AWS IoT ogni reader RFID è rappresentato da una *Thing*, ovvero un'entità che rappresenta un dispositivo fisico; ogni _Thing_ registrata in un account AWS è identificata da un nome univoco a livello di regione AWS.
 Nell'infrastruttura di KanbanBOX avremo una _Thing_ che permette al backend di connettersi ad AWS IoT come se fosse un client MQTT in modo che questo possa inviare e ricevere i messaggi usando il broker integrato, e una _Thing_ per ogni reader RFID configurato. \
-// TODO: decidere se sotitutire tutti i topic con la nuova gerarchia o lasciare quelli vecchi
-Per ogni _Thing_ è possibile definire degli attributi, un gruppo di appartenenza e un tipo. In questo caso è risultato utile definire un *tipo di _Thing_* per ogni modello di reader RFID, attualmente Zebra FX7500 e Zebra FX9600, in modo da poter operare su tutti i reader di uno stesso modello in modo più pratico se necessario. Inoltre è stato definito *l'attributo licenseId* per ogni _Thing_ in modo da poter salvare anche su AWS IoT, al momento della creazione dell'entità, la licenza (che identifica uno specifico cliente) in cui è configurato il reader. \
+// TODO: decidere se sostituire tutti i topic con la nuova gerarchia o lasciare quelli vecchi
+Per ogni _Thing_ è possibile definire degli attributi, un gruppo di appartenenza e un tipo. In questo caso si è deciso di definire un *tipo di _Thing_* per ogni modello di reader RFID, attualmente Zebra FX7500 e Zebra FX9600, in modo da poter operare su tutti i reader di uno stesso modello più comodamente nel caso in cui fosse necessario per sviluppi futuri. Inoltre è stato definito *l'attributo licenseId* per ogni _Thing_ in modo da poter salvare anche su AWS IoT, al momento della creazione dell'entità, la licenza (che identifica uno specifico cliente) in cui è configurato il reader. \
 
- e che può essere associata a una o più *certificate* per l'autenticazione, a una o più *policy* per definire i permessi di accesso alle risorse AWS e a una o più *IoT Rule* per definire le azioni da eseguire quando vengono ricevuti messaggi su determinati topic MQTT. \
+Al momento della creazione di una _Thing_ è necessario anche *associare un certificato*, che viene utilizzato per l'autenticazione del dispositivo rappresentato dalla _Thing_ quando questo si connette ad AWS IoT Core. \
+AWS IoT permette di scegliere se generare un certificato X.509 direttamente da AWS o se utilizzare un certificato generato esternamente; dato che si è deciso di gestire, e quindi anche di creare, le _Thing_ associate ai reader registrati su KanbanBOX tramite l'SDK di AWS IoT per PHP, è risultato molto più pratico utilizzare certificati generati da AWS ottenibili e assegnabili alle _Thing_ tramite i metodi implementati dall'SDK stesso.
+
+Ad ogni certificato viene poi associata una *policy*, ovvero un file JSON che definisce i permessi di accesso alle risorse AWS per le _Thing_ (nel nostro caso ogni certificato sarà associato ad una sola _Thing_) a cui è associato il certificato. \
+Per l'infrastruttura di KanbanBOX sono state definite due policy:
+// TODO: mettere json delle policy modificando i topic che tengono la stessa gerarchia di prima ma usando le variabili ThingName per il clientId
+- *_Administration_*: ha accesso completo 
+    ```json
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": "*",
+                "Resource": "*"
+            }
+        ]
+    }
+    ```
+una per backend infatti il backend è rappresentato da una thing ecc...
+nelle policy di AWS è possibile usare delle variabili...in questo modo è possibile definire delle policy generiche...
+
 
 === AWS SQS
 // TODO: scopo già spiegato in cap4 ma controllare cosa manca, di sicuro la descrizione di tutte le entità
