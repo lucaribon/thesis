@@ -47,31 +47,66 @@ Come già accennato in precedenza, AWS IoT Core è un servizio di Amazon Web Ser
 
 In AWS IoT ogni reader RFID è rappresentato da una *Thing*, ovvero un'entità che rappresenta un dispositivo fisico; ogni _Thing_ registrata in un account AWS è identificata da un nome univoco a livello di regione AWS.
 Nell'infrastruttura di KanbanBOX avremo una _Thing_ che permette al backend di connettersi ad AWS IoT come se fosse un client MQTT in modo che questo possa inviare e ricevere i messaggi usando il broker integrato, e una _Thing_ per ogni reader RFID configurato. \
-// TODO: decidere se sostituire tutti i topic con la nuova gerarchia o lasciare quelli vecchi
-Per ogni _Thing_ è possibile definire degli attributi, un gruppo di appartenenza e un tipo. In questo caso si è deciso di definire un *tipo di _Thing_* per ogni modello di reader RFID, attualmente Zebra FX7500 e Zebra FX9600, in modo da poter operare su tutti i reader di uno stesso modello più comodamente nel caso in cui fosse necessario per sviluppi futuri. Inoltre è stato definito *l'attributo licenseId* per ogni _Thing_ in modo da poter salvare anche su AWS IoT, al momento della creazione dell'entità, la licenza (che identifica uno specifico cliente) in cui è configurato il reader. \
+Per ogni _Thing_ è possibile definire degli attributi, un gruppo di appartenenza e un tipo. In questo caso si è deciso di definire gli attributi *manufacturer* e *model* che rappresentano rispettivamente il produttore e il modello del dispositivo rappresentato dalla _Thing_; attualmente questi attributi sono utilizzati per definire la *gerarchia dei topic* ma, in futuro, potrebbero essere utili per operare su insiemi di dispositivi raggruppandoli per produttore o modello. \
 
 Al momento della creazione di una _Thing_ è necessario anche *associare un certificato*, che viene utilizzato per l'autenticazione del dispositivo rappresentato dalla _Thing_ quando questo si connette ad AWS IoT Core. \
 AWS IoT permette di scegliere se generare un certificato X.509 direttamente da AWS o se utilizzare un certificato generato esternamente; dato che si è deciso di gestire, e quindi anche di creare, le _Thing_ associate ai reader registrati su KanbanBOX tramite l'SDK di AWS IoT per PHP, è risultato molto più pratico utilizzare certificati generati da AWS ottenibili e assegnabili alle _Thing_ tramite i metodi implementati dall'SDK stesso.
 
-Ad ogni certificato viene poi associata una *policy*, ovvero un file JSON che definisce i permessi di accesso alle risorse AWS per le _Thing_ (nel nostro caso ogni certificato sarà associato ad una sola _Thing_) a cui è associato il certificato. \
+Ad ogni certificato viene poi associata una *policy*, ovvero un file JSON che definisce i permessi di accesso alle risorse AWS per le _Thing_ (nel nostro caso ogni certificato sarà dedicato ad una sola _Thing_) a cui è associato il certificato. \
 Per l'infrastruttura di KanbanBOX sono state definite due policy:
-// TODO: mettere json delle policy modificando i topic che tengono la stessa gerarchia di prima ma usando le variabili ThingName per il clientId
-- *_Administration_*: ha accesso completo 
+- *_Administration_*: questa policy è associata alla _Thing_ che rappresenta il *backend di KanbanBOX*, e permette a questa di connettersi ad AWS IoT Core, pubblicare e ricevere messaggi su tutti i topic, creare e gestire le _Thing_ associate ai reader RFID, e gestire i certificati associati a queste ultime; 
     ```json
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Effect": "Allow",
-                "Action": "*",
-                "Resource": "*"
-            }
-        ]
-    }
+{
+    "Version": "2012-10-17",
+    "Statement": 
+    [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iot:Publish",
+                "iot:Receive",
+                "iot:Republish",
+                "iot:Subscribe",
+                "iot:Connect",
+                "iot:GetRetainedMessage",
+                "iot:ListRetainedMessages",
+                "iot:RetainPublish",
+                "iot:CreateKeysAndCertificate",
+                "iot:DeleteCertificate",
+                "iot:AttachPolicy",
+                "iot:DetachPolicy"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
     ```
-una per backend infatti il backend è rappresentato da una thing ecc...
-nelle policy di AWS è possibile usare delle variabili...in questo modo è possibile definire delle policy generiche...
+- *_Connect_Publish_Subscribe_Receive_ByThingName_*: questa policy è associata ad ogni _Thing_ che rappresenta un reader RFID; in questo caso vengono usate le *variabili* messe a disposizione da *AWS IoT Core nelle policy* per ottenere, dinamicamente, parametri relativi alla connessione MQTT in corso. \ \ Di seguito è stata inserita una parte della policy dove vengono mostrati i permessi di connessione e pubblicazione (dato che gli altri permessi presenti sono analoghi a quello di pubblicazione); si può notare come per la connessione venga usata la variabile _*\${iot:Connection.Thing.ThingName}*_ per obbligare il reader a connettersi solamente usando il _clientId_ (che è equivalente al _ThingName_ su AWS) associato al certificato che sta utilizzando; infatti AWS IoT, una volta ricevuta la richiesta di connessione, verificherà che il certificato usato dal reader sia associato alla _Thing_ corrispondente al _clientId_ usato in questa fase dal reader. \ \ Il permesso di pubblicazione sfrutta anche la variabile _*\${iot:Connection.Thing.Attributes[...]}*_ per recuperare gli attributi della _Thing_, e imporre al reader di pubblicare solo sui topic a lui dedicati.
+    ```json
+{
+    "Version": "2012-10-17",
+    "Statement": 
+    [
+        {
+            "Effect": "Allow",
+            "Action": "iot:Connect",
+            "Resource": "<endpoint-arn>:client/${iot:Connection.Thing.ThingName}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "iot:Publish",
+            "Resource": [
+                "<endpoint-arn>:topic/*${iot:Connection.Thing.ThingName}*",
+                "<endpoint-arn>:topic/${iot:Connection.Thing.Attributes[manufacturer]}/${iot:Connection.Thing.Attributes[model]}/*"
+            ]
+        },
+        // altri permessi ...
+    ]
+}
+    ```
+    L'`endpoint-arn` è un _placeholder_ che va sostituito con l'ARN dell'endpoint di AWS IoT Core utilizzato per la connessione al broker MQTT.
 
+// TODO: rule
 
 === AWS SQS
 // TODO: scopo già spiegato in cap4 ma controllare cosa manca, di sicuro la descrizione di tutte le entità
