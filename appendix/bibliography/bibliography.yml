@@ -45,3 +45,9 @@ simps-mqtt:
     title: Simps MQTT Client Library
     url: https://github.com/simps/mqtt
     date: 2026-10-03
+
+aws-iot-sql:
+    type: Web
+    title: AWS IoT SQL Reference
+    url: https://docs.aws.amazon.com/iot/latest/developerguide/iot-sql-reference.html
+    date: 2026-10-03

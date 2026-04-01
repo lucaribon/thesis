@@ -106,12 +106,23 @@ Per l'infrastruttura di KanbanBOX sono state definite due policy:
     ```
     L'`endpoint-arn` è un _placeholder_ che va sostituito con l'ARN dell'endpoint di AWS IoT Core utilizzato per la connessione al broker MQTT.
 
-// TODO: rule
+L'ultimo elemento necessario nell'infrastruttura progettata sono le *IoT Rule*, ovvero uno strumento che permette di *instradare i messaggi* ricevuti su determinati topic nel broker MQTT di AWS IoT Core verso altre risorse AWS. \ In questo caso è bastato configurare una sola IoT Rule che instradasse i messaggi ricevuti sul topic dedicato ai tag RFID e agli _heartbeat_ (topic che è lo stesso per tutti i reader) verso una coda SQS; così facendo abbiamo potuto implementare un worker nel backend di KanbanBOX che può estrarre i messaggi dalla cosa in modalità _pull_ e processarli.
+
+Le _IoT Rule_ vengono configurate tramite una query in linguaggio SQL @aws-iot-sql, arricchito con delle funzioni specifiche per AWS IoT, che permette di filtrare i messaggi in ingresso e di estrarre i dati che ci interessano. Di seguito viene riportata la query utilizzata:
+```sql
+SELECT *, clientId() AS clientId FROM '#' WHERE topic(3) = 'events'
+```
+Come vediamo dalla clausola `FROM`, la query recupera i messaggi ricevuti su tutti i topic (*wildcard `#`*) e usando la clausola `WHERE`, abbinata alla *funzione `topic(n)`* che ritorna l'n-esimo livello del topic, filtra i messaggi per ottenere solo quelli ricevuti sui topic che terminano con `events`, ovvero i topic dedicati ai messaggi dei tag RFID e degli _heartbeat_; come anticipato, nel nostro caso il topic è lo stesso per tutti i reader ma si è deciso di usare una regola dinamica in caso di futuri cambiamenti nella struttura dei topic. \
+
+Altro aspetto peculiare è l'utilizzo della *funzione `clientId()`* che, come per la funzione `topic()`, è implementata nativamente da AWS IoT; questa viene usata per integrare il _clientId_ nel payload del messaggio, così da poter identificare il reader che lo ha generato e quindi associare i dati del tag o dell'heartbeat al reader corretto direttamente dal backend di KanbanBOX, senza dover configurare un topic ed una _IoT Rule_ dedicati per ogni reader, per poi utilizzare quest'ultimi come "canali identificativi". \
+In aggiunta al _clientId_, ovviamente, vengono inclusi anche tutti gli altri dati del messaggio (payload, timestamp, tipo, ...) usando *l'asterisco (`*`)*.
+
 
 === AWS SQS
 // TODO: scopo già spiegato in cap4 ma controllare cosa manca, di sicuro la descrizione di tutte le entità
 
 === Struttura dei topic
+// TODO: decidere se metterlo prima delle descrizioni di reader e AWS Iot
 // TODO: scrivere dopo aver descritto per intero il flusso di reader e AWS IoT, così si possono citare le IoT Rule spiegando perché per i topic dei tag data è stata usata una gerarchia più semplice (testing/events e production/events)
 
 
