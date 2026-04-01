@@ -83,26 +83,26 @@ Per l'infrastruttura di KanbanBOX sono state definite due policy:
     ```
 - *_Connect_Publish_Subscribe_Receive_ByThingName_*: questa policy è associata ad ogni _Thing_ che rappresenta un reader RFID; in questo caso vengono usate le *variabili* messe a disposizione da *AWS IoT Core nelle policy* per ottenere, dinamicamente, parametri relativi alla connessione MQTT in corso. \ \ Di seguito è stata inserita una parte della policy dove vengono mostrati i permessi di connessione e pubblicazione (dato che gli altri permessi presenti sono analoghi a quello di pubblicazione); si può notare come per la connessione venga usata la variabile _*\${iot:Connection.Thing.ThingName}*_ per obbligare il reader a connettersi solamente usando il _clientId_ (che è equivalente al _ThingName_ su AWS) associato al certificato che sta utilizzando; infatti AWS IoT, una volta ricevuta la richiesta di connessione, verificherà che il certificato usato dal reader sia associato alla _Thing_ corrispondente al _clientId_ usato in questa fase dal reader. \ \ Il permesso di pubblicazione sfrutta anche la variabile _*\${iot:Connection.Thing.Attributes[...]}*_ per recuperare gli attributi della _Thing_, e imporre al reader di pubblicare solo sui topic a lui dedicati.
     ```json
-{
-    "Version": "2012-10-17",
-    "Statement": 
-    [
-        {
-            "Effect": "Allow",
-            "Action": "iot:Connect",
-            "Resource": "<endpoint-arn>:client/${iot:Connection.Thing.ThingName}"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "iot:Publish",
-            "Resource": [
-                "<endpoint-arn>:topic/*${iot:Connection.Thing.ThingName}*",
-                "<endpoint-arn>:topic/${iot:Connection.Thing.Attributes[manufacturer]}/${iot:Connection.Thing.Attributes[model]}/*"
-            ]
-        },
-        // altri permessi ...
-    ]
-}
+    {
+        "Version": "2012-10-17",
+        "Statement": 
+        [
+            {
+                "Effect": "Allow",
+                "Action": "iot:Connect",
+                "Resource": "<endpoint-arn>:client/${iot:Connection.Thing.ThingName}"
+            },
+            {
+                "Effect": "Allow",
+                "Action": "iot:Publish",
+                "Resource": [
+                    "arn:aws:iot:eu-north-1:396913738910:topic/${iot:Connection.Thing.Attributes[manufacturer]}/${iot:Connection.Thing.Attributes[model]}/${iot:Connection.Thing.ThingName}/*",
+                    "arn:aws:iot:eu-north-1:396913738910:topic/${iot:Connection.Thing.Attributes[manufacturer]}/${iot:Connection.Thing.Attributes[model]}/events"
+                ]
+            },
+            // altri permessi ...
+        ]
+    }
     ```
     L'`endpoint-arn` è un _placeholder_ che va sostituito con l'ARN dell'endpoint di AWS IoT Core utilizzato per la connessione al broker MQTT.
 
