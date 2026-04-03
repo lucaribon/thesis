@@ -38,26 +38,44 @@ Inoltre i reader Zebra permettono di definire quale topic utilizzare per le segu
 Una volta configurati tutti i parametri elencati il reader potrà connettersi al broker MQTT integrato in AWS IoT Core e iniziare a trasmettere i messaggi in base alla configurazione dei topic sopra descritta. \
 
 Oltre ai parametri di connessione, anche la modalità di lettura (detta *modalità operativa*) è configurabile tramite un'apposita interfaccia web in esecuzione sui reader stessi, e quindi raggiungibile collegandosi direttamente all'IP del reader tramite un browser web; in alternativa è possibile configurare i parametri sopracitati tramite dei comandi MQTT, inviati su appositi topic configurati nel reader, che seguono uno schema JSON definito da Zebra.
-Per poter configurare il reader (sia i parametri di connessione che la modalità operativa) *direttamente dall'interfaccia di KanbanBOX* abbiamo deciso di sfruttare i comandi MQTT, usando lo stesso flusso di dati MQTT utilizzato per trasmettere messaggi dei tag e di diagnostica, per questo è necessario poter trasmettere messaggi MQTT anche dal backend di KanbanBOX verso il reader, passando per AWS IoT Core. Per adempiere a questo requisito è stata sfruttata e la libreria *php-mqtt* (@php-mqtt). \
+Per poter configurare il reader (sia i parametri di connessione che la modalità operativa) *direttamente dall'interfaccia di KanbanBOX* abbiamo deciso di sfruttare i comandi MQTT, usando lo stesso flusso di dati MQTT utilizzato per trasmettere messaggi dei tag e di diagnostica, per questo è necessario poter trasmettere messaggi MQTT anche dal backend di KanbanBOX verso i reader, passando per AWS IoT Core. Per adempiere a questo requisito è stata sfruttata e la libreria *php-mqtt* (@php-mqtt). \
 
 === Struttura dei topic
+<cap:struttura-topic>
 // TODO: decidere se metterlo prima delle descrizioni di reader e AWS Iot
 // TODO: scrivere dopo aver descritto per intero il flusso di reader e AWS IoT, così si possono citare le IoT Rule spiegando perché per i topic dei tag data è stata usata una gerarchia più semplice (testing/events e production/events)
+La struttura dei topic è stata *standardizzata* in modo da poterla replicare per tutti i reader senza incorrere in problemi di incongruenza tra le varie configurazioni.
+
+Nei primi livelli della struttura sono stati sfruttati nome del *produttore* e del *modello* del dispositivo così da poter raggrupparli basandosi su dei parametri potenzialmente utili, dato che in un futuro potrebbe essere necessario poter operare su insiemi di dispositivi usando una _wildcard_ simile a questa "`<manufacturer>/<model>/#`" senza, quindi, essere costretti ad utilizzare un numero elevato di topic più specifici. 
+
+Successivamente, per alcuni canali di comunicazione, è stato aggiunto l'*identificativo* del dispositivo; questo perché per le categorie di messaggi `management` e `control` è necessario, per il backend di KanbanBOX, poter leggere la risposta ad un comando inviato ad un dispositivo specifico per poter dare un feedback corretto all'utente, quindi la soluzione più conveniente è stata quella di usare un topic dedicato per ogni dispositivo, così da poter rimanere in ascolto sul topic di risposta usato dal dispositivo. \ Rimane comunque possibile usare una _wildcard_ per operare raggruppando i dispositivi per produttore e modello. 
+
+Infine, all'ultimo livello della gerarchia si trova la *macro-categoria di messaggi* per cui quel topic viene utilizzato.
+
+Di seguito viene riportata la struttura dei topic attualmente in uso, associata alla categoria del topic per cui viene usata:
+- *_management events_* e *_tag data events_*: `<manufacturer>/<model>/events`, in questo caso si è deciso di usare un solo topic per entrambe le categorie di messaggi dato che tramite la _IoT Rule_ implementata [@cap:aws-iot-core] il _clientId_ viene incluso nel payload del messaggio prima di essere inserito nella coda SQS; così facendo di evita di dover configurare due _rule_ diverse per instradare le due categorie di messaggi verso la stessa coda;
+- *_management_*: come già accennato, è necessario usare dei topic dedicati per ogni dispositivo dato che è necessario leggere le risposte ai comandi inviati
+    - `<manufacturer>/<model>/<clientId>/management_commands`
+    - `<manufacturer>/<model>/<clientId>/management_responses` 
+- *_control_*: anche in questo caso sono necessari dei topic dedicati
+    - `<manufacturer>/<model>/<clientId>/control_commands`
+    - `<manufacturer>/<model>/<clientId>/control_responses`
 
 === AWS IoT Core
+<cap:aws-iot-core>
 // TODO: scopo già spiegato in cap4 ma controllare cosa manca, di sicuro la descrizione di tutte le entità
 Come già accennato in precedenza, AWS IoT Core è un servizio di Amazon Web Services che integra un broker MQTT e una serie di funzionalità a supporto della gestione di dispositivi IoT e della raccolta, elaborazione o distribuzione dei dati da essi generati. \
 
-In AWS IoT ogni reader RFID è rappresentato da una *Thing*, ovvero un'entità che rappresenta un dispositivo fisico; ogni _Thing_ registrata in un account AWS è identificata da un nome univoco a livello di regione AWS.
+In AWS IoT ogni reader RFID è rappresentato da una *_Thing_*, ovvero un'entità che rappresenta un dispositivo fisico; ogni _Thing_ registrata in un account AWS è identificata da un nome univoco a livello di regione AWS.
 Nell'infrastruttura di KanbanBOX avremo una _Thing_ che permette al backend di connettersi ad AWS IoT come se fosse un client MQTT in modo che questo possa inviare e ricevere i messaggi usando il broker integrato, e una _Thing_ per ogni reader RFID configurato. \
-Per ogni _Thing_ è possibile definire degli attributi, un gruppo di appartenenza e un tipo. In questo caso si è deciso di definire gli attributi *manufacturer* e *model* che rappresentano rispettivamente il produttore e il modello del dispositivo rappresentato dalla _Thing_; attualmente questi attributi sono utilizzati per definire la *gerarchia dei topic* ma, in futuro, potrebbero essere utili per operare su insiemi di dispositivi raggruppandoli per produttore o modello. \
+Per ogni _Thing_ è possibile definire degli attributi, un gruppo di appartenenza e un tipo. In questo caso si è deciso di definire gli attributi *manufacturer* e *model* che rappresentano rispettivamente il produttore e il modello del dispositivo rappresentato dalla _Thing_; attualmente questi attributi sono utilizzati per definire la *struttura dei topic* [@cap:struttura-topic] ma, in futuro, potrebbero essere utili per operare su insiemi di dispositivi raggruppandoli per produttore o modello. \
 
 Al momento della creazione di una _Thing_ è necessario anche *associare un certificato*, che viene utilizzato per l'autenticazione del dispositivo rappresentato dalla _Thing_ quando questo si connette ad AWS IoT Core. \
 AWS IoT permette di scegliere se generare un certificato X.509 direttamente da AWS o se utilizzare un certificato generato esternamente; dato che si è deciso di gestire, e quindi anche di creare, le _Thing_ associate ai reader registrati su KanbanBOX tramite l'SDK di AWS IoT per PHP, è risultato molto più pratico utilizzare certificati generati da AWS ottenibili e assegnabili alle _Thing_ tramite i metodi implementati dall'SDK stesso.
 
 Ad ogni certificato viene poi associata una *policy*, ovvero un file JSON che definisce i permessi di accesso alle risorse AWS per le _Thing_ (nel nostro caso ogni certificato sarà dedicato ad una sola _Thing_) a cui è associato il certificato. \
 Per l'infrastruttura di KanbanBOX sono state definite due policy:
-- *_Administration_*: questa policy è associata alla _Thing_ che rappresenta il *backend di KanbanBOX*, e permette a questa di connettersi ad AWS IoT Core, pubblicare e ricevere messaggi su tutti i topic, creare e gestire le _Thing_ associate ai reader RFID, e gestire i certificati associati a queste ultime; 
+- *_Administration_*: questa policy è associata alla _Thing_ che rappresenta il *backend di KanbanBOX*, e permette a questa di connettersi ad AWS IoT Core, pubblicare e ricevere messaggi su tutti i topic, creare e gestire le _Thing_ associate ai reader RFID, e gestire i certificati e le policy
     ```json
 {
     "Version": "2012-10-17",
@@ -84,7 +102,7 @@ Per l'infrastruttura di KanbanBOX sono state definite due policy:
     ]
 }
     ```
-- *_Connect_Publish_Subscribe_Receive_ByThingName_*: questa policy è associata ad ogni _Thing_ che rappresenta un reader RFID; in questo caso vengono usate le *variabili* messe a disposizione da *AWS IoT Core nelle policy* per ottenere, dinamicamente, parametri relativi alla connessione MQTT in corso. \ \ Di seguito è stata inserita una parte della policy dove vengono mostrati i permessi di connessione e pubblicazione (dato che gli altri permessi presenti sono analoghi a quello di pubblicazione); si può notare come per la connessione venga usata la variabile _*\${iot:Connection.Thing.ThingName}*_ per obbligare il reader a connettersi solamente usando il _clientId_ (che è equivalente al _ThingName_ su AWS) associato al certificato che sta utilizzando; infatti AWS IoT, una volta ricevuta la richiesta di connessione, verificherà che il certificato usato dal reader sia associato alla _Thing_ corrispondente al _clientId_ usato in questa fase dal reader. \ \ Il permesso di pubblicazione sfrutta anche la variabile _*\${iot:Connection.Thing.Attributes[...]}*_ per recuperare gli attributi della _Thing_, e imporre al reader di pubblicare solo sui topic a lui dedicati.
+- *_Connect_Publish_Subscribe_Receive_ByThingName_*: questa policy è associata ad ogni _Thing_ che rappresenta un reader RFID; in questo caso vengono usate le *variabili* messe a disposizione da *AWS IoT Core nelle policy* per ottenere, dinamicamente, parametri relativi alla connessione MQTT in corso. \ \ Di seguito è stata inserita una parte della policy dove vengono mostrati solamente i permessi di connessione e pubblicazione (dato che gli altri permessi presenti sono analoghi a quello di pubblicazione); si può notare come per la connessione venga usata la variabile _*\${iot:Connection.Thing.ThingName}*_ per obbligare il reader a connettersi solamente usando il _clientId_ (che è equivalente al _ThingName_ su AWS) associato al certificato che sta utilizzando; infatti AWS IoT, una volta ricevuta la richiesta di connessione, verificherà che il certificato usato dal reader sia associato alla _Thing_ corrispondente al _clientId_ usato in questa fase dal reader. \ \ Il permesso di pubblicazione sfrutta anche la variabile _*\${iot:Connection.Thing.Attributes[...]}*_ per recuperare gli attributi della _Thing_, e imporre al reader di pubblicare solo sui topic a lui dedicati.
     ```json
     {
         "Version": "2012-10-17",
@@ -99,8 +117,8 @@ Per l'infrastruttura di KanbanBOX sono state definite due policy:
                 "Effect": "Allow",
                 "Action": "iot:Publish",
                 "Resource": [
-                    "arn:aws:iot:eu-north-1:396913738910:topic/${iot:Connection.Thing.Attributes[manufacturer]}/${iot:Connection.Thing.Attributes[model]}/${iot:Connection.Thing.ThingName}/*",
-                    "arn:aws:iot:eu-north-1:396913738910:topic/${iot:Connection.Thing.Attributes[manufacturer]}/${iot:Connection.Thing.Attributes[model]}/events"
+                    "<endpoint-arn>:topic/${iot:Connection.Thing.Attributes[manufacturer]}/${iot:Connection.Thing.Attributes[model]}/${iot:Connection.Thing.ThingName}/*",
+                    "<endpoint-arn>:topic/${iot:Connection.Thing.Attributes[manufacturer]}/${iot:Connection.Thing.Attributes[model]}/events"
                 ]
             },
             // altri permessi ...
@@ -118,7 +136,7 @@ SELECT *, clientId() AS clientId FROM '#' WHERE topic(3) = 'events'
 Come vediamo dalla clausola `FROM`, la query recupera i messaggi ricevuti su tutti i topic (*wildcard `#`*) e usando la clausola `WHERE`, abbinata alla *funzione `topic(n)`* che ritorna l'n-esimo livello del topic, filtra i messaggi per ottenere solo quelli ricevuti sui topic che terminano con `events`, ovvero i topic dedicati ai messaggi dei tag RFID e degli _heartbeat_; come anticipato, nel nostro caso il topic è lo stesso per tutti i reader ma si è deciso di usare una regola dinamica in caso di futuri cambiamenti nella struttura dei topic. \
 
 Altro aspetto peculiare è l'utilizzo della *funzione `clientId()`* che, come per la funzione `topic()`, è implementata nativamente da AWS IoT; questa viene usata per integrare il _clientId_ nel payload del messaggio, così da poter identificare il reader che lo ha generato e quindi associare i dati del tag o dell'heartbeat al reader corretto direttamente dal backend di KanbanBOX, senza dover configurare un topic ed una _IoT Rule_ dedicati per ogni reader, per poi utilizzare quest'ultimi come "canali identificativi". \
-In aggiunta al _clientId_, ovviamente, vengono inclusi anche tutti gli altri dati del messaggio (payload, timestamp, tipo, ...) usando *l'asterisco (`*`)*.
+In aggiunta al _clientId_, ovviamente, vengono inclusi anche tutti gli altri dati del messaggio (_payload_, _timestamp_, tipo, ...) usando *l'asterisco (`*`)*.
 
 
 === AWS SQS
