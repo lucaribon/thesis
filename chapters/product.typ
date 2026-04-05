@@ -42,8 +42,6 @@ Per poter configurare il reader (sia i parametri di connessione che la modalità
 
 === Struttura dei topic
 <cap:struttura-topic>
-// TODO: decidere se metterlo prima delle descrizioni di reader e AWS Iot
-// TODO: scrivere dopo aver descritto per intero il flusso di reader e AWS IoT, così si possono citare le IoT Rule spiegando perché per i topic dei tag data è stata usata una gerarchia più semplice (testing/events e production/events)
 La struttura dei topic è stata *standardizzata* in modo da poterla replicare per tutti i reader senza incorrere in problemi di incongruenza tra le varie configurazioni.
 
 Nei primi livelli della struttura sono stati sfruttati nome del *produttore* e del *modello* del dispositivo così da poter raggrupparli basandosi su dei parametri potenzialmente utili, dato che in un futuro potrebbe essere necessario poter operare su insiemi di dispositivi usando una _wildcard_ simile a questa "`<manufacturer>/<model>/#`" senza, quindi, essere costretti ad utilizzare un numero elevato di topic più specifici. 
@@ -63,7 +61,6 @@ Di seguito viene riportata la struttura dei topic attualmente in uso, associata 
 
 === AWS IoT Core
 <cap:aws-iot-core>
-// TODO: scopo già spiegato in cap4 ma controllare cosa manca, di sicuro la descrizione di tutte le entità
 Come già accennato in precedenza, AWS IoT Core è un servizio di Amazon Web Services che integra un broker MQTT e una serie di funzionalità a supporto della gestione di dispositivi IoT e della raccolta, elaborazione o distribuzione dei dati da essi generati. \
 
 In AWS IoT ogni reader RFID è rappresentato da una *_Thing_*, ovvero un'entità che rappresenta un dispositivo fisico; ogni _Thing_ registrata in un account AWS è identificata da un nome univoco a livello di regione AWS.
@@ -140,8 +137,20 @@ In aggiunta al _clientId_, ovviamente, vengono inclusi anche tutti gli altri dat
 
 
 === AWS SQS
-// TODO: scopo già spiegato in cap4 ma controllare cosa manca, di sicuro la descrizione di tutte le entità
+AWS *Simple Queue Service* (SQS) è un servizio di *message queuing* che consente di stabilire una comunicazione *asincrona* tra componenti di un sistema software, introducendo una coda persistente tra chi produce eventi e chi li elabora. La coda è detta *asincrona* perché il componente che produce l'evento non deve conoscere né contattare direttamente il destinatario; infatti il messaggio viene pubblicato nella coda e l'elaborazione avviene in un secondo momento, quando il "componente consumatore" (nel nostro caso il worker) legge i messaggi disponibili. 
+Nel sistema descritto, SQS viene impiegato come coda di transito per i messaggi ricevuti su AWS IoT Core: una _IoT Rule_ [@cap:aws-iot-core] instrada i messaggi, in formato *JSON*, pubblicati sul topic `<manufacturer>/<model>/events` verso la coda SQS, mantenendo quindi separati la trasmissione tramite MQTT e il consumo dei messaggi.
 
+L'uso della coda introduce due vantaggi principali:
+- *buffering*: se il worker non riesce a processare i messaggi alla stessa velocità con cui vengono prodotti, questi si accumulano nella coda senza andare persi. Questo permette di assorbire picchi temporanei nel traffico mantenendo stabile il resto del sistema.
+- *persistenza*: i messaggi vengono memorizzati da SQS per un periodo configurabile (7 giorni in questa implementazione), rendendo possibile la consegna anche in presenza di indisponibilità temporanee del worker.
+
+Dal punto di vista del modello di consegna, SQS permette una modalità di consumo *_pull_*: il worker, utilizzando l'SDK AWS per PHP @aws-sqs-sdk-php, interroga periodicamente la coda e recupera i messaggi disponibili. 
+Questo approccio è utile anche per gestire casi in cui un messaggio, una volta letto, non venga effettivamente considerato d'interesse (ad esempio in caso di eccezione per tipi di messaggi non gestiti lato backend); in questi casi il messaggio non viene confermato come consumato (cioè rimosso dalla coda), e può tornare nuovamente disponibile in coda.\
+Nei casi in cui il messaggio sia malformato o contenga dati incompleti, invece, il worker lo consuma e lo scarta, evitando che possa essere processato più volte.
+
+Come parzialmente anticipato nella descrizione della struttura dei topic [@cap:struttura-topic], per i messaggi di tipo `management` e `control` è sorta la necessità di poter leggere le risposte ai comandi inviati ai reader, e quindi di gestire le risposte in modo sincrono per poter dare un feedback immediato all'utente. \ Per questo motivo si è deciso di utilizzare la coda SQS solamente per i messaggi di dati dei tag e heartbeat e di gestire i messaggi di tipo `management` e `control` direttamente tramite MQTT.
+
+Infine, l'accesso alla coda è regolato tramite *IAM*, infatti è stato creato un ruolo IAM con permessi per scrivere e leggere dalla coda SQS configurata. Questo stesso ruolo è stato associato alla _IoT Rule_ per permettergli l'inserimento dei messaggi in coda, e viene usato dal worker di KanbanBOX per permettergli di leggere i messaggi dalla coda; in questo modo si garantisce che solo questi due componenti possano interagire con la coda, e quindi si mantiene un livello di sicurezza adeguato.
 
 === KanbanBOX
 
