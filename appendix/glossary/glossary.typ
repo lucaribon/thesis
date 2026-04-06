@@ -110,6 +110,9 @@ Per il protocollo MQTT il Quality of Service definisce con che garanzia verranno
 === RFID
 <glossary-RFID>
 Radio-Frequency Identification, è una tecnologia di identificazione che utilizza onde radio per trasmettere dati tra un lettore e un dispositivo chiamato "tag" o "etichetta" RFID.\
+=== RSSI
+<glossary-RSSI>
+Received Signal Strength Indicator, è una misura della potenza del segnale ricevuto da un dispositivo, come un lettore RFID, che indica la forza del segnale radio tra il lettore e il tag RFID.\
 
 == S
 

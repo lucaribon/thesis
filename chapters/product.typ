@@ -1,4 +1,5 @@
-// TODO: capitoli di sicuro da sistemare (aggiungere/togliere/cambiare capitoli) // contenuti e lunghezza molto variabili in base all'argomento scelto, indicativamente tra le 20 e le 40 pagine (comprensive di tabelle e immagini), distribuite tra 1-3 capitoli
+#import "../config/thesis-config.typ": gloss
+// TODO:contenuti e lunghezza molto variabili in base all'argomento scelto, indicativamente tra le 20 e le 40 pagine (comprensive di tabelle e immagini), distribuite tra 1-3 capitoli
 #pagebreak(to:"odd")
 
 #set par(justify: false)
@@ -153,6 +154,18 @@ Come parzialmente anticipato nella descrizione della struttura dei topic [@cap:s
 Infine, l'accesso alla coda è regolato tramite *IAM*, infatti è stato creato un ruolo IAM con permessi per scrivere e leggere dalla coda SQS configurata. Questo stesso ruolo è stato associato alla _IoT Rule_ per permettergli l'inserimento dei messaggi in coda, e viene usato dal worker di KanbanBOX per permettergli di leggere i messaggi dalla coda; in questo modo si garantisce che solo questi due componenti possano interagire con la coda, e quindi si mantiene un livello di sicurezza adeguato.
 
 === KanbanBOX
+KanbanBOX è il software gestionale, sviluppato dall'omonima azienda ospitante, che ha lo scopo di facilitare il monitoraggio e la gestione dei processi produttivi e logistici attraverso l'uso di *kanban* digitali che vengono associati a specifici tag RFID. \
+
+La piattaforma web di KanbanBOX comunica in tre direzioni distinte nel flusso dei dati relativo al dominio dei reader RFID.
+
+La prima riguarda il *_polling_ dei messaggi* dei tag RFID e degli heartbeat, che tramite l'SDK di AWS (usando il protocollo *HTTP* per le chiamate), vengono estratti dalla coda SQS e processati, da un worker dedicato. \ 
+Il processamento consiste principalmente nel distinguere la tipologia di messaggio ricevuto e nell'estrazione dei dati rilevanti da esso; nel caso dei messaggi dei tag RFID i dati di interesse sono principalmente l'identificativo del tag letto, il timestamp di lettura, il reader che ha generato il messaggio e i dati tecnici di lettura (#gloss("RSSI", <glossary-RSSI>), antenna, numero di letture, etc.), questi vengono poi utilizzati per aggiornare lo stato del *kanban* associato a quel tag, se esistente, e per mostrare la lettura del cartellino nella dashboard dei tag letti. \
+Mentre per i messaggi di heartbeat i dati di interesse sono principalmente l'identificativo del reader e il timestamp di ricezione del messaggio, utilizzati per *aggiornare lo stato di connessione* del reader in modo da informare l'utente sull'operatività del reader stesso. 
+
+Il secondo flusso di dati riguarda la *configurazione dei reader* tramite l'interfaccia web di KanbanBOX, che tramite il protocollo MQTT invia comandi ai reader per configurare i parametri di connessione e la modalità operativa e riceve l'esito dell'applicazione dei comandi dai reader. \
+Tutti i dati riguardanti a questo flusso passano per il broker *MQTT* di AWS IoT Core, attraverso i topic descritti nella sezione dedicata alla struttura dei topic [@cap:struttura-topic].
+
+L'ultimo flusso è relativo alla comunicazione verso AWS IoT Core tramite l'SDK di AWS per PHP, che viene utilizzato principalmente per la *gestione delle entità di AWS IoT* Core, in particolare per la ricezione del certificato e delle chiavi necessari per la generazione del file PFX. 
 
 = Codifica
 
