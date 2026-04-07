@@ -17,8 +17,13 @@
 
 == Flusso del sistema
 // TODO: figure flusso del sistema
+#figure(
+    image("../images/data_flow_diagram.png"),
+    caption: "Flusso del sistema",
+)
 
-=== Reader RFID
+
+=== RFID Reader
 I reader RFID Zebra sono dei dispositivi hardware che, se muniti di uno o più moduli esterni che fungono da antenne, sono in grado di leggere i tag RFID presenti nell'ambiente circostante. \
 Per poter trasmettere dati e comandi, da e verso il reader, è necessario configurare la connessione ad un endpoint esterno; nel nostro caso, in cui la scelta del broker MQTT è ricaduta su AWS IoT Core, è stato necessario configurare un endpoint di tipo *AWS IoT Connector*, ovvero un'interfaccia implementata da Zebra nei propri reader che consente di farli comunicare con AWS IoT Core tramite MQTT, configurando un numero ridotto di parametri. \ 
 La configurazione, infatti, richiede di definire:
