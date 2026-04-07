@@ -162,7 +162,8 @@ In questa sezione vengono elencati e descritti gli strumenti e le tecnologie gi�
 - *Psr (PHP Standard Recommendations)*: libreria che definisce una serie di standard e mette a disposizione interfacce per garantire l'interoperabilità tra le librerie e i framework PHP, facilitando l'integrazione di componenti di terze parti e promuovendo un'architettura modulare e scalabile;
 - *Psl (PHP Standard Library)*: libreria standard che aiuta ad imporre un approccio fortemente tipizzato e orientato agli oggetti nello sviluppo di applicazioni PHP;
 - *ramsey/UUID*: libreria per la generazione di UUID (Universally Unique Identifier), utilizzata per creare identificatori univoci per le entità del dominio di KanbanBOX, come ad esempio i reader RFID o i tag RFID letti;
-- *i18next*: libreria per la gestione dell'internazionalizzazione (i18n), utilizzata per supportare più lingue nell'interfaccia di KanbanBOX.
+- *i18next*: libreria per la gestione dell'internazionalizzazione (i18n), utilizzata per supportare più lingue nell'interfaccia di KanbanBOX;
+- *openssl*: estensione di PHP che fornisce funzioni per la crittografia e la generazione di certificati, utilizzata per la generazione dei file PFX da fornire agli installatori dei reader RFID.
 
 *Testing e Qualità:* tutti i controlli elencati di seguito vengono eseguiti tramite l'integrazione continua configurata su *GitHub Actions*, che permette di eseguire i test e le analisi di qualità del codice per ogni pull request.
 - *PHPUnit*: framework principale per l'esecuzione di _unit test_, ovvero che permette di testare l'unità di codice minima nel progetto, fondamentale per validare la _business logic_;
