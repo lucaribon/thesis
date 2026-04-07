@@ -171,27 +171,3 @@ Il secondo flusso di dati riguarda la *configurazione dei reader* tramite l'inte
 Tutti i dati riguardanti a questo flusso passano per il broker *MQTT* di AWS IoT Core, attraverso i topic descritti nella sezione dedicata alla struttura dei topic [@cap:struttura-topic].
 
 L'ultimo flusso è relativo alla comunicazione verso AWS IoT Core tramite l'SDK di AWS per PHP, che viene utilizzato principalmente per la *gestione delle entità di AWS IoT* Core, in particolare per la ricezione del certificato e delle chiavi necessari per la generazione del file PFX. 
-
-= Codifica
-
-== Design pattern utilizzati
-// ?forse no?
-
-== Gestione dei reader RFID
-// TODO: descrizione dello scopo
-// TODO: figure grafico UML classe/classi
-// ?FE separato o unito a BE
-// TODO: descrizione dettagliata di classi, campi, metodi come in specifica tecnica, con esempi di codice
-
-== Configurazione dei reader RFID
-
-= Ricezione dei tag RFID letti
-== Architettura
-
-
-== Progettazione
-
-== Codifica
-=== ReadTagEventsMessageSerializer
-=== ReadTagEventsMessage
-=== ReadTagEventsMessageHandler
