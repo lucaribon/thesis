@@ -196,28 +196,32 @@ L'ultimo flusso è relativo alla comunicazione verso AWS IoT Core tramite l'SDK 
 Come anticipato nella Sezione @cap:flusso-del-sistema i dati dei tag RFID letti dai reader vengono estratti in _pull_ da AWS SQS tramite un _worker_. Una volta estratto un messaggio il _worker_ lo distribuisce, in base al tipo di messaggio, ad un opportuno _handler_, che nel caso dei messaggi ricevuti dalla coda 'rfid-reader-tag-events' è il `RfidEventsMessageSerializer`.
 
 Di seguito viene mostrato come il _worker_ viene instaziato nella classe `Container`, ovvero il contenitore di dipendenze del backend di KanbanBox che serve per gestire la _dependency injection_.
+
+Vediamo che viene costruito un oggetto `ConsumeMessagesCommand` che è il comando, eseguito dal worker, che consente di estrarre i messaggi dalla coda SQS e di processarli; questo comando viene costruito con un `RoutableMessageBus` che è un bus dei messaggi che consente di instradare i messaggi a degli handler specifici in base al loro tipo, e con un _locator_ (`rfidEventsReceiverLocator`) che rappresenta il ricevitore SQS associato alla coda da cui vogliamo estrarre i messaggi. \
+Abbiamo poi anche un `EventDispatcher` per gestire gli eventi generati durante l'esecuzione del comando, e un `Logger` per dare in _output_ eventuali errori o messaggi di log. \
+Infine viene fornito anche il nome coda sotto forma di array, che in altri contesti potrebbe essere utile per gestire più code con lo stesso comando, ma nel nostro caso è un parametro superfluo dato che abbiamo un solo comando dedicato ad una sola coda, già associata al `rfidEventsReceiverLocator`.
 ```php
 <?php
 $rfidEventsQueueConfiguration = $getConfig->getRfidEventsQueueConfiguration();
-                    $rfidEventsReceiverLocator    = new EmptyContainer();
-                    $rfidEventsReceiverLocator->set(
-                        $rfidEventsQueueConfiguration->queueName,
-                        $awsSqsFactory->buildReceiver(
-                            $rfidEventsQueueConfiguration,
-                            new RfidEventsMessageSerializer($clock),
-                        ),
-                    );
+$rfidEventsReceiverLocator = new EmptyContainer();
+$rfidEventsReceiverLocator->set(
+    $rfidEventsQueueConfiguration->queueName,
+    $awsSqsFactory->buildReceiver(
+        $rfidEventsQueueConfiguration,
+        new RfidEventsMessageSerializer($clock),
+    ),
+);
 
-                    $rfidEventsCommandExecutor = new ConsumeMessagesCommand(
-                        new RoutableMessageBus(
-                            new EmptyContainer(),
-                            $messageBus,
-                        ),
-                        $rfidEventsReceiverLocator,
-                        $eventDispatcher,
-                        $logger,
-                        [$rfidEventsQueueConfiguration->queueName],
-                    );
+$rfidEventsCommandExecutor = new ConsumeMessagesCommand(
+    new RoutableMessageBus(
+        new EmptyContainer(),
+        $messageBus,
+    ),
+    $rfidEventsReceiverLocator,
+    $eventDispatcher,
+    $logger,
+    [$rfidEventsQueueConfiguration->queueName],
+);
 ```
 
 == Ricezione dei tag RFID letti

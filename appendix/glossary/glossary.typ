@@ -3,7 +3,10 @@
 #set page(numbering: "1")
 #set align(left)
 #set heading(numbering: none)
-#show heading: it => block(above: 1.4em, below: 1em, text(it.body))
+#show heading: it => [
+    #if it.level == 1 { pagebreak(weak: true) }
+    #block(above: 1.4em, below: 1em, text(it.body))
+]
 
 = Glossario
 <glossary>
@@ -20,7 +23,7 @@ Le API definiscono i metodi e i formati per trasmettere richieste e risposte tra
 == B
 === Backend
 <glossary-backend>
-Il backend è la parte di un sistema software che gestisce la logica di funzionamento del sistema, l'elaborazione dei dati e l'interazione con il database o altri servizi. Non include, invece, l'interfaccia con cui l'utente finale interagisce o la parte visibile del sistema, che è chiamata frontend. 
+Il backend è la parte di un sistema software che gestisce la logica di funzionamento del sistema, l'elaborazione dei dati e l'interazione con il database o altri servizi. Non include, invece, l'interfaccia con cui l'utente finale interagisce o la parte visibile del sistema, che è chiamata frontend.
 
 Nel caso di KanbanBox il backend viene eseguito su una macchina server, ovvero un dispositivo diverso e fisicamente distante dalla macchina usata dall'utente finale per interagire con il sistema.\
 
@@ -41,8 +44,8 @@ In questo documento viene usata anche per riferirsi agli strumenti utilizzabili 
 == D
 === DTO
 <glossary-dto>
-Data Transfer Object, è un oggetto che permette di standardizzare l'accesso e il trasferimento, tra componenti software diversi, di dati che si vuole organizzare seguendo una struttura ben definita, che può essere rappresentata da una classe o da un'interfaccia.\  
-Spesso i DTO garantiscono anche di imporre vincoli di tipo sui dati (parametri di funzione, tipi di ritorno, ecc.), vantaggio ampiamente sfruttato in questo progetto. 
+Data Transfer Object, è un oggetto che permette di standardizzare l'accesso e il trasferimento, tra componenti software diversi, di dati che si vuole organizzare seguendo una struttura ben definita, che può essere rappresentata da una classe o da un'interfaccia.\
+Spesso i DTO garantiscono anche di imporre vincoli di tipo sui dati (parametri di funzione, tipi di ritorno, ecc.), vantaggio ampiamente sfruttato in questo progetto.
 
 == E
 
@@ -99,7 +102,7 @@ Privacy-Enhanced Mail, è un formato di file utilizzato per memorizzare e trasme
 
 === PFX
 <glossary-PFX>
-Personal Information Exchange, noto anche come PKCS#12, è un formato di file utile per incorporare più certificati e chiavi private in un unico file, che può essere anche protetto da una password.\ 
+Personal Information Exchange, noto anche come PKCS#12, è un formato di file utile per incorporare più certificati e chiavi private in un unico file, che può essere anche protetto da una password.\
 
 == Q
 === Quality of Service
@@ -132,7 +135,7 @@ Unified Modeling Language, è un linguaggio di modellazione standardizzato utili
 == W
 === Wildcard
 <glossary-wildcard>
-In MQTT, le wildcard sono caratteri speciali utilizzati nei topic per fare in modo che un client possa ricevere messaggi da più topic contemporaneamente, definendo un pattern gerarchico, dove uno o più livelli vengono resi variabili tramite i caratteri speciali "\#" per rappresentare più livelli e "\+" per rappresentare un singolo livello; per variabili si intende che ammettono qualsiasi stringa al loro posto. 
+In MQTT, le wildcard sono caratteri speciali utilizzati nei topic per fare in modo che un client possa ricevere messaggi da più topic contemporaneamente, definendo un pattern gerarchico, dove uno o più livelli vengono resi variabili tramite i caratteri speciali "\#" per rappresentare più livelli e "\+" per rappresentare un singolo livello; per variabili si intende che ammettono qualsiasi stringa al loro posto.
 
 == X
 

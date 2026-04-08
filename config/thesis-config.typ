@@ -47,8 +47,9 @@
     show heading: set block(above: 1.4em, below: 1em)
 
 
-    show heading.where(level: 1): it => {
-        stack(
+    show heading.where(level: 1): it => [
+        #pagebreak(weak: true)
+        #stack(
             spacing: 2em,
             if it.numbering != none {
                 text(size: 1.5em)[#chapter #counter(heading).display()]
@@ -56,7 +57,7 @@
             text(size: 2.1em, hyphenate: false, it.body),
             v(0.5em),
         )
-    }
+    ]
 
     show heading.where(level: 2): it => {
         stack(
