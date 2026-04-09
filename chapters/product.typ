@@ -178,21 +178,27 @@ L'ultimo flusso è relativo alla comunicazione verso AWS IoT Core tramite l'SDK 
 == Design pattern utilizzati
 // ?forse no?
 === Command
+=== Handler
+// ?forse no?
 
 == Gestione dei reader RFID
 // TODO: descrizione dello scopo
 // TODO: figure grafico UML classe/classi
 // ?FE separato o unito a BE
 // TODO: descrizione dettagliata di classi, campi, metodi come in specifica tecnica, con esempi di codice
-=== Reader
-// TODO: parlare dei vari command e commandhandler e come vengono usati ma senza entrare troppo nei dettagli, c'è già un riferimento nei design pattern
 === AwsIotClient
 // TODO: non mettere l'implementazione ma solo la firma dei metodi secondo me; non ha senso metterla dato che alla fine è un wrapper, quindi mettere le firme dei metodi e cosa fanno, specificando poi che alla fine è un wrapper per la SDK AWS IoT Core dove le chiamate vengono adattate al nostro caso d'uso
 === MqttClient
+=== Reader
+// TODO: parlare dei vari command, commandhandler, onAwsIot e come vengono usati ma senza entrare troppo nei dettagli, c'è già un riferimento nei design pattern
 
 
 == Configurazione dei reader RFID
 
+
+== Ricezione dei tag RFID letti
+
+=== Worker
 Come anticipato nella Sezione @cap:flusso-del-sistema i dati dei tag RFID letti dai reader vengono estratti in _pull_ da AWS SQS tramite un _worker_. Una volta estratto un messaggio il _worker_ lo distribuisce, in base al tipo di messaggio, ad un opportuno _handler_, che nel caso dei messaggi ricevuti dalla coda 'rfid-reader-tag-events' è il `RfidEventsMessageSerializer`.
 
 Di seguito viene mostrato come il _worker_ viene instaziato nella classe `Container`, ovvero il contenitore di dipendenze del backend di KanbanBox che serve per gestire la _dependency injection_.
@@ -208,7 +214,7 @@ $rfidEventsReceiverLocator->set(
     $rfidEventsQueueConfiguration->queueName,
     $awsSqsFactory->buildReceiver(
         $rfidEventsQueueConfiguration,
-        new RfidEventsMessageSerializer($clock),
+        new RfidEventsMessageSerializer($clock, $logger),
     ),
 );
 
@@ -223,13 +229,21 @@ $rfidEventsCommandExecutor = new ConsumeMessagesCommand(
     [$rfidEventsQueueConfiguration->queueName],
 );
 ```
-
-== Ricezione dei tag RFID letti
 === RfidEventsMessageSerializer
-//      TODO: improve decodedEnvelope handling to be cleaner
+
+`RfidEventsMessageSerializer` è il componente che si occupa di *manipolare* i messaggi provenienti dalla coda SQS e di trasformarli in *DTO* che possono essere gestiti dal sistema di messaggistica interno.
+Nel flusso del _worker_ mostrato nella sezione precedente, il serializer viene passato alla factory che costruisce il receiver SQS (`buildReceiver(...)`): in questo modo, ogni payload JSON letto dalla coda viene convertito, tramite il serializer, in un `Envelope` contenente un oggetto di dominio, che verrà poi instradato dal `RoutableMessageBus` verso l'handler corretto.
+
+Nel dettaglio, nel metodo `decode(...)`:
+- Se il `type` del messaggio è `heartbeat` e il `clientId` è presente, viene creato un `ReportEventsMessage` contenente un report di tipo `ReaderReportContainsHeartbeat`; il `Clock` viene usato per assegnare l'istante di ricezione e viene generato un identificativo univoco del report (`Uuid::uuid4()`).
+- Se il payload contiene l'id del tag letto (`idHex`) e il `clientId` viene costruito un `ReadTagEventsMessage` con i dati della lettura (timestamp, RSSI, antenna, numero di letture, ecc.) e l'identificativo del reader che ha generato il messaggio, ricavato dal `clientId`;
+- Se la struttura non è valida o mancano campi obbligatori, viene emesso un warning e il serializer restituisce un `MessageToBeDiscarded`, così da evitare che il worker propaghi messaggi malformati nel resto del sistema. \
+L'oggetto `Envelope` restituito non è altro che un wrapper utile per eseguire la distribuzione del messaggio nel sistema di messaggistica interno (`MessageBus`).
+
+È importante notare come venga definito uno *`psalm-type`* (`RfidMessageBody`) per il corpo del messaggio, di cui non è stata riportata la definizione completa per questioni di spazio e chiarezza; questa annotazione è utile per indicare a Psalm di imporre la tipizzazione statica specificata, sulle variabili a cui è assegnata, in questo caso `$decodedEnvelope`, evitando di dover gestire tipi di dati `mixed` o non conformi a quelli attesi.
 ```php
 <?php
-/** @psalm-type RfidMessageBody = array{} */
+/** @psalm-type RfidMessageBody = array{...} */
 final readonly class RfidEventsMessageSerializer implements SerializerInterface
 {
     public function __construct(
@@ -286,8 +300,9 @@ final readonly class RfidEventsMessageSerializer implements SerializerInterface
     }
 }
 ```
-=== ReadTagEventsMessage
-=== ReadTagEventsMessageHandler
+=== RfidEventsMessage
+=== RfidEventsMessageHandler
+// TODO: parlare di readtagEventsMessage e reportEventsMessage
 
 
 = Verifica e validazione
