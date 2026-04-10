@@ -52,8 +52,20 @@ aws-iot-sql:
     url: https://docs.aws.amazon.com/iot/latest/developerguide/iot-sql-reference.html
     date: 2026-01-04
 
+psr-container:
+    type: Web
+    title: PSR Container
+    url: https://www.php-fig.org/psr/psr-11/
+    date: 2026-10-04
+
 symfony-amazonSqsReceiver:
     type: Web
     title: Symfony AmazonSqsReceiver
     url: https://github.com/symfony/amazon-sqs-messenger/blob/8.1/Transport/AmazonSqsReceiver.php
+    date: 2026-10-04
+
+symfony-worker:
+    type: Web
+    title: Symfony Worker
+    url: https://github.com/symfony/symfony/blob/8.1/src/Symfony/Component/Messenger/Worker.php
     date: 2026-10-04
