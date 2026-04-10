@@ -176,8 +176,13 @@ L'ultimo flusso è relativo alla comunicazione verso AWS IoT Core tramite l'SDK 
 = Codifica
 
 == Design pattern utilizzati
+=== Dependency Injection
+=== Factory
+// ?forse no?
+=== Builder
 // ?forse no?
 === Command
+// ?forse no?
 === Handler
 // ?forse no?
 
@@ -199,9 +204,9 @@ L'ultimo flusso è relativo alla comunicazione verso AWS IoT Core tramite l'SDK 
 == Ricezione dei tag RFID letti
 
 === Worker
-Come anticipato nella Sezione @cap:flusso-del-sistema i dati dei tag RFID letti dai reader vengono estratti in _pull_ da AWS SQS tramite un _worker_. Una volta estratto un messaggio il _worker_ lo distribuisce, in base al tipo di messaggio, ad un opportuno _handler_, che nel caso dei messaggi ricevuti dalla coda 'rfid-reader-tag-events' è il `RfidEventsMessageSerializer`.
+Come anticipato nella Sezione @cap:flusso-del-sistema i dati dei tag RFID letti dai reader vengono estratti in _pull_ da AWS SQS tramite un *_worker_*. Una volta estratto un messaggio il _worker_ lo distribuisce, in base al tipo di messaggio, ad un opportuno *_handler_*, che nel caso dei messaggi ricevuti dalla coda 'rfid-reader-tag-events' è il `RfidEventsMessageSerializer`.
 
-Di seguito viene mostrato come il _worker_ viene instaziato nella classe `Container`, ovvero il contenitore di dipendenze del backend di KanbanBox che serve per gestire la _dependency injection_.
+Di seguito viene mostrato come il _worker_ viene istanziato nella classe `Container`, ovvero il contenitore di dipendenze del backend di KanbanBox che serve per gestire la _dependency injection_.
 
 Vediamo che viene costruito un oggetto `ConsumeMessagesCommand` che è il comando, eseguito dal worker, che consente di estrarre i messaggi dalla coda SQS e di processarli; questo comando viene costruito con un `RoutableMessageBus` che è un bus dei messaggi che consente di instradare i messaggi a degli handler specifici in base al loro tipo, e con un _locator_ (`rfidEventsReceiverLocator`) che rappresenta il ricevitore SQS associato alla coda da cui vogliamo estrarre i messaggi. \
 Abbiamo poi anche un `EventDispatcher` per gestire gli eventi generati durante l'esecuzione del comando, e un `Logger` per dare in _output_ eventuali errori o messaggi di log. \
@@ -230,15 +235,18 @@ $rfidEventsCommandExecutor = new ConsumeMessagesCommand(
 );
 ```
 === RfidEventsMessageSerializer
+<cap:rfid-events-message-serializer>
 
 `RfidEventsMessageSerializer` è il componente che si occupa di *manipolare* i messaggi provenienti dalla coda SQS e di trasformarli in *DTO* che possono essere gestiti dal sistema di messaggistica interno.
 Nel flusso del _worker_ mostrato nella sezione precedente, il serializer viene passato alla factory che costruisce il receiver SQS (`buildReceiver(...)`): in questo modo, ogni payload JSON letto dalla coda viene convertito, tramite il serializer, in un `Envelope` contenente un oggetto di dominio, che verrà poi instradato dal `RoutableMessageBus` verso l'handler corretto.
 
-Nel dettaglio, nel metodo `decode(...)`:
-- Se il `type` del messaggio è `heartbeat` e il `clientId` è presente, viene creato un `ReportEventsMessage` contenente un report di tipo `ReaderReportContainsHeartbeat`; il `Clock` viene usato per assegnare l'istante di ricezione e viene generato un identificativo univoco del report (`Uuid::uuid4()`).
-- Se il payload contiene l'id del tag letto (`idHex`) e il `clientId` viene costruito un `ReadTagEventsMessage` con i dati della lettura (timestamp, RSSI, antenna, numero di letture, ecc.) e l'identificativo del reader che ha generato il messaggio, ricavato dal `clientId`;
-- Se la struttura non è valida o mancano campi obbligatori, viene emesso un warning e il serializer restituisce un `MessageToBeDiscarded`, così da evitare che il worker propaghi messaggi malformati nel resto del sistema. \
-L'oggetto `Envelope` restituito non è altro che un wrapper utile per eseguire la distribuzione del messaggio nel sistema di messaggistica interno (`MessageBus`).
+I *parametri* passati al costruttore del serializer sono un `Clock` e un `LoggerInterface`: il primo viene usato per assegnare il timestamp agli eventi generati, mentre il secondo è utile per _loggare_ eventuali errori o messaggi di diagnostica durante la decodifica dei messaggi.
+
+Il metodo *`decode(...)`* è il componente principale del serializer, invocato per lo più dall'oggetto `AmazonSqsReceiver` @symfony-amazonSqsReceiver del framework Symfony quando viene letto un messaggio dalla coda SQS; il suo funzionamento è il seguente:
+- se il `type` del messaggio è `heartbeat` e il `clientId` è presente, viene creato un `ReportEventsMessage` contenente un report di tipo `ReaderReportContainsHeartbeat`; il `Clock` viene usato per assegnare l'istante di ricezione e viene generato un identificativo univoco del report (`Uuid::uuid4()`).
+- se il payload contiene l'id del tag letto (`idHex`) e il `clientId`, viene costruito un `ReadTagEventsMessage` con i dati della lettura (timestamp, RSSI, antenna, numero di letture, ecc.) e l'identificativo del reader che ha generato il messaggio, ricavato dal `clientId`;
+- se la struttura non è valida o mancano campi obbligatori, viene emesso un warning e il serializer restituisce un `MessageToBeDiscarded`, così da evitare che il worker propaghi messaggi malformati nel resto del sistema. \
+L'oggetto *`Envelope` restituito* non è altro che un wrapper utile per eseguire la distribuzione del messaggio nel sistema di messaggistica interno (`MessageBus`).
 
 È importante notare come venga definito uno *`psalm-type`* (`RfidMessageBody`) per il corpo del messaggio, di cui non è stata riportata la definizione completa per questioni di spazio e chiarezza; questa annotazione è utile per indicare a Psalm di imporre la tipizzazione statica specificata, sulle variabili a cui è assegnata, in questo caso `$decodedEnvelope`, evitando di dover gestire tipi di dati `mixed` o non conformi a quelli attesi.
 ```php
@@ -300,9 +308,150 @@ final readonly class RfidEventsMessageSerializer implements SerializerInterface
     }
 }
 ```
-=== RfidEventsMessage
+
+// TODO: valutare se tenere i DTO oppure se descriverli velocemente
+=== ReadTagEventsMessage
+`ReadTagEventsMessage` è il DTO che rappresenta un singolo *tag RFID* letto, che è stato recuperato dalla coda SQS. \
+Come  anche in @cap:rfid-events-message-serializer, questo oggetto viene creato dal `RfidEventsMessageSerializer` quando il payload contiene i campi minimi necessari, ovvero l'identificativo del tag `idHex` e l'identificativo del reader `clientId`.
+
+Di seguito vengono descritti i *campi* dell'oggetto:
+- *`id`* è l'identificativo univoco del messaggio nel sistema di messaggistica interno (utile per tracciamento e diagnostica);
+- *`idHex`* è l'identificativo del tag letto (tipicamente l'EPC in formato esadecimale) ed è l'informazione che permette di associare la lettura a un *kanban*;
+- *`now`* rappresenta il timestamp della lettura (o, più in generale, l'istante associato all'evento di lettura che viene propagato nel dominio);
+- *`reads`*, *`phase`*, *`peakRssi`*, *`antenna`*, *`eventNum`*, *`format`* rappresentano le statistiche relative alla lettura;
+- *`clientId`* è l'identificativo del reader che ha prodotto l'evento.
+
+La classe implementa i *metodi* dell' l'*interfaccia `Message`*:
+- `getAttributes()` ritorna `null` perché la classe non aggiunge ulteriori metadati;
+- `getBody()` serializza tutti i campi (per questioni di spazio e chiarezza non sono stati elencati tutti) in JSON per consentire log/diagnostica o trasporto interno coerente con gli altri `Message`.
+```php
+<?php
+final readonly class ReadTagEventsMessage implements Message
+{
+    public function __construct(
+        public MessageId $id,
+        public string $idHex,
+        public string $type,
+        public DateTimeImmutable $now,
+        public int $reads,
+        public float $phase,
+        public int $peakRssi,
+        public string $format,
+        public int $eventNum,
+        public int $antenna,
+        public RfidReaderId $clientId,
+    ) {
+    }
+
+    public function getAttributes(): MessageAttributes|null
+    {
+        return null;
+    }
+
+    public function getBody(): string
+    {
+        return json_encode([
+            'id' => $this->id->__toString(),
+            'idHex' => $this->idHex,
+            // ... associazione chiave-valore di tutti i campi ...
+        ], JSON_THROW_ON_ERROR);
+    }
+}
+```
+=== ReportEventsMessage e ReaderReportContainsHeartbeat
+Nel caso dei messaggi di tipo *heartbeat*, l'obiettivo non è associare un tag a un kanban, ma aggiornare lo *stato di connessione* del reader nel backend. Per questo motivo il serializer, quando riceve un payload con `type = heartbeat` e con `clientId` presente, costruisce un messaggio di tipo `ReportEventsMessage`.
+
+`ReportEventsMessage` è un DTO molto semplice pensato per essere compatibile con il *`MessageBus`* (per questo implementa `Message`) e _wrappare_ l'evento `ReaderReportContainsHeartbeat`. \ 
+In questo modo è possibile trasmettere l'evento `ReaderReportContainsHeartbeat` (già esistente e adatto a questo caso d'uso) attraverso il sistema di messaggistica interno.
+
+```php
+<?php
+final readonly class ReportEventsMessage implements Message
+{
+    /**
+     * DTO representing a heartbeat
+     */
+    public function __construct(
+        public ReaderReportContainsHeartbeat $readerReportContainsHeartbeat,
+    ) {
+    }
+
+    public function getAttributes(): MessageAttributes|null
+    {
+        return null;
+    }
+
+    public function getBody(): string
+    {
+        return '';
+    }
+}
+```
+
+`ReaderReportContainsHeartbeat` è invece un *domain event* (`AggregateDomainEvent`) che rappresenta un evento relativo ad uno specifico DTO, in questo caso un `RfidReport`, ovvero un messaggio diagnostico ricevuto da un reader RFID.
+
+I parametri passati al *costruttore* sono:
+- `report`: l'identificativo dell'`RfidReport` associato a questo evento;
+- `reader`: l'identificativo del reader che ha generato l'heartbeat;
+- `raisedAt`: l'istante in cui l'evento è stato generato.
+
+Il metodo *`raise(...)`* è un _factory method_ che consente di creare un'istanza di `ReaderReportContainsHeartbeat` a partire dai dati ricevuti dal serializer, e assegnando l'istante di generazione tramite il `Clock`.
+
+I metodi *`toArray()`* e *`from(...)`* sono invece utili per serializzare e deserializzare l'evento, quindi per adattarlo ai formati necessari nel contesto in cui può essere utilizzato.
+
+```php
+<?php
+final class ReaderReportContainsHeartbeat implements AggregateDomainEvent
+{
+    private function __construct(
+        private RfidReportId $report,
+        public RfidReaderId $reader,
+        private DateTimeImmutable $raisedAt,
+    ) {
+    }
+
+    public static function raise(
+        RfidReportId $report,
+        RfidReaderId $reader,
+        Clock $clock,
+    ): self {
+        return new self(
+            $report,
+            $reader,
+            $clock->now(),
+        );
+    }
+
+    /* ... getters ... */
+
+    /** @return array<string, string> */
+    public function toArray(): array
+    {
+        return [
+            'rfidReport' => $this->aggregate()->toString(),
+            'reader' => $this->reader->id->toString(),
+        ];
+    }
+
+    public static function from(
+        DateTimeImmutable $raisedAt,
+        array $data,
+    ): self {
+        Assert::keyExists($data, 'rfidReport');
+        Assert::stringNotEmpty($data['rfidReport']);
+        Assert::keyExists($data, 'reader');
+        Assert::stringNotEmpty($data['reader']);
+
+        return new self(
+            RfidReportId::fromString($data['rfidReport']),
+            RfidReaderId::fromString($data['reader']),
+            $raisedAt,
+        );
+    }
+}
+```
+
 === RfidEventsMessageHandler
-// TODO: parlare di readtagEventsMessage e reportEventsMessage
 
 
 = Verifica e validazione
