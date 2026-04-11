@@ -3,12 +3,10 @@
 #import "../config/thesis-config.typ": gloss
 
 #show: codly-init.with()
-#codly(languages: 
-    (php: (name: "PHP")),
-)
+#codly(languages: (php: (name: "PHP")))
 
 // contenuti e lunghezza molto variabili in base all'argomento scelto, indicativamente tra le 20 e le 40 pagine (comprensive di tabelle e immagini), distribuite tra 1-3 capitoli
-#pagebreak(to:"odd")
+#pagebreak(to: "odd")
 
 #set par(justify: false)
 
@@ -24,6 +22,7 @@
 
 
 === RFID Reader
+<cap:rfid-reader>
 I reader RFID Zebra sono dei dispositivi hardware che, se muniti di uno o più moduli esterni che fungono da antenne, sono in grado di leggere i tag RFID presenti nell'ambiente circostante. \
 Per poter trasmettere dati e comandi, da e verso il reader, è necessario configurare la connessione ad un endpoint esterno; nel nostro caso, in cui la scelta del broker MQTT è ricaduta su AWS IoT Core, è stato necessario configurare un endpoint di tipo *AWS IoT Connector*, ovvero un'interfaccia implementata da Zebra nei propri reader che consente di farli comunicare con AWS IoT Core tramite MQTT, configurando un numero ridotto di parametri. \
 La configurazione, infatti, richiede di definire:
@@ -45,6 +44,10 @@ Una volta configurati tutti i parametri elencati il reader potrà connettersi al
 
 Oltre ai parametri di connessione, anche la modalità di lettura (detta *modalità operativa*) è configurabile tramite un'apposita interfaccia web in esecuzione sui reader stessi, e quindi raggiungibile collegandosi direttamente all'IP del reader tramite un browser web; in alternativa è possibile configurare i parametri sopracitati tramite dei comandi MQTT, inviati su appositi topic configurati nel reader, che seguono uno schema JSON definito da Zebra.
 Per poter configurare il reader (sia i parametri di connessione che la modalità operativa) *direttamente dall'interfaccia di KanbanBOX* abbiamo deciso di sfruttare i comandi MQTT, usando lo stesso flusso di dati MQTT utilizzato per trasmettere messaggi dei tag e di diagnostica, per questo è necessario poter trasmettere messaggi MQTT anche dal backend di KanbanBOX verso i reader, passando per AWS IoT Core. Per adempiere a questo requisito è stata sfruttata e la libreria *php-mqtt* (@php-mqtt). \
+
+Nel dominio di KanbanBOX ogni reader RFID può essere associato ad una o più *aree*; ogni area rappresenta un insieme di una o più *antenne RFID*.\
+In questo modo si riescono a rappresentare, dal punto di vista della logica di dominio, le antenne fisiche installate nelle linee di produzione che vengono collegate ai reader RFID. \ 
+Inoltre ad ogni area viene associato un *cambio stato* @stati-kanban del cartellino, di conseguenza, nella logica di dominio, basterà associare l'antenna che ha eseguito la lettura all'area corrispondente (tramite le relazioni definite a DB) per poter associare le letture dei tag ad un cambio stato del cartellino kanban.
 
 === Struttura dei topic
 <cap:struttura-topic>
@@ -82,7 +85,7 @@ Per l'infrastruttura di KanbanBOX sono state definite due policy:
     ```json
     {
         "Version": "2012-10-17",
-        "Statement": 
+        "Statement":
         [
             {
                 "Effect": "Allow",
@@ -109,7 +112,7 @@ Per l'infrastruttura di KanbanBOX sono state definite due policy:
     ```json
     {
         "Version": "2012-10-17",
-        "Statement": 
+        "Statement":
         [
             {
                 "Effect": "Allow",
@@ -170,12 +173,13 @@ Mentre per i messaggi di heartbeat i dati di interesse sono l'identificativo del
 Il secondo flusso di dati riguarda la *configurazione dei reader* tramite l'interfaccia web di KanbanBOX, che tramite il protocollo MQTT invia comandi ai reader per configurare i parametri di connessione e la modalità operativa e riceve l'esito dell'applicazione dei comandi dai reader. \
 Tutti i dati riguardanti a questo flusso passano per il broker *MQTT* di AWS IoT Core, attraverso i topic descritti nella sezione dedicata alla struttura dei topic [@cap:struttura-topic].
 
-L'ultimo flusso è relativo alla comunicazione verso AWS IoT Core tramite l'SDK di AWS per PHP, che viene utilizzato principalmente per la *gestione delle entità di AWS IoT* Core, in particolare per la ricezione del certificato e delle chiavi necessari per la generazione del file PFX. 
+L'ultimo flusso è relativo alla comunicazione verso AWS IoT Core tramite l'SDK di AWS per PHP, che viene utilizzato principalmente per la *gestione delle entità di AWS IoT* Core, in particolare per la ricezione del certificato e delle chiavi necessari per la generazione del file PFX.
 
 
 = Codifica
 
 == Design pattern utilizzati
+=== Repository
 === Dependency Injection
 === Factory
 // ?forse no?
@@ -314,7 +318,7 @@ final readonly class RfidEventsMessageSerializer implements SerializerInterface
 // TODO: valutare se tenere i DTO oppure se descriverli velocemente
 === ReadTagEventsMessage
 `ReadTagEventsMessage` è il DTO che rappresenta un singolo *tag RFID* letto, che è stato recuperato dalla coda SQS. \
-Come  anche in @cap:rfid-events-message-serializer, questo oggetto viene creato dal `RfidEventsMessageSerializer` quando il payload contiene i campi minimi necessari, ovvero l'identificativo del tag `idHex` e l'identificativo del reader `clientId`.
+Come anticipato anche in @cap:rfid-events-message-serializer, questo oggetto viene creato dal `RfidEventsMessageSerializer` quando il payload contiene i campi minimi necessari, ovvero l'identificativo del tag `idHex` e l'identificativo del reader `clientId`.
 
 Di seguito vengono descritti i *campi* dell'oggetto:
 - *`id`* è l'identificativo univoco del messaggio nel sistema di messaggistica interno (utile per tracciamento e diagnostica);
@@ -363,7 +367,7 @@ final readonly class ReadTagEventsMessage implements Message
 === ReportEventsMessage e ReaderReportContainsHeartbeat
 Nel caso dei messaggi di tipo *heartbeat*, l'obiettivo non è associare un tag a un kanban, ma aggiornare lo *stato di connessione* del reader nel backend. Per questo motivo il serializer, quando riceve un payload con `type = heartbeat` e con `clientId` presente, costruisce un messaggio di tipo `ReportEventsMessage`.
 
-`ReportEventsMessage` è un DTO molto semplice pensato per essere compatibile con il *`MessageBus`* (per questo implementa `Message`) e _wrappare_ l'evento `ReaderReportContainsHeartbeat`. \ 
+`ReportEventsMessage` è un DTO molto semplice pensato per essere compatibile con il *`MessageBus`* (per questo implementa `Message`) e _wrappare_ l'evento `ReaderReportContainsHeartbeat`. \
 In questo modo è possibile trasmettere l'evento `ReaderReportContainsHeartbeat` (già esistente e adatto a questo caso d'uso) attraverso il sistema di messaggistica interno.
 
 ```php
@@ -399,7 +403,7 @@ I parametri passati al *costruttore* sono:
 
 Il metodo *`raise(...)`* è un _factory method_ che consente di creare un'istanza di `ReaderReportContainsHeartbeat` a partire dai dati ricevuti dal serializer, e assegnando l'istante di generazione tramite il `Clock`.
 
-I metodi *`toArray()`* e *`from(...)`* sono invece utili per serializzare e deserializzare l'evento, quindi per adattarlo ai formati necessari nel contesto in cui può essere utilizzato.
+I metodi *`toArray()`* e *`from(...)`* sono invece utili per serializzare e deserializzare l'evento, quindi per adattarlo ai formati necessari nei contesti in cui può essere utilizzato.
 
 ```php
 <?php
@@ -453,7 +457,186 @@ final class ReaderReportContainsHeartbeat implements AggregateDomainEvent
 }
 ```
 
-=== RfidEventsMessageHandler
+=== RfidEventsMessageHandler, UpdateLastHeartbeatOfTheReaderCommand e RfidScan
+
+`RfidEventsMessageHandler` è l'*_handler_* che riceve i messaggi incapsulati dal `RfidEventsMessageSerializer` e li usa per *riflettere i cambiamenti* indicati dai messaggi stessi nel dominio, ad esempio aggiornando lo stato di un reader o registrando una lettura di un tag RFID.
+
+Nel flusso del _worker_ descritto in precedenza, dopo la decodifica e il wrapping in un `Envelope`, il `RoutableMessageBus` instrada i messaggi, di tipo esplicitamente ammesso (nel `Container` le classi di messaggi vengono associate agli _handler_ corrispondenti), verso questo handler.
+
+Il *costruttore* riceve una serie di *dipendenze* che permettono di applicare la logica di business e la persistenza dei dati:
+- *`RfidScanRepository`*: oggetto per gestire la persistenza dei dati a DB, associato specificatamente alla tabella `rfid_scan` che in questo caso ci servirà per gli eventi di lettura dei tag RFID;
+- *`IgnoreScanDueToDebouncing`*: oggetto che implementa il *debouncing* per evitare di registrare letture duplicate troppo ravvicinate;
+- *`RfidAreaByReaderIdAndAntennaName`*: oggetto che quando invocato permette di ottenere dal DB l'area associata ad una specifica combinazione di reader e antenna, così da poter associare la lettura del tag a un'area specifica;
+- *`StringIdFromEpc`*: oggetti per la conversione dell'EPC (identificativo del tag fisico) da esadecimale a stringa usata per identificare i cartellini internamente a KanbanBOX;
+- *`FindCardFromStringId`*: oggetto che permette di cercare un cartellino a DB usando il suo identificativo;
+- *`Clock`*: oggetto per la gestione di timestamp o data e ora, utile per assegnare il timestamp alle letture o agli eventi generati;
+- *`CommandBus`*: oggetto che permette di eseguire i comandi costruiti nel metodo `handle(...)`.
+
+Il metodo *`handle(...)`* gestisce due macro-casi, coerenti con i due DTO introdotti nelle sezioni precedenti:
+- *heartbeat* (`ReportEventsMessage`): evento diagnostico che segnala che un reader è connesso e attivo;
+- *tag scan* (ad es. `ReadTagEventsMessage`): evento di lettura di un tag RFID.
+
+```php
+<?php
+final readonly class RfidEventsMessageHandler implements MessageHandler
+{
+    public function __construct(
+        private RfidScanRepository $rfidScanRepository,
+        private IgnoreScanDueToDebouncing $ignoreScanDueToDebouncing,
+        private RfidAreaByReaderIdAndAntennaName $rfidAreaIdByReaderIdAndAntennaName,
+        private StringIdFromEpc $stringIdFromEpc,
+        private FindCardFromStringId $findCardFromStringId,
+        private Clock $clock,
+        private CommandBus $commandBus,
+    ) {
+    }
+
+    public function handle(Message $message): void
+    {
+        if ($message instanceof ReportEventsMessage) {
+            $this->commandBus->execute(
+                    UpdateLastHeartbeatOfTheReaderCommand
+                    ::fromReaderReportContainsHeartbeat(
+                    $message->readerReportContainsHeartbeat,
+                ),
+            );
+
+            return;
+        }
+
+        $event = RfidScan::validateScan(
+            $message->clientId,
+            $message->idHex,
+            $message->peakRssi,
+            (string) $message->antenna,
+            $message->now,
+            $this->ignoreScanDueToDebouncing,
+            $this->rfidAreaIdByReaderIdAndAntennaName,
+            $this->stringIdFromEpc,
+            $this->findCardFromStringId,
+            $this->clock,
+        );
+        $this->rfidScanRepository->store($event);
+    }
+}
+```
+
+Nel caso dell'*heartbeat*, l'handler traduce l'evento in un comando *`UpdateLastHeartbeatOfTheReaderCommand`* usando i dati contenuti nel `ReaderReportContainsHeartbeat` _wrappato_ nel messaggio. Il `CommandBus` eseguirà il comando, aggiornando, con la data e ora dell'heartbeat appena ricevuto, la colonna `last_heartbeat` nella tabella `rfid_reader`.
+
+```php
+<?php
+final class UpdateLastHeartbeatOfTheReaderCommand implements RfidScanCommand
+{
+    private function __construct(public RfidReaderId $reader, public DateTimeImmutable $raisedAt)
+    {
+    }
+
+    public static function fromReaderReportContainsHeartbeat(ReaderReportContainsHeartbeat $event): self
+    {
+        return new self($event->reader, $event->raisedAt());
+    }
+
+    public function credentials(): System
+    {
+        return new System();
+    }
+}
+```
+
+Invece, per la *lettura dei tag*, l'handler delega la validazione e la costruzione dell'evento a *`RfidScan::validateScan(...)`*, passando:
+- i dati contenuti nel tag (`clientId`, `idHex`, `RSSI`, `antenna`, `timestamp`);
+- le dipendenze necessarie a validare correttamente la lettura del tag.
+Il risultato della validazione è un evento di lettura di un tag (`RfidScan`) di cui si garantisce la correttezza dei dati contenuti e a cui è stata associata l'area in cui è stato letto. \
+Come spiegato alla fine di @cap:rfid-reader, associando i tag letti all'area corretta possiamo poi identificare il cambio stato previsto dall'area e *aggiornare* di conseguenza il *cartellino kanban* con identificativo corrispondente a quello del tag RFID letto. 
+
+```php
+<?php
+final class RfidScan implements AggregateRoot
+{
+    private RfidScanId $id;
+
+    /** @var list<AggregateDomainEvent<self>> */
+    public array $newEvents = [];
+
+    /** @var positive-int|0  */
+    private int $version = 0;
+
+    private function __construct(RfidScanId $id)
+    {
+        $this->id = $id;
+    }
+
+    public static function validateScan(
+        RfidReaderId $readerId,
+        string $epc,
+        int $peakRssi,
+        string $antennaName,
+        DateTimeImmutable $scanTime,
+        IgnoreScanDueToDebouncing $ignoreScanDueToDebouncing,
+        RfidAreaByReaderIdAndAntennaName $areaByReaderIdAndAntennaName,
+        StringIdFromEpc $stringIdFromEpc,
+        FindCardFromStringId $findCardFromStringId,
+        Clock $clock,
+    ): self {
+        $instance = new self(RfidScanId::generate());
+
+        // Validate the RFID EPC
+        try {
+            $cardStringId = $stringIdFromEpc($epc);
+        } catch (InvalidRfidEpc) {
+            $instance->newEvents[] = ScanDiscardedForInvalidRfidEpc::raise($instance->id, $readerId, $epc, $clock);
+
+            return $instance;
+        }
+
+        // Identify the area
+        $area = $areaByReaderIdAndAntennaName($readerId, $antennaName);
+
+        // Validate area existence
+        if ($area === null) {
+            $instance->newEvents[] = ScanDiscardedForNonExistingAntennaByName::raise($instance->id, $readerId, $antennaName, $clock);
+
+            return $instance;
+        }
+
+        // Validate the area is active
+        if (! $area->isActive()) {
+            $instance->newEvents[] = ScanDiscardedForAntennasAreaNotActive::raise($instance->id, $area->getId(), $epc, $antennaName, $cardStringId, $clock);
+
+            return $instance;
+        }
+
+        // Ignore the scan if it's due to debounce
+        if ($ignoreScanDueToDebouncing($area->getId(), $epc, $area->getDebouncingSeconds())) {
+            $instance->newEvents[] = ScanIgnoredDueToDebouncing::raise($instance->id, $area->getId(), $epc, $peakRssi, $scanTime, $clock);
+
+            return $instance;
+        }
+
+        // Associate the scan to the area
+        $instance->newEvents[] = ScanAssociatedToArea::raise($instance->id, $area->getId(), $epc, $peakRssi, $scanTime, $cardStringId, $clock);
+
+        // Associate the scan to the card
+        try {
+            $cardData = $findCardFromStringId($area->getLicense()->getId(), $cardStringId);
+
+            $instance->newEvents[] = ScanAssociatedToCard::raise(
+                $instance->id,
+                $area->getId(),
+                $epc,
+                $cardStringId,
+                $cardData['cardId'],
+                $clock,
+            );
+        } catch (CardNotFound) {
+        }
+
+        return $instance;
+    }
+
+    /* ... metodi ausiliari ... */
+}
+```
 
 
 = Verifica e validazione

@@ -69,3 +69,9 @@ symfony-worker:
     title: Symfony Worker
     url: https://github.com/symfony/symfony/blob/8.1/src/Symfony/Component/Messenger/Worker.php
     date: 2026-10-04
+
+stati-kanban:
+    type: Web
+    title: Stati Kanban
+    url: https://help.kanbanbox.com/hc/it/articles/360006520694-Stati-del-Kanban
+    date: 2026-11-04
