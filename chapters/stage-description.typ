@@ -24,8 +24,8 @@ Per il team di sviluppo sono previste diverse occasioni ricorrenti per la pianif
 - *OKR (Objective and Key Results)*: riunione svolta su base trimestrale in cui, partendo da degli obiettivi aziendali più generici, si definiscono gli obiettivi specifici per il team di sviluppo e i risultati chiave che ne misurano il raggiungimento. \ Così facendo si assicura che ogni team si impegni a supportare gli obbiettivi aziendali e non solo le proprie esigenze interne o del cliente.
 
 
-    // TODO: aggiungere loghi
-    /*=*/=== Versionamento e integrazione continua
+// TODO: aggiungere loghi
+=== Versionamento e integrazione continua
 Per il *versionamento* di tutta la _codebase_ e la documentazione di KanbanBOX viene utilizzato *Git*, un sistema di controllo di versione distribuito.
 
 I repository Git sono ospitati su *GitHub*, una piattaforma utilizzata per la gestione del codice sorgente e la collaborazione tra sviluppatori, che fornisce funzionalità aggiuntive, oltre al semplice versionamento, usate dal team di KanbanBox come la gestione delle _issue_, le _pull request_ con relative verifiche del codice e l'integrazione continua.

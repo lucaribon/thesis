@@ -5,10 +5,6 @@
 = Introduzione teorica // max 20 pagine indicativamente
 <cap:introduzione-teorica>
 
-// TODO: chiedere se ha senso mettere anche tecnologie che non he scelto perché già presenti nel progetto, tipo docker per l'hosting, altre librerie per PHP
-
-// == Tecnologie analizzate
-
 == Aspetti teorici rilevanti
 
 === Protocolli di comunicazione
@@ -39,7 +35,6 @@ Come anticipato i *pacchetti* (messaggi) di MQTT hanno un overhead più essenzia
 - *payload*: di dimensione variabile, contiene i dati effettivi del messaggio, che in questo caso saranno le letture dei tag RFID.
 Quindi si parla di un overhead minimo di *\~2 byte* per ogni messaggio MQTT, contro gli almeno *\~85 byte* di overhead per ogni richiesta HTTP fatta dai reader.
 
-// TODO: table della struttura dei pacchetti MQTT VS HTTP
 #figure(
     table(
         columns: (1fr, 1fr, 1.5fr, 1.5fr, 1.5fr),
@@ -175,4 +170,4 @@ In questa sezione vengono elencati e descritti gli strumenti e le tecnologie gi�
 - *MySQL*: database relazionale utilizzato per la persistenza dei dati in KanbanBOX;
 - *Make*: utility di automazione utile per gestire l'intero ciclo di vita del software, dalla fase di sviluppo a quella di testing e deployment, semplificando l'esecuzione di comandi complessi e ripetitivi che vengono raggruppati e mappati in comandi più semplici tramite un file di configurazione detto Makefile;
 - *AWS IAM*: servizio di gestione degli accessi di Amazon Web Services, utilizzato per configurare i ruoli e i relativi permessi di accesso alle varie funzionalità di AWS da parte dei servizi e degli sviluppatori di KanbanBOX; 
-- *Reader Zebra*: dispositivi hardware prodotti dal Zebra Technologies; nel caso di questo progetto si ha interagito principalmente con i reader RFID della serie FX7500 e FX9600 ma in KanbanBOX sono ampiamente utilizzati anche dispositivi come barcode scanner e stampanti di etichette.\ Nello specifico i reader hanno il compito di leggere i tag RFID in prossimita, tramite delle antenne esterne, e di trasmettere i dati dei tag letti agli endpoint configurati
+- *Reader Zebra*: dispositivi hardware prodotti dal Zebra Technologies; nel caso di questo progetto si ha interagito principalmente con i reader RFID della serie FX7500 e FX9600 ma in KanbanBOX sono ampiamente utilizzati anche dispositivi come barcode scanner e stampanti di etichette.\ Nello specifico i reader hanno il compito di leggere i tag RFID in prossimita, tramite delle antenne esterne, e di trasmettere i dati dei tag letti agli endpoint configurati.

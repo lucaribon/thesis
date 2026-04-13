@@ -44,10 +44,34 @@ simps-mqtt:
     type: Web
     title: Simps MQTT Client Library
     url: https://github.com/simps/mqtt
-    date: 2026-10-03
+    date: 2026-01-04
 
 aws-iot-sql:
     type: Web
     title: AWS IoT SQL Reference
     url: https://docs.aws.amazon.com/iot/latest/developerguide/iot-sql-reference.html
-    date: 2026-10-03
+    date: 2026-01-04
+
+psr-container:
+    type: Web
+    title: PSR Container
+    url: https://www.php-fig.org/psr/psr-11/
+    date: 2026-10-04
+
+symfony-amazonSqsReceiver:
+    type: Web
+    title: Symfony AmazonSqsReceiver
+    url: https://github.com/symfony/amazon-sqs-messenger/blob/8.1/Transport/AmazonSqsReceiver.php
+    date: 2026-10-04
+
+symfony-worker:
+    type: Web
+    title: Symfony Worker
+    url: https://github.com/symfony/symfony/blob/8.1/src/Symfony/Component/Messenger/Worker.php
+    date: 2026-10-04
+
+stati-kanban:
+    type: Web
+    title: Stati Kanban
+    url: https://help.kanbanbox.com/hc/it/articles/360006520694-Stati-del-Kanban
+    date: 2026-11-04
