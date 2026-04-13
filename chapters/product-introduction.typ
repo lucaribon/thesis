@@ -5,10 +5,6 @@
 = Introduzione teorica // max 20 pagine indicativamente
 <cap:introduzione-teorica>
 
-// TODO: chiedere se ha senso mettere anche tecnologie che non he scelto perché già presenti nel progetto, tipo docker per l'hosting, altre librerie per PHP
-
-// == Tecnologie analizzate
-
 == Aspetti teorici rilevanti
 
 === Protocolli di comunicazione
@@ -39,7 +35,6 @@ Come anticipato i *pacchetti* (messaggi) di MQTT hanno un overhead più essenzia
 - *payload*: di dimensione variabile, contiene i dati effettivi del messaggio, che in questo caso saranno le letture dei tag RFID.
 Quindi si parla di un overhead minimo di *\~2 byte* per ogni messaggio MQTT, contro gli almeno *\~85 byte* di overhead per ogni richiesta HTTP fatta dai reader.
 
-// TODO: table della struttura dei pacchetti MQTT VS HTTP
 #figure(
     table(
         columns: (1fr, 1fr, 1.5fr, 1.5fr, 1.5fr),
