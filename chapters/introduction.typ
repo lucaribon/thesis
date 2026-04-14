@@ -7,7 +7,8 @@
 = Introduzione // 2 pagine
 <cap:introduzione> 
 
-== Organizzazione del testo (WIP)
+== Organizzazione del testo
+// TODO: sistemare
 
 Il documento è strutturato in sei capitoli principali:
 #set par(first-line-indent: 0pt)
