@@ -46,7 +46,7 @@ Oltre ai parametri di connessione, anche la modalità di lettura (detta *modalit
 Per poter configurare il reader (sia i parametri di connessione che la modalità operativa) *direttamente dall'interfaccia di KanbanBOX* abbiamo deciso di sfruttare i comandi MQTT, usando lo stesso flusso di dati MQTT utilizzato per trasmettere messaggi dei tag e di diagnostica, per questo è necessario poter trasmettere messaggi MQTT anche dal backend di KanbanBOX verso i reader, passando per AWS IoT Core. Per adempiere a questo requisito è stata sfruttata e la libreria *php-mqtt* (@php-mqtt). \
 
 Nel dominio di KanbanBOX ogni reader RFID può essere associato ad una o più *aree*; ogni area rappresenta un insieme di una o più *antenne RFID*.\
-In questo modo si riescono a rappresentare, dal punto di vista della logica di dominio, le antenne fisiche installate nelle linee di produzione che vengono collegate ai reader RFID. \ 
+In questo modo si riescono a rappresentare, dal punto di vista della logica di dominio, le antenne fisiche installate nelle linee di produzione che vengono collegate ai reader RFID. \
 Inoltre ad ogni area viene associato un *cambio stato* @stati-kanban del cartellino, di conseguenza, nella logica di dominio, basterà associare l'antenna che ha eseguito la lettura all'area corrispondente (tramite le relazioni definite a DB) per poter associare le letture dei tag ad un cambio stato del cartellino kanban.
 
 === Struttura dei topic
@@ -198,7 +198,7 @@ In realtà, come già detto, viene utilizzato nella creazione di sostanzialmente
 
 === Factory
 Il *Factory pattern* raccoglie la logica di creazione di oggetti in metodi dedicati, così da:
-- evitare costruttori troppo complessi “sparsi” nel codice chiamante;
+- evitare costruttori troppo complessi "sparsi" nel codice chiamante;
 - centralizzare regole di costruzione e default;
 - rendere più semplice cambiare implementazioni o parametri in futuro.
 
@@ -304,7 +304,7 @@ In entrambi i metodi viene restituito l'esito e, nel caso fosse presente, il mes
 class MqttClientAws implements MqttClient
 {
     private PhpMqttClient $mqttClient;
-    
+
     public function __construct(
         private readonly ConnectionSettings $connectionSettings,
         MqttConfig $mqttConfig,
@@ -433,9 +433,9 @@ class MqttClientAws implements MqttClient
 
 === SetupNewReaderOnAwsIot
 <cap:setup-new-reader-on-aws-iot>
-Il servizio *`SetupNewReaderOnAwsIot`* si occupa di eseguire tutte le operazioni necessarie per creare e configurare una nuova _Thing_ su AWS IoT Core associata al reader RFID che si sta aggiungendo su KanbanBOX. 
+Il servizio *`SetupNewReaderOnAwsIot`* si occupa di eseguire tutte le operazioni necessarie per creare e configurare una nuova _Thing_ su AWS IoT Core associata al reader RFID che si sta aggiungendo su KanbanBOX.
 Inoltre si occupa di gestire il _rollback_ nel caso in cui una qualsiasi delle operazioni fallisca, così da mantenere la coerenza tra AWS IoT Core e il database di KanbanBOX evitando di lasciare entità orfane o non completamente configurate su AWS; in questi casi viene ritornato un oggetto che implementa  `ErrorCreatingEntity` che permette di gestire in modo più granulare i feedback di errore da dare all'utente.
-Se la creazione va a buon fine ritorna un DTO che contiene tutti i dati necessari per la generazione del certificato PFX. 
+Se la creazione va a buon fine ritorna un DTO che contiene tutti i dati necessari per la generazione del certificato PFX.
 
 Per assolvere al suo scopo, `SetupNewReaderOnAwsIot` utilizza i metodi di *`AwsIotClientImplementation`*.
 
@@ -632,7 +632,7 @@ Riguardo le _row operation_, che si possono vedere nella colonna "Operations", h
 La funzione di *aggiunta del reader*, raggiungibile tramite la _table operation_ mostrata nella @fig:add-reader-button, visualizza a schermo il form visibile nella @fig:reader-add-update; se vengono inseriti i campi obbligatori (con il bordo rosso) e si preme il pulsante "Save", dopo aver superato la validazione del form, si procede con le seguenti _task_:
 - se il reader utilizza il protocollo MQTT, viene eseguita la creazione e configurazione delle entità di AWS IoT Core associate al reader tramite il metodo `create_entity_on_aws(...)`; quest'ultimo si occupa di invocare il servizio *`SetupNewReaderOnAwsIot`* [@cap:setup-new-reader-on-aws-iot] e, se il "setup" va a buon fine, genera il certificato in formato PFX e lo restituisce;
 - se il certificato è stato generato (la funzione precedente ha ritornato un `IotCertificate`), o se il reader utilizza il protocollo HTTP, si procede con la memorizzazione del reader a DB tramite il metodo `store_reader(...)`, che si occupa di invocare il comando *`AddReaderCommand`* [@cap:command-pattern] per salvare il reader a DB, e di dare un feedback positivo all'utente nel caso fosse andato tutto a buon fine;
-- 
+-
     *a.* se c'è stato qualche errore durante la creazione delle entità su AWS IoT Core, tramite il *`RfidReaderCreationErrorPresenter`* viene mostrato un messaggio di errore all'utente con le informazioni relative al problema riscontrato;\
     *b.* altrimenti si ritorna alla pagina di gestione dei reader.
 ```php
@@ -717,19 +717,19 @@ La funzione di *aggiornamento del reader* usa un form pressoché identico a quel
 
 Come anticipato la funzionalità di *configurazione di un reader* è raggiungibile solamente se il reader in questione utilizza il protocollo MQTT, questo perché è necessario poter inviare dei comandi MQTT al reader per configurarlo, e questa funzionalità non è prevista per i reader HTTP. \
 Le configurazioni sono inseribili manualmente incollandole in formato JSON oppure generando il JSON tramite l'interfaccia basata su JSON schema mostrata in @fig:json-schema; in entrambi i casi, una volta premuto il pulsante "Save", le configurazioni vengono validate tramite lo schema e successivamente si procede con le seguenti _task_:
-- si esegue la connessione la broker MQTT; 
+- si esegue la connessione la broker MQTT;
 - si controlla che almeno una delle due configurazioni sia definita\
     *a.* se si, si procede con l'invio dei comandi per cui la configurazione è definita usando il metodo `MqttClient::publishCommandInTopic(...)`; \
     *b.* altrimenti si ignorano tutti i passaggi successivi e viene eseguito il _redirect_ alla tabella dei reader.
 - si esegue la disconnessione dal broker MQTT;
-- se almeno una delle due configurazioni è andata a buon fine viene eseguito il salvataggio a DB delle configurazioni inviate per cui si è ricevuto esito positivo; 
+- se almeno una delle due configurazioni è andata a buon fine viene eseguito il salvataggio a DB delle configurazioni inviate per cui si è ricevuto esito positivo;
 - viene dato un feedback relativo all'esito dell'applicazione delle configurazioni e viene eseguito il _redirect_ alla tabella dei reader;
 
 
 ```php
 <?php
 public function configure_reader(string $readerId): void
-{    
+{
     /* ... codice di supporto per visualizzazione del form e validazione dei dati ... */
     $this->mqttClient->connect();
 
@@ -790,6 +790,7 @@ public function configure_reader(string $readerId): void
 ```
 
 === DownloadReaderCertificateRow e RfidDownloadCertificate
+<cap:download-reader-certificate>
 #figure(
     image("../images/download_certificate.png", width: 130%),
     caption: "Row operation di download del certificato",
@@ -1364,7 +1365,7 @@ Invece, per la *lettura dei tag*, l'handler delega la validazione e la costruzio
 - i dati contenuti nel tag (`clientId`, `idHex`, `RSSI`, `antenna`, `timestamp`);
 - le dipendenze necessarie a validare correttamente la lettura del tag.
 Il risultato della validazione è un evento di lettura di un tag (`RfidScan`) di cui si garantisce la correttezza dei dati contenuti e a cui è stata associata l'area in cui è stato letto. \
-Come spiegato alla fine di @cap:rfid-reader, associando i tag letti all'area corretta possiamo poi identificare il cambio stato previsto dall'area e *aggiornare* di conseguenza il *cartellino kanban* con identificativo corrispondente a quello del tag RFID letto. 
+Come spiegato alla fine di @cap:rfid-reader, associando i tag letti all'area corretta possiamo poi identificare il cambio stato previsto dall'area e *aggiornare* di conseguenza il *cartellino kanban* con identificativo corrispondente a quello del tag RFID letto.
 
 ```php
 <?php
@@ -1458,3 +1459,247 @@ final class RfidScan implements AggregateRoot
 
 
 = Verifica e validazione
+In questo capitolo si parlerà anche dell'implementazione dei test di unità e integrazione per le funzionalità implementate, ma è importante premettere che, in accordo con il tutor interno, si è deciso di *dare priorità dell'implementazione delle funzionalità* in modo da poterle completare nei tempi previsti; per questo motivo i test implementati coprono solamente le classi strettamente legate al dominio di KanbanBOX, come ad esempio `RfidEventsMessageSerializer` o `RfidEventsMessageHandler`, mentre non sono stati implementati i test di classi strettamente legate a servizi esterni su cui si ha meno controllo, come `AwsIotClientImplementation` che, interagendo con le API di AWS, risulta molto più oneroso da testare.
+
+Nonostante questo, si può affermare che le classi nel dominio di KanbanBOX sono state esaustivamente testate, dato che la CI [@cap:verifica-validazione-ci] verifica che le classi in questione siano state correttamente testate.
+
+== Analisi statica del codice
+<cap:analisi-statica>
+Per aumentare l'affidabilità del codice e ridurre i difetti intercettabili prima dell'esecuzione, nel progetto sono stati introdotti strumenti di *analisi statica* che possono essere eseguiti arbitrariamente, in locale, tramite target dedicati del `Makefile`. \
+Questi controlli sono integrati anche nella pipeline di CI [@cap:verifica-validazione-ci] e vengono eseguiti automaticamente.
+
+Gli strumenti principali utilizzati sono:
+- *PHPCS* (PHP Coding Standards): effettua il controllo di *conformità allo standard di codifica* e individua violazioni di stile basandosi su regole di qualità configurate nel progetto, come naming, spaziature, indentazione, ecc. . \ Nel progetto `phpcs` *non modifica* i file ma si limita a produrre un report e a far fallire l'esecuzione (e la CI) se il numero o la severità delle violazioni supera quanto consentito dalla configurazione.
+- *PHPCBF* (PHP Code Beautifier and Fixer): è il *"complemento correttivo"* di PHPCS e applica le correzioni che possono essere automatizzate. In pratica, quando eseguito tramite `make phpcbf`, può *modificare direttamente i file sorgenti* normalizzando aspetti come indentazione, rimozione di trailing whitespace, aggiunta del newline finale e altre correzioni a non distruttive.
+- *Psalm*: esegue analisi statica sul codice PHP con l'obiettivo di individuare *potenziali bug* e *incoerenze di tipizzazione*. Basandosi su tipi nativi e annotazioni PHPDoc (ad es. `@psalm-type` mostrato in @cap:rfid-events-message-serializer), Psalm segnala problemi come: tipi incompatibili tra argomenti e parametri, valori `null` non gestiti, return type errati o mancanti e altri problemi che in PHP emergerebbero solo a esecuzione. \ Psalm *non applica modifiche* al codice, ma fallisce la validazione se trova errori oltre le soglie configurate.
+
+== Implementazione dei test di unità
+<cap:verifica-validazione-test-unitari>
+I test di unità del progetto sono stati implementati principalmente tramite *PHPUnit*, con classi di test che estendono `TestCase`.
+Lo scopo del test di unità è verificare il comportamento di una singola unità (classe o metodo) *in isolamento* dal resto del sistema, rendendo i test veloci, deterministici e semplici da eseguire in locale e in CI.
+
+Il blocco di codice seguente mostra un esempio reale di test di unità per `DownloadReaderCertificateRow`, ovvero una *row operation* della tabella di gestione dei reader RFID (descritta nella sezione @cap:download-reader-certificate) e verrà sfruttato per descrivere, in modo generico, il processo di implementazione dei test di unità adottato in KanbanBOX.
+
+Nel dettaglio, questi sono i *passaggi* seguiti per implementare i test di unità:
+- *inizializzazione comune tramite `setUp()`*: i test creano le dipendenze condivise (mock e helper) una sola volta; nell'esempio vengono creati i mock di `TwigEnvironment`, `InternalUrlBuilder` e `GetTranslationMock`, poi viene inizializzato `TestingHelper`, una classe di supporto per semplificare la costruzione di oggetti usati frequentemente;
+- *preparazione*: si costruisce l'oggetto da testare e si prepara l'input del caso d'uso (ad es. `RowId` e `Table`), configurando i mock in base allo scenario;
+- *esecuzione*: si invoca il metodo sotto test; nel caso di una *row operation* questo avviene tramite `handle(...)`, che incapsula la logica di conferma e delega al metodo `execute(...)` solo quando i parametri indicano che l'utente ha confermato;
+- *assert*: si verifica l'output tramite asserzioni, cioè metodi che controllano che il risultato dell'esecuzione sia conforme a quanto atteso.
+
+Un aspetto centrale nell'approccio ai test unitari è l'uso dei *mock* per sostituire dipendenze esterne o non rilevanti per quel test.
+Nel frammento in esempio, `TwigEnvironment` e `InternalUrlBuilder` vengono sostituiti tramite `$this->createMock(...)`: questo consente di iniettare dipendenze valide senza dover predisporre un sistema di template reale o una configurazione completa di routing.
+
+PHPUnit espone due modalità principali quando si lavora con un mock:
+- *stub*: si imposta un valore di ritorno per simulare un comportamento (es. `method(...)->willReturn(...)`);
+- *expectation*: si verifica che un metodo venga chiamato un certo numero di volte e/o con certi argomenti (es. `expects($this->once())->method(...)->with(...)`).
+Nell'esempio la combinazione tra *expectation* e *stub* viene usata per controllare l'interazione con `InternalUrlBuilder`: nel test `testExecute()` ci si aspetta che `build(...)` venga chiamato *una sola volta* con un path costruito a partire dal `RowId`, e si imposta il valore di ritorno per rendere l'esito deterministico:
+```php
+$this->urlBuilder
+    ->expects(self::once())
+    ->method('build')
+    ->with('rfid/download_certificate/' . $rowId->id)
+    ->willReturn($expectedUrl);
+```
+Nel test `testExecuteWithoutConfirmation()` invece si imposta `expects(self::never())` per verificare che, in assenza di conferma, l'URL non venga nemmeno costruito (quindi non vengano eseguite operazioni non necessarie).
+
+Per verificare l'esito, vengono usate *asserzioni* fornite da `TestCase`.
+Nel codice si vede l'uso di:
+- `self::assertEquals(...)`, usato per confrontare oggetti risposta complessi (ad es. `RedirectToLink`) con un valore atteso costruito dal test;
+- `self::assertInstanceOf(...)`, utile quando è sufficiente verificare *il tipo* del risultato (ad es. `AskConfirmation` quando manca la conferma) senza legarsi ai dettagli interni dell'oggetto.
+In altri casi (non mostrati) è comune usare anche `assertSame` (identità), `assertTrue/assertFalse` (condizioni) o `expectException` (verifica di eccezioni).
+
+Attenzione, nel frammento compare anche l'uso di `assert(...)` del linguaggio (non di PHPUnit): in questo contesto viene usato soprattutto come supporto alla *tipizzazione* e all'analisi statica, e non come meccanismo di verifica del test.
+```php
+<?php
+#[CoversClass(DownloadReaderCertificateRow::class)]
+class DownloadReaderCertificateRowTest extends TestCase
+{
+    /** @var TwigEnvironment&MockObject */
+    private TwigEnvironment $twigEnvironment;
+
+    /** @var InternalUrlBuilder&MockObject */
+    private InternalUrlBuilder $urlBuilder;
+
+    private GetTranslationMock $getTranslation;
+    private TestingHelper $testingHelper;
+
+    protected function setUp(): void
+    {
+        $this->twigEnvironment = $this->createMock(TwigEnvironment::class);
+        $this->urlBuilder      = $this->createMock(InternalUrlBuilder::class);
+
+        $this->getTranslation = new GetTranslationMock();
+        $this->testingHelper  = new TestingHelper();
+    }
+
+    public function testExecute(): void
+    {
+        $downloadReaderCertificateRow = DownloadReaderCertificateRow::create(
+            'download_certificate',
+            'Download Certificate',
+            'download',
+            Language::EN,
+            $this->getTranslation,
+            $this->twigEnvironment,
+            $this->urlBuilder,
+        );
+
+        $rowId = new RowId('123');
+        $table = $this->testingHelper->buildTable('readerId');
+
+        $expectedUrl = new Uri('http://example.com/rfid/download_certificate/123');
+        $this->urlBuilder
+            ->expects(self::once())
+            ->method('build')
+            ->with('rfid/download_certificate/' . $rowId->id)
+            ->willReturn($expectedUrl);
+
+        $response = $downloadReaderCertificateRow->handle($rowId, ['confirm' => 'yes'], $table);
+
+        $expectedResponse = new RedirectToLink($expectedUrl, Target::NewTab, reloadRow: true);
+        self::assertEquals($expectedResponse, $response);
+    }
+
+    public function testExecuteWithoutConfirmation(): void
+    {
+        $downloadReaderCertificateRow = DownloadReaderCertificateRow::create(
+            'download_certificate',
+            'Download Certificate',
+            'download',
+            Language::EN,
+            $this->getTranslation,
+            TwigEnvironmentMock::createFakeEnvironment(
+                ['CustomTable/Body/Row/Operation/askConfirmation.twig'],
+                [
+                    [
+                        'messages' => ['rfid_download_certificate_confirmation_[]_en_'],
+                        'buttons' => [
+                            ['name' => 'general_confirm_[]_en_', 'icon' => 'tick', 'value' => 'yes'],
+                            ['name' => 'gen_cancel_[]_en_', 'icon' => 'cross', 'value' => 'cancel'],
+                        ],
+                    ],
+                ],
+            ),
+            $this->urlBuilder,
+        );
+
+        $rowId = new RowId('123');
+
+        $this->urlBuilder->expects(self::never())->method('build');
+
+        $response = $downloadReaderCertificateRow->handle($rowId, [], $this->testingHelper->buildTable('readerId'));
+
+        self::assertInstanceOf(AskConfirmation::class, $response);
+    }
+}
+```
+== Implementazione dei test di integrazione
+I test di integrazione hanno l'obiettivo di verificare che *più componenti collaborino correttamente* tra loro, includendo tipicamente la persistenza su database o l'uso di servizi esterni reali.
+
+Il frammento di codice seguente mostra un esempio di test di integrazione per `RfidEventsMessageHandler`, che gestisce i messaggi RFID decodificati dal worker. Il test estende `IsolatedDatabaseTransactionTestCase`: questa classe base prepara un ambiente di test con un *container* disponibile (`$this->container`) e un database eseguito in maniera *isolata*, tipicamente tramite una transazione che viene ripristinata a fine test. In questo modo ogni test può leggere/scrivere su DB senza "sporcare" lo stato per i test successivi.
+
+Nel metodo `setUp()` si nota un pattern ricorrente:
+- si invocano le operazioni di setup della classe base (`parent::setUp()`);
+- si recuperano dal container implementazioni reali (in questo caso `RfidScanRepository`, `RfidAreaByReaderIdAndAntennaName`, `FindCardFromStringId`, `Clock`);
+- si decide in modo esplicito cosa inizializzare tramite *mock*; in questo caso `CommandBus` viene sostituito con un mock perché l'interesse del test è verificare che l'handler *invochi* il comando corretto.
+
+Anche nei test di integrazione rimangono validi i passaggi mostrati per i test di unità:
+- *preparazione*: si costruisce l'input del caso d'uso, che in questo caso è un messaggio di tipo `ReadTagEventsMessage` o `ReportEventsMessage` (a seconda del caso), e si configurano i mock se necessario;
+- *esecuzione*: si invoca il metodo `handle(...)` dell'handler, che rappresenta il punto di ingresso per i messaggi decodificati dal worker;
+- *assert*: si verifica che il risultato dell'esecuzione sia quello atteso.
+
+Anche in questa tipologia di test possono essere sfruttate le modalità `stub` ed `expectation` dei mock, spiegati nel capitolo @cap:verifica-validazione-test-unitari, ad esempio per verificare che il `CommandBus` venga invocato con il comando corretto quando si gestisce un messaggio di tipo *heartbeat*.
+```php
+<?php
+#[CoversClass(ReadTagEventsMessage::class)]
+#[CoversClass(RfidEventsMessageHandler::class)]
+class RfidEventsMessageHandlerTest extends IsolatedDatabaseTransactionTestCase
+{
+    private RfidScanRepository $rfidScanRepository;
+    private RfidAreaByReaderIdAndAntennaName $rfidAreaIdByReaderIdAndAntennaName;
+    private IgnoreScanDueToDebouncing $ignoreScanDueToDebouncing;
+    private FindCardFromStringId $findCardFromStringId;
+    private StringIdFromEpc $stringIdFromEpc;
+    private Clock $clock;
+    private RfidEventsMessageHandler $rfidEventsMessageHandler;
+
+    /** @var CommandBus&MockObject */
+    private CommandBus $commandBus;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->rfidScanRepository                 = $this->container->get(RfidScanRepository::class);
+        $this->rfidAreaIdByReaderIdAndAntennaName = $this->container->get(RfidAreaByReaderIdAndAntennaName::class);
+        $this->ignoreScanDueToDebouncing          = $this->container->get(IgnoreScanDueToDebouncing::class);
+        $this->stringIdFromEpc                    = new DefaultStringIdFromEpc();
+        $this->findCardFromStringId               = $this->container->get(FindCardFromStringId::class);
+        $this->clock                              = $this->container->get(Clock::class);
+        $this->commandBus                         = $this->createMock(CommandBus::class);
+
+        $this->rfidEventsMessageHandler = new RfidEventsMessageHandler(
+            $this->rfidScanRepository,
+            $this->ignoreScanDueToDebouncing,
+            $this->rfidAreaIdByReaderIdAndAntennaName,
+            $this->stringIdFromEpc,
+            $this->findCardFromStringId,
+            $this->clock,
+            $this->commandBus,
+        );
+    }
+
+    public function testHandlerWithRfidScan(): void
+    {
+        $readTagEventsMessage = new ReadTagEventsMessage(
+            MessageId::fromString('1f11d640-b2c8-6772-b39d-4202f28cd586'),
+            '3034257BF461AABDD0000001',
+            'type',
+            new DateTimeImmutable('2026-02-25T12:00:00Z'),
+            99,
+            1.0,
+            27,
+            'format',
+            1,
+            1,
+            RfidReaderId::fromString('1f11d640-b2c8-6772-b39d-4202f28cd586'),
+        );
+
+        $this->rfidEventsMessageHandler->handle($readTagEventsMessage);
+
+        $storedScan = $this->rfidScanRepository->get(RfidScanId::fromString('1f11d640-b2c8-6772-b39d-4202f28cd586'));
+        self::assertEquals($readTagEventsMessage->clientId->id, $storedScan->aggregateRootId()->toString());
+    }
+
+    public function testHandlerWithReportEventsMessage(): void
+    {
+        $reportEventsMessage                   = new ReportEventsMessage(
+            ReaderReportContainsHeartbeat::from(
+                new DateTimeImmutable('2026-02-25T12:00:00Z'),
+                [
+                    'rfidReport' => '1f11d640-b2c8-6772-b39d-4202f28cd586',
+                    'reader' => '123a4567-b2c8-6772-b39d-4202f28cd586',
+                ],
+            ),
+        );
+        $updateLastHeartbeatOfTheReaderCommand = UpdateLastHeartbeatOfTheReaderCommand::fromReaderReportContainsHeartbeat(
+            $reportEventsMessage->readerReportContainsHeartbeat,
+        );
+
+        $this->commandBus->expects(self::once())
+            ->method('execute')
+            ->with($updateLastHeartbeatOfTheReaderCommand);
+
+        $this->rfidEventsMessageHandler->handle($reportEventsMessage);
+    }
+}
+```
+
+== Continuous Integration
+<cap:verifica-validazione-ci>
+Viene citata la *Continuous Integration* (CI) in questo capitolo perché è proprio tramite le Github Actions [@cap:versionamento-integrazione] che vengono eseguite le operazioni di verifica e validazione prima che il codice venga inserito in produzione.
+
+Nella CI implementata da KanbanBOX vengono eseguiti i workflow relativi a tutti gli strumenti di analisi statica mostrati in @cap:analisi-statica, e successivamente anche i test di unità e integrazione descritti nei capitoli precedenti. \
+Oltre a questi controlli, la CI esegue anche altri workflow relativi a strumenti che non sono stati affrontati in modo rilevanti durante questo progetto; tra questi risulta interessante menzionare:
+- *infection*, strumento per l'analisi della *mutazione* del codice, che verifica l'efficacia dei test esistenti introducendo modifiche graduali al codice e controllando se i test rispondono alle variazioni;
+- *visual test* tramite *Playwright*, che consente di verificare il funzionamento dei componenti dell'interfaccia utente.
