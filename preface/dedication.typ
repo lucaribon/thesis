@@ -1,7 +1,7 @@
 #set page(numbering: none)
 
 #grid(
-    columns: (1fr),
+    columns: 1fr,
     rows: (1fr, auto, 1fr),
     [],
     [
