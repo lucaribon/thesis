@@ -443,6 +443,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 <uc:11>
 
 == Requisiti
+<cap:requisiti>
 In questa sezione vengono elencati i requisiti dettati dal progetto. Essendo questo un progetto che ha richiesto un'ampia fase di esplorazione, i requisiti sono stati identificati in diversi momenti, partendo con un'analisi iniziale del piano di lavoro e, successivamente, approfondendo l'analisi attraverso riunioni interne con alcuni membri del team di sviluppo.
 
 Ogni requisito è identificato da un codice alfanumerico costruito seguendo la struttura:
@@ -519,24 +520,24 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
         fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
 
         table.header([*Requisito*], [*Descrizione*], [*Fonti*], [*Stato*]),
-        [R-01-Q-O], [Test e validazione funzionale del driver sviluppato], [Piano di lavoro], [Raggiunto],
+        [R-01-Q-O], [Test e validazione funzionale del driver sviluppato], [Piano di lavoro], [Raggiunto parzialmente],
 
         [R-02-Q-O],
         [Implementazione di meccanismi atti a garantire la sicurezza della comunicazione],
         [Riunioni interne],
         [Raggiunto],
 
-        [R-02-Q-D],
+        [R-03-Q-D],
         [Ottimizzazione delle performance del driver e gestione avanzata degli errori e dei log],
         [Piano di lavoro],
         [Raggiunto parzialmente],
 
-        [R-03-Q-FA],
+        [R-04-Q-FA],
         [Redazione della documentazione tecnica relativa all'architettura del progetto, configurazioni e utilizzo del driver],
         [Piano di lavoro],
         [Raggiunto],
 
-        [R-04-Q-FA],
+        [R-05-Q-FA],
         [Sperimentazione di scenari avanzati di lettura multipla di tag RFID e gestione dei conflitti],
         [Piano di lavoro],
         [Raggiunto],
