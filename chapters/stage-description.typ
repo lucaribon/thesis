@@ -26,6 +26,7 @@ Per il team di sviluppo sono previste diverse occasioni ricorrenti per la pianif
 
 // TODO: aggiungere loghi
 === Versionamento e integrazione continua
+<cap:versionamento-integrazione>
 Per il *versionamento* di tutta la _codebase_ e la documentazione di KanbanBOX viene utilizzato *Git*, un sistema di controllo di versione distribuito.
 
 I repository Git sono ospitati su *GitHub*, una piattaforma utilizzata per la gestione del codice sorgente e la collaborazione tra sviluppatori, che fornisce funzionalità aggiuntive, oltre al semplice versionamento, usate dal team di KanbanBox come la gestione delle _issue_, le _pull request_ con relative verifiche del codice e l'integrazione continua.

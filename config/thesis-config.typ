@@ -19,7 +19,9 @@
         if it.element != none and it.element.func() == heading {
             let loc = it.element.location()
             if it.element.numbering != none {
-                link(loc)[§#counter(heading).display()]
+                let nums = counter(heading).at(loc)
+                let pattern = if it.element.numbering == auto { "1.1" } else { it.element.numbering }
+                link(loc)[§#numbering(pattern, ..nums)]
             } else {
                 link(loc)[§#it.element.body]
             }
