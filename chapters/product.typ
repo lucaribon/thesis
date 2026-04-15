@@ -177,6 +177,7 @@ L'ultimo flusso è relativo alla comunicazione verso AWS IoT Core tramite l'SDK 
 
 
 = Codifica
+<cap:codifica>
 
 == Design pattern utilizzati
 === Repository
@@ -1459,6 +1460,7 @@ final class RfidScan implements AggregateRoot
 
 
 = Verifica e validazione
+<cap:verifica-validazione>
 In questo capitolo si parlerà anche dell'implementazione dei test di unità e integrazione per le funzionalità implementate, ma è importante premettere che, in accordo con il tutor interno, si è deciso di *dare priorità dell'implementazione delle funzionalità* in modo da poterle completare nei tempi previsti; per questo motivo i test implementati coprono solamente le classi strettamente legate al dominio di KanbanBOX, come ad esempio `RfidEventsMessageSerializer` o `RfidEventsMessageHandler`, mentre non sono stati implementati i test di classi strettamente legate a servizi esterni su cui si ha meno controllo, come `AwsIotClientImplementation` che, interagendo con le API di AWS, risulta molto più oneroso da testare.
 
 Nonostante questo, si può affermare che le classi nel dominio di KanbanBOX sono state esaustivamente testate, dato che la CI [@cap:verifica-validazione-ci] verifica che le classi in questione siano state correttamente testate.

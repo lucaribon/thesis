@@ -20,7 +20,7 @@ Queste limitazioni hanno motivato la migrazione a MQTT come protocollo per la co
 
 === MQTT
 Come anticipato *MQTT* è stato scelto proprio per ovviare alla limitazioni che HTTP presenta in questo contesto.
-Infatti MQTT è protocollo di comunicazione progettato specificamente per la comunicazione tra dispositivi IoT, con *ottime performance* anche con risorse limitate, *affidabile* e adatto a gestire *grandi quantità* di *dispositivi* e *messaggi*.
+Infatti MQTT è protocollo di comunicazione progettato specificamente per la comunicazione tra dispositivi IoT, con *ottime performance* anche con risorse limitate, *affidabile* e adatto a gestire *grandi quantità* di *dispositivi* e *messaggi* @hive-mq.
 
 L'architettura di MQTT si basa su un modello di _*publish/subscribe*_, in cui i dispositivi (in questo caso i lettori RFID) pubblicano messaggi su specifici _*topic*_ e altri dispositivi (come ad esempio il backend di KanbanBOX) si sottoscrivono a questi topic per ricevere i messaggi. Il tutto viene orchestrato da un _*broker*_ MQTT, ovvero un server che gestisce la distribuzione dei messaggi tra i publisher e i subscriber tramite i topic definiti.
 
@@ -141,7 +141,7 @@ Mentre l'*SDK ufficiale di AWS SQS (@aws-sqs-sdk-php)*, sempre nella sua version
 
 Nel caso degli SDK di AWS l'unica alternativa plausibile sarebbe stata quella di utilizzare la _#gloss("CLI", <glossary-cli>)_ di AWS, lanciando i comandi tramite PHP, ma è stata scartata fin da subito in quanto non presenta alcun vantaggio rispetto all'utilizzo degli SDK ufficiali e, anzi, avrebbe reso l'implementazione molto più ostica.
 
-== Stack tecnologico preesistente
+== Stack tecnologico pre-esistente
 In questa sezione vengono elencati e descritti gli strumenti e le tecnologie già utilizzati in azienda e che sono stati sfruttati durante l'implementazione esposta in questo documento.
 
 === Librerie e framework PHP
