@@ -13,9 +13,9 @@ Dall'interfaccia di gestione dei reader RFID, strutturata come tabella, l'ammini
     - _nome_: nome che aiuta l'utente a identificare il reader;
     - _produttore_: nome dell'azienda che ha prodotto il reader, attualmente sono disponibili solo reader prodotti da Zebra;
     - _modello_: nome o numero di modello del reader, attualmente sono disponibili solo reader della serie FX7500 e FX9600;
-    - _indirizzo MAC_: indirizzo MAC del reader; campo opzionale poiché viene usato uno UUID generato dal backend di KanbanBox che risulta più affidabile, in quanto il MAC address può essere facilmente manipolato da chiunque abbia accesso al reader;
+    - _indirizzo MAC_: indirizzo MAC del reader; campo opzionale poiché viene usato uno UUID generato dal backend di KanbanBOX che risulta più affidabile, in quanto il MAC address può essere facilmente manipolato da chiunque abbia accesso al reader;
     - _abilitazione_: indica se il reader è abilitato e quindi utilizzabile o meno, permette di rendere temporaneamente inutilizzabile un reader senza doverlo eliminare e riconfigurare successivamente.
-    L'aggiunta deve scaturire sia la registrazione del reader nel database di KanbanBox, che la creazione delle entità corrispondenti al reader e al certificato in Aws IoT.
+    L'aggiunta deve scaturire sia la registrazione del reader nel database di KanbanBOX, che la creazione delle entità corrispondenti al reader e al certificato in Aws IoT.
 - *Aggiornamento* dei dati di un reader già registrato nel sistema, con parametri e modalità coerenti con la procedura di aggiunta;
 - *Configurazione*
     - del *sistema*: permette di configurare i parametri per la connessione al broker MQTT, in questo caso integrato in AWS IoT Core, tra cui anche i certificati per autenticare il reader durante la comunicazione con AWS IoT;
@@ -28,7 +28,7 @@ Dall'interfaccia di gestione dei reader RFID, strutturata come tabella, l'ammini
 === Ricezione e visualizzazione dei cartellini letti dai reader
 La piattaforma prevede già un'interfaccia per visualizzare i cartellini letti dai reader, con elementi grafici intuitivi e individuabili in modo chiaro, che permette di distinguere facilmente i cartellini processati da quelli scartati anche in ambienti meno agevoli come le linee di produzione delle aziende clienti.
 
-La migrazione da HTTP a MQTT comporta però un'incompatibilità nella comunicazione tra i reader e KanbanBox; è quindi necessario *adattare l'implementazione* del *_pull_* dei cartellini da AWS SQS e dell'*interpretazione* dei dati trasmessi attraverso i tag letti, in modo che questi rimangano associabili ai cartellini kanban e al loro cambio stato, e che continuino ad essere distinti tra cartellini processati e scartati.
+La migrazione da HTTP a MQTT comporta però un'incompatibilità nella comunicazione tra i reader e KanbanBOX; è quindi necessario *adattare l'implementazione* del *_pull_* dei cartellini da AWS SQS e dell'*interpretazione* dei dati trasmessi attraverso i tag letti, in modo che questi rimangano associabili ai cartellini kanban e al loro cambio stato, e che continuino ad essere distinti tra cartellini processati e scartati.
 
 === Errori e notifiche all'utente
 In caso di *errori*, il sistema deve notificare all'amministratore l'impossibilità di completare l'operazione richiesta e l'errore riscontrato tramite dei *pop-up* a scomparsa, mostrati direttamente nella pagina in cui l'utente sta operando.
@@ -42,7 +42,7 @@ Per questo motivo, in questa sede, ho deciso di raggruppare tutti i ruoli al di 
 == Casi d'uso
 In questa sezione sono presenti i diagrammi #gloss("UML", <glossary-uml>) che rappresentano i casi d'uso principali del sistema e le loro descrizioni.
 
-Il progetto è focalizzato principalmente sulla creazione di un driver di interfacciamento, ovvero un componente software che si occupa di gestire la comunicazione tra i reader RFID, AWS IoT Core e la piattaforma web KanbanBox, e sulla progettazione dell'architettura del sistema che include reader, servizi AWS e backend di KanbanBox.
+Il progetto è focalizzato principalmente sulla creazione di un driver di interfacciamento, ovvero un componente software che si occupa di gestire la comunicazione tra i reader RFID, AWS IoT Core e la piattaforma web KanbanBOX, e sulla progettazione dell'architettura del sistema che include reader, servizi AWS e backend di KanbanBOX.
 Inoltre molte delle funzionalità direttamente o indirettamente legate alle modifiche o aggiunte fatte erano già implementate in origine e sono rimaste invariate e funzionanti.
 Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 
@@ -63,7 +63,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
             "Il reader RFID è configurato per poter comunicare in rete e con AWS IoT.",
         ),
         postcondizioni: (
-            "Il reader RFID viene registrato nella piattaforma KanbanBox;",
+            "Il reader RFID viene registrato nella piattaforma KanbanBOX;",
             "Il reader RFID viene registrato nei servizi cloud esterni.",
         ),
         scenario_principale: (
@@ -93,10 +93,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         precondizioni: (
             "L'amministratore deve essere autenticato;",
             "Il reader RFID è configurato per poter comunicare in rete e con AWS IoT;",
-            "Il reader RFID è già registrato nella piattaforma KanbanBox.",
+            "Il reader RFID è già registrato nella piattaforma KanbanBOX.",
         ),
         postcondizioni: (
-            "Il sistema ha aggiornato i dati del reader RFID nella piattaforma KanbanBox.",
+            "Il sistema ha aggiornato i dati del reader RFID nella piattaforma KanbanBOX.",
         ),
         scenario_principale: (
             "L'amministratore, dalla tabella dei reader, preme il bottone per modificare i dati del reader scelto;",
@@ -125,7 +125,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         precondizioni: (
             "L'amministratore deve essere autenticato;",
             "Il reader RFID è configurato per poter comunicare in rete e con AWS IoT;",
-            "Il reader RFID è già registrato nella piattaforma KanbanBox.",
+            "Il reader RFID è già registrato nella piattaforma KanbanBOX.",
         ),
         postcondizioni: (
             parts: (
@@ -160,7 +160,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         precondizioni: (
             "L'amministratore deve essere autenticato;",
             "Il reader RFID è configurato per poter comunicare in rete e con AWS IoT;",
-            "Il reader RFID è già registrato nella piattaforma KanbanBox.",
+            "Il reader RFID è già registrato nella piattaforma KanbanBOX.",
         ),
         postcondizioni: (
             "L'amministratore ha inserito la configurazione di sistema nel formato apposito.",
@@ -185,7 +185,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         precondizioni: (
             "L'amministratore deve essere autenticato;",
             "Il reader RFID è configurato per poter comunicare in rete e con AWS IoT;",
-            "Il reader RFID è già registrato nella piattaforma KanbanBox.",
+            "Il reader RFID è già registrato nella piattaforma KanbanBOX.",
         ),
         postcondizioni: (
             "L'amministratore ha inserito la configurazione della modalità operativa nel formato apposito.",
@@ -210,16 +210,16 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         precondizioni: (
             "L'amministratore deve essere autenticato;",
             "Il reader RFID è configurato per poter comunicare in rete e con AWS IoT;",
-            "Il reader RFID è registrato nella piattaforma KanbanBox.",
+            "Il reader RFID è registrato nella piattaforma KanbanBOX.",
         ),
         postcondizioni: (
-            "Il reader RFID viene eliminato dalla piattaforma KanbanBox;",
+            "Il reader RFID viene eliminato dalla piattaforma KanbanBOX;",
             "Il reader RFID viene eliminato dai servizi cloud esterni.",
         ),
         scenario_principale: (
             "L'amministratore, dalla tabella dei reader, preme il bottone per eliminare il reader scelto;",
             "Tramite un pop-up viene chiesta conferma dell'eliminazione del reader RFID;",
-            "Se viene confermata l'eliminazione, il sistema procede a eliminare il reader RFID dalla piattaforma KanbanBox e dai servizi cloud esterni.",
+            "Se viene confermata l'eliminazione, il sistema procede a eliminare il reader RFID dalla piattaforma KanbanBOX e dai servizi cloud esterni.",
         ),
         estensioni: (
             "Errore: sistema non raggiungibile;",
@@ -239,7 +239,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         precondizioni: (
             "L'amministratore deve essere autenticato;",
             "Il reader RFID è configurato per poter comunicare in rete e con AWS IoT;",
-            "Il reader RFID è già registrato nella piattaforma KanbanBox.",
+            "Il reader RFID è già registrato nella piattaforma KanbanBOX.",
         ),
         postcondizioni: "Viene fornito il file del certificato, che può essere scaricato in locale una sola volta per motivi di sicurezza.",
         scenario_principale: (
@@ -287,7 +287,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         number: 6.1,
         name: "Visualizzazione dei cartellini processati",
         attore_principale: "Amministratore",
-        descrizione: "Nella dashboard di visualizzazione dei cartellini letti è presente una colonna dedicata ai cartellini processati dalla piattaforma KanbanBox.",
+        descrizione: "Nella dashboard di visualizzazione dei cartellini letti è presente una colonna dedicata ai cartellini processati dalla piattaforma KanbanBOX.",
         precondizioni: (
             "L'amministratore deve essere autenticato;",
             "Almeno un reader RFID è configurato per poter comunicare in rete e con AWS IoT;",
@@ -308,7 +308,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         number: 6.2,
         name: "Visualizzazione dei cartellini scartati",
         attore_principale: "Amministratore",
-        descrizione: "Nella dashboard di visualizzazione dei cartellini letti è presente una colonna dedicata ai cartellini scartati dalla piattaforma KanbanBox.",
+        descrizione: "Nella dashboard di visualizzazione dei cartellini letti è presente una colonna dedicata ai cartellini scartati dalla piattaforma KanbanBOX.",
         precondizioni: (
             "L'amministratore deve essere autenticato;",
             "Almeno un reader RFID è configurato per poter comunicare in rete e con AWS IoT;",
@@ -358,7 +358,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         number: 8,
         name: "Errore: servizi cloud esterni non raggiungibili",
         attore_principale: "Amministratore",
-        descrizione: "I servizi cloud esterni, come AWS IoT, non sono raggiungibili a causa di un problema di configurazione o di un errore nel backend di KanbanBox. In questo caso, il sistema deve notificare all'amministratore l'impossibilità di inoltrare la richiesta al servizio cloud esterno e di completare l'operazione richiesta.",
+        descrizione: "I servizi cloud esterni, come AWS IoT, non sono raggiungibili a causa di un problema di configurazione o di un errore nel backend di KanbanBOX. In questo caso, il sistema deve notificare all'amministratore l'impossibilità di inoltrare la richiesta al servizio cloud esterno e di completare l'operazione richiesta.",
         precondizioni: (
             "L'amministratore deve essere autenticato;",
             "L'amministratore sta tentando di eseguire un'operazione che richiede la comunicazione con un servizio cloud esterno.",
@@ -403,7 +403,7 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
         precondizioni: (
             "L'amministratore deve essere autenticato;",
             "L'amministratore ha tentato di eliminare un reader RFID;",
-            "Il reader RFID in questione è già stato eliminato dalla piattaforma KanbanBox e dai servizi cloud esterni.",
+            "Il reader RFID in questione è già stato eliminato dalla piattaforma KanbanBOX e dai servizi cloud esterni.",
         ),
         postcondizioni: "Il sistema mostra un messaggio di errore all'amministratore, indicando che il reader RFID è già stato eliminato.",
         scenario_principale: (
@@ -476,7 +476,7 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
         [Raggiunto],
 
         [R-02-F-O],
-        [L'amministratore deve poter aggiungere un reader al backend di KanbanBox e ad AWS IoT],
+        [L'amministratore deve poter aggiungere un reader al backend di KanbanBOX e ad AWS IoT],
         [UC1],
         [Raggiunto],
 
@@ -556,12 +556,12 @@ Nelle tabelle @tab:requisiti-funzionali, @tab:requisiti-qualitativi e @tab:requi
 
         table.header([*Requisito*], [*Descrizione*], [*Fonti*], [*Stato*]),
         [R-01-V-O],
-        [Utilizzo del protocollo MQTT per la comunicazione tra i reader RFID, AWS IoT Core e il backend di KanbanBox],
+        [Utilizzo del protocollo MQTT per la comunicazione tra i reader RFID, AWS IoT Core e il backend di KanbanBOX],
         [Piano di lavoro, UC3, UC3.1, UC3.2],
         [Raggiunto],
 
         [R-02-V-O],
-        [Utilizzo di AWS IoT Core come servizio cloud per la gestione della comunicazione tra i reader RFID e il backend di KanbanBox],
+        [Utilizzo di AWS IoT Core come servizio cloud per la gestione della comunicazione tra i reader RFID e il backend di KanbanBOX],
         [Piano di lavoro, UC6],
         [Raggiunto],
 

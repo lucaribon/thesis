@@ -587,7 +587,7 @@ readonly class UpdateReaderOnAwsIot implements UpdateReaderOnExternalPlatform
 ```
 
 === PfxHelper
-La classe *`PfxHelper`* ha il solo scopo di adattare, al contesto di KanbanBox, la chiamata al metodo `openssl_pkcs12_export(...)` della libreria `openssl`, per generare un file PFX a partire dai file in formato PEM forniti da AWS IoT. \
+La classe *`PfxHelper`* ha il solo scopo di adattare, al contesto di KanbanBOX, la chiamata al metodo `openssl_pkcs12_export(...)` della libreria `openssl`, per generare un file PFX a partire dai file in formato PEM forniti da AWS IoT. \
 
 ```php
 <?php

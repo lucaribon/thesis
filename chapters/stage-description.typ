@@ -29,7 +29,7 @@ Per il team di sviluppo sono previste diverse occasioni ricorrenti per la pianif
 <cap:versionamento-integrazione>
 Per il *versionamento* di tutta la _codebase_ e la documentazione di KanbanBOX viene utilizzato *Git*, un sistema di controllo di versione distribuito.
 
-I repository Git sono ospitati su *GitHub*, una piattaforma utilizzata per la gestione del codice sorgente e la collaborazione tra sviluppatori, che fornisce funzionalità aggiuntive, oltre al semplice versionamento, usate dal team di KanbanBox come la gestione delle _issue_, le _pull request_ con relative verifiche del codice e l'integrazione continua.
+I repository Git sono ospitati su *GitHub*, una piattaforma utilizzata per la gestione del codice sorgente e la collaborazione tra sviluppatori, che fornisce funzionalità aggiuntive, oltre al semplice versionamento, usate dal team di KanbanBOX come la gestione delle _issue_, le _pull request_ con relative verifiche del codice e l'integrazione continua.
 
 Nel repository di KanbanBOX, ovvero quello contentente tutta la _codebase_ del prodotto, viene usato il flusso di lavoro *Git Flow*, che prevede l'utilizzo di due rami principali, `master` e `development`. \
 In `master` viene mantenuta sempre la versione stabile e in produzione, mentre in `development` viene costruito lo _snapshot_ della prossima _release_.
@@ -277,7 +277,7 @@ Infatti, il broker di AWS IoT nella sua configurazione base permette a tutti i c
     table(
         columns: (1fr, 2fr),
         inset: 8pt,
-    align: (x, y) => if y > 0 { left } else { center + horizon },
+        align: (x, y) => if y > 0 { left } else { center + horizon },
         fill: (x, y) => if y == 0 { luma(190) } else if (y == 2 or y == 4 or y == 6 or y == 8) { luma(230) },
 
         table.header(table.cell(colspan: 2)[*RT-06 - Debugging difficoltoso*]),
