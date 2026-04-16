@@ -24,10 +24,14 @@ Per il team di sviluppo sono previste diverse occasioni ricorrenti per la pianif
 - *OKR (Objective and Key Results)*: riunione svolta su base trimestrale in cui, partendo da degli obiettivi aziendali più generici, si definiscono gli obiettivi specifici per il team di sviluppo e i risultati chiave che ne misurano il raggiungimento. \ Così facendo si assicura che ogni team si impegni a supportare gli obbiettivi aziendali e non solo le proprie esigenze interne o del cliente.
 
 
-// TODO: aggiungere loghi
+#v(4em)
 === Versionamento e integrazione continua
 <cap:versionamento-integrazione>
 Per il *versionamento* di tutta la _codebase_ e la documentazione di KanbanBOX viene utilizzato *Git*, un sistema di controllo di versione distribuito.
+#figure(
+    image("../images/GitHub_Lockup_Black.png", width: 50%),
+    caption: "Logo di GitHub",
+) <fig:versionamento-integrazione>
 
 I repository Git sono ospitati su *GitHub*, una piattaforma utilizzata per la gestione del codice sorgente e la collaborazione tra sviluppatori, che fornisce funzionalità aggiuntive, oltre al semplice versionamento, usate dal team di KanbanBOX come la gestione delle _issue_, le _pull request_ con relative verifiche del codice e l'integrazione continua.
 
@@ -68,6 +72,10 @@ Anche per i test vengono usati dei _container_ in modo da isolare l'ambiente di 
 Rilevante è l'impegno che KanbanBOX sta impiegando per automatizzare il più possibile il processo di distribuzione, sfruttando, anche in questo caso, i Docker _container_.
 
 === Monitoraggio
+#figure(
+    image("../images/sentry-wordmark-dark-400x119.png", width: 50%),
+    caption: "Logo di Sentry",
+) <fig:monitoraggio>
 *Sentry* è una piattaforma di *monitoraggio degli errori* che consente di tracciare, analizzare e risolvere i problemi nelle applicazioni in tempo reale.\
 All'interno di KanbanBOX viene utilizzata sia per ricevere notifiche automatiche sugli errori che si verificano in produzione, sia per gestire in modo più ordinato e collaborativo gli errori che si verificano aggiungendo dettagli utili ai _bug_ su cui si sta lavorando e categorizzandoli.
 
@@ -75,16 +83,27 @@ Giornalmente viene scelto un membro del team di sviluppo viene che si dedicherà
 In più, settimanalmente viene organizzata una riunione dove il *responsabile Sentry* di quella giornata, assieme al resto del team, analizza e discute le issue più frequenti dell'ultimo periodo con l'obbiettivo di categorizzarle, documentarle nel modo più dettagliato possibile e assegnarle ai membri del team per la risoluzione.
 
 === Altri strumenti a supporto dello sviluppo
-
+#figure(
+    image("../images/PhpStorm_Icon.png", width: 20%),
+    caption: "Logo di PhpStorm",
+) <fig:altri-strumenti>
 Per lo sviluppo di KanbanBOX viene utilizzato *PhpStorm*, un *ambiente di sviluppo integrato (#gloss("IDE", <glossary-ide>))* specifico per il linguaggio PHP che offre funzionalità avanzate come l'analisi statica del codice, _refactoring_ automatizzato, il _debugging_ e l'integrazione con sistemi di controllo di versione come Git.
 
+#figure(
+    image("../images/docker-logo-ocean-blue.png", width: 50%),
+    caption: "Logo di Docker",
+) <fig:altri-strumenti>
 Tutti i servizi che compongono KanbanBOX, o che ne supportano lo sviluppo e il _testing_, sono eseguiti in dei _container_.\
 *Docker* è la piattaforma utilizzata per creare, distribuire e gestire questi container in modo efficiente; nel caso di KanbanBOX vengono utilizzati dei Dockerfile per istanziare e orchestrare i container, e dei file `docker-compose.yml` per definire la loro configurazione.
 
+#figure(
+    image("../images/500px-Microsoft_Office_Teams_(2025–present).svg.png", width: 18%),
+    caption: "Logo di Visual Studio Code",
+) <fig:altri-strumenti>
 Per la *comunicazione* interna al team e con il resto dell'azienda viene utilizzato *Microsoft Teams*, una piattaforma di collaborazione che integra chat, videoconferenze, condivisione di file e integrazione con altre applicazioni Microsoft 365.\
 All'interno dell'azienda sono presenti sia canali generali per la comunicazione tra tutti i dipendenti, sia canali specifici per ogni team di lavoro. Inoltre sono presenti canali dedicati ad attività specifiche come le riunioni Dev+ weekly e le analisi delle issue di Sentry (vedi #ref(<sez:contesto-aziendale>)).
 
-
+#v(3em)
 == Analisi dei rischi
 I rischi individuati e analizzati nella fase iniziale del progetto vengono identificati usando la seguente codifica:
 #align(center, [*R[categoria] - [numero]*])

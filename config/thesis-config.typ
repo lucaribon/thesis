@@ -127,8 +127,14 @@
         heading(level: 3, numbering: none)[UC#useCaseDetails.number: #useCaseDetails.name]
     }
 
+    let uc_figure = useCaseDetails.at("figure", default: none)
+    if uc_figure != none {
+        uc_figure
+        v(0.75em)
+    }
+
     let rows = for (k, v) in useCaseDetails {
-        if k != "number" and k != "name" {
+        if k != "number" and k != "name" and k != "figure" {
             let label = k.replace("_", " ")
             let label_clusters = label.clusters()
             let label_head = label_clusters.at(0)

@@ -46,15 +46,13 @@ Il progetto è focalizzato principalmente sulla creazione di un driver di interf
 Inoltre molte delle funzionalità direttamente o indirettamente legate alle modifiche o aggiunte fatte erano già implementate in origine e sono rimaste invariate e funzionanti.
 Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 
-// TODO: integrare la figure nello use case in modo che venga mostrata sotto al titolo del caso d'uso. A MENO CHE non si decida/riesca a fare una solo figure per più use case, visto che sono molto legati e pochi.
-// #figure(
-//     image("../images/usecase/scenario-principale.png", width: 100%),
-//     caption: "Use Case - UC0: Scenario principale",
-// ) <uc:scenario-principale>
-
 #useCase(
     (
         number: 1,
+        figure: figure(
+            image("../images/usecase/uc1.png", width: 100%),
+            caption: "UC1: Aggiunta di un reader RFID",
+        ),
         name: "Aggiunta di un reader RFID",
         attore_principale: "Amministratore",
         descrizione: "Il sistema consente all'amministratore di aggiungere un nuovo reader RFID alla piattaforma, configurando i parametri necessari per la comunicazione con AWS IoT.",
@@ -87,6 +85,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 2,
+        figure: figure(
+            image("../images/usecase/uc2.png", width: 100%),
+            caption: "UC2: Aggiornamento dati del reader RFID",
+        ),
         name: "Aggiornamento dati del reader RFID",
         attore_principale: "Amministratore",
         descrizione: "Il sistema consente all'amministratore di aggiornare i dati di un reader RFID già registrato nella piattaforma.",
@@ -119,6 +121,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 3,
+        figure: figure(
+            image("../images/usecase/uc3.png", width: 100%),
+            caption: "UC3: Configurazione reader RFID",
+        ),
         name: "Configurazione reader RFID",
         attore_principale: "Amministratore",
         descrizione: "Il sistema consente all'amministratore di configurare un reader RFID già registrato nella piattaforma.",
@@ -154,6 +160,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 3.1,
+        figure: figure(
+            image("../images/usecase/uc3.1.png", width: 100%),
+            caption: "UC3.1: Modifica della configurazione di sistema del reader RFID",
+        ),
         name: "Modifica della configurazione di sistema del reader RFID",
         attore_principale: "Amministratore",
         descrizione: "Il sistema consente all'amministratore di modificare la configurazione di sistema del reader RFID, che include parametri utili per l'utilizzo di certificati di AWS IoT o la configurazione relativa a MQTT.",
@@ -179,6 +189,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 3.2,
+        figure: figure(
+            image("../images/usecase/uc3.2.png", width: 100%),
+            caption: "UC3.2: Modifica della modalità operativa del reader RFID",
+        ),
         name: "Modifica della modalità operativa del reader RFID",
         attore_principale: "Amministratore",
         descrizione: "Il sistema consente all'amministratore di modificare la modalità operativa del reader RFID, che include parametri come la configurazione delle antenne radio, la frequenza di lettura dei tag, i dati inseriti nei messaggi MQTT e altri.",
@@ -204,6 +218,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 4,
+        figure: figure(
+            image("../images/usecase/uc4.png", width: 100%),
+            caption: "UC4: Eliminazione di un reader RFID",
+        ),
         name: "Eliminazione reader RFID",
         attore_principale: "Amministratore",
         descrizione: "Il sistema consente all'amministratore di eliminare un reader RFID già registrato nella piattaforma.",
@@ -233,6 +251,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 5,
+            figure: figure(
+                image("../images/usecase/uc5.png", width: 100%),
+                caption: "UC5: Download del certificato associato al reader",
+            ),
         name: "Download del certificato associato al reader",
         attore_principale: "Amministratore",
         descrizione: "Il sistema consente all'amministratore di scaricare, solamente una volta, il certificato associato al reader RFID, necessario per la comunicazione con AWS IoT.",
@@ -259,6 +281,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 6,
+        figure: figure(
+            image("../images/usecase/uc6.png", width: 100%),
+            caption: "UC6: Visualizzazione dei cartellini letti dai reader",
+        ),
         name: "Visualizzazione dei cartellini letti dal reader",
         attore_principale: "Amministratore",
         descrizione: "Il sistema implementa una dashboard da cui è possibile vedere i cartellini letti dai reader e il loro stato.",
@@ -285,6 +311,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 6.1,
+        figure: figure(
+            image("../images/usecase/uc6.1.png", width: 70%),
+            caption: "UC6.1: Visualizzazione dei cartellini processati",
+        ),
         name: "Visualizzazione dei cartellini processati",
         attore_principale: "Amministratore",
         descrizione: "Nella dashboard di visualizzazione dei cartellini letti è presente una colonna dedicata ai cartellini processati dalla piattaforma KanbanBOX.",
@@ -306,6 +336,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 6.2,
+        figure: figure(
+            image("../images/usecase/uc6.2.png", width: 70%),
+            caption: "UC6.2: Visualizzazione dei cartellini scartati",
+        ),
         name: "Visualizzazione dei cartellini scartati",
         attore_principale: "Amministratore",
         descrizione: "Nella dashboard di visualizzazione dei cartellini letti è presente una colonna dedicata ai cartellini scartati dalla piattaforma KanbanBOX.",
@@ -328,6 +362,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 7,
+        figure: figure(
+            image("../images/usecase/uc7.png", width: 70%),
+            caption: "UC7: Errore sistema non raggiungibile",
+        ),
         name: "Errore: sistema non raggiungibile",
         attore_principale: "Amministratore",
         descrizione: (
@@ -356,6 +394,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 8,
+        figure: figure(
+            image("../images/usecase/uc8.png", width: 70%),
+            caption: "UC8: Errore: servizi cloud esterni non raggiungibili",
+        ),
         name: "Errore: servizi cloud esterni non raggiungibili",
         attore_principale: "Amministratore",
         descrizione: "I servizi cloud esterni, come AWS IoT, non sono raggiungibili a causa di un problema di configurazione o di un errore nel backend di KanbanBOX. In questo caso, il sistema deve notificare all'amministratore l'impossibilità di inoltrare la richiesta al servizio cloud esterno e di completare l'operazione richiesta.",
@@ -376,6 +418,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 9,
+        figure: figure(
+            image("../images/usecase/uc9.png", width: 70%),
+            caption: "UC9: Errore: configurazione non valida",
+        ),
         name: "Errore: configurazione non valida",
         attore_principale: "Amministratore",
         descrizione: "La configurazione inserita dall'amministratore per un reader RFID non è valida, a causa della mancanza di alcuni dati o del mancato rispetto dei vincoli imposti dallo schema di validazione.",
@@ -397,6 +443,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 10,
+        figure: figure(
+            image("../images/usecase/uc10.png", width: 70%),
+            caption: "UC10: Errore: eliminazione già effettuata",
+        ),
         name: "Errore: eliminazione già effettuata",
         attore_principale: "Amministratore",
         descrizione: "Il sistema restituisce un messaggio di errore all'amministratore quando tenta di eliminare un reader RFID che è già stato eliminato.",
@@ -421,6 +471,10 @@ Per questo i casi d'uso relativi al progetto sono in numero ridotto e semplici.
 #useCase(
     (
         number: 11,
+        figure: figure(
+            image("../images/usecase/uc11.png", width: 70%),
+            caption: "UC11: Errore: certificato già scaricato",
+        ),
         name: "Errore: certificato già scaricato",
         attore_principale: "Amministratore",
         descrizione: "Il sistema restituisce un messaggio di errore all'amministratore quando tenta di scaricare il certificato, associato ad un reader, che è già stato scaricato in precedenza, poiché per motivi di sicurezza il certificato può essere scaricato una sola volta.",

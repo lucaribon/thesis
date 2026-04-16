@@ -92,10 +92,15 @@ Al momento della creazione di un'entità client su AWS IoT Core, la procedura di
 Per rendere più pratica l'installazione dei reader RFID nelle aziende clienti si è deciso di gestire questi file sensibili interamente nel backend di KanbanBOX, in modo da fornire agli installatori, tramite l'interfaccia web, un unico file in formato *_#gloss("PFX", <glossary-PFX>)_*, che incapsula i certificati e le chiavi fornite da AWS, ovvero l'unico formato accettato dai reader Zebra per il caricamento del certificato. In questo modo si evita agli installatori l'onere di dover compiere operazioni macchinose, per utenti che hanno meno dimestichezza con questi strumenti, e rischiose, in caso di fughe di dati.\
 Anche lato KanbanBOX i certificati rimangono scaricabili solamente una volta e successivamente vengono rimossi da qualsiasi dispositivo o servizio di archiviazione su cui erano stati memorizzati.
 
+#v(4em)
 == Strumenti scelti
 In questa sezione vengono esposti i servizi e le tecnologie scelte per affrontare il progetto e i fattori che hanno portato a preferirli rispetto alle alternative disponibili.
 
 === Hosting del broker MQTT
+#figure(
+    image("../images/IoT Core.png", width: 20%),
+    caption: "Logo di AWS IoT Core",
+) <fig:aws-iot-core>
 Per l'hosting del broker MQTT e dei servizi a supporto della comunicazione tra i reader RFID e KanbanBOX si è optato fin da subito per una soluzione *cloud*. Questa scelta è stata dettata da diversi fattori: innanzitutto, l'azienda non disponeva di infrastruttura hardware adeguata a questo scopo; inoltre, uno degli obiettivi del progetto era quello di permettere la configurazione da *remoto* dei reader RFID tramite KanbanBOX. Questo richiede di accedere alle reti interne dei clienti (alle quali i reader si connettono per raggiungere la rete esterna) che sono tipicamente soggette a *regole di accesso molto restrittive*. Risulta quindi più agevole e sicuro richiedere ai clienti di abilitare il traffico verso i server di un servizio cloud riconosciuto e affidabile, piuttosto che verso i server locali di KanbanBOX.
 
 Di conseguenza sono state valutate le opzioni di hosting in cloud disponibili sul mercato, prima di tutto confrontando i _provider_ che offrono soluzioni adatte, tra cui Google Cloud, Microsoft Azure e *Amazon Web Services*. La scelta è ricaduta su AWS, principalmente per la già consolidata presenza di servizi AWS nell'infrastruttura di KanbanBOX, così da poter integrare la nuova infrastruttura con in servizi già in uso.
@@ -108,6 +113,10 @@ Il sottostante dei due servizi è molto simile, infatti entrambi si basano su un
 - *costi*: AWS IoT Core prevede un modello di _pricing on demand_, ovvero pagato in base all'effettivo utilizzo del servizio, che viene misurato in messaggi trasmessi, dispositivi connessi, durata della connessione e altre metriche; basandosi su una stima di utilizzo per l'integrazione in KanbanBOX, sono stati confrontati i costi di AWS EC2 @aws-ec2-pricing e AWS IoT Core @aws-iot-pricing e si è notato come la differenza non giustifichi le complicazioni date dall'utilizzo di AWS EC2; inoltre, in questo caso, il modello di pagamento _on demand_ di EC2 risulta più difficile da gestire e quindi in periodi di utilizzo meno intenso c'è il rischio di pagare più del necessario, rispetto ad AWS IoT Core dove l'adeguamento al carico di lavoro è più flessibile e completamente automatizzato di _default_.
 
 === Coda per la gestione dei messaggi in ingresso dai reader RFID
+#figure(
+    image("../images/Simple Queue Service.png", width: 20%),
+    caption: "Logo di AWS SQS",
+) <fig:aws-sqs>
 Per la gestione dei messaggi in ingresso dai reader RFID, si è deciso di implementare una coda che permettesse di gestire i messaggi in modo più efficiente. In questo modo, i messaggi vengono inseriti in una coda e processati da un _worker_ dedicato, implementato in KanbanBOX, che distribuisce i messaggi ai servizi di KanbanBOX adibiti al consumo dei messaggi.\
 
 In questo caso il confronto iniziale è stato svolto tra l'utilizzo della *coda integrata nel broker MQTT* di AWS IoT Core e l'integrazione di una coda dedicata.\

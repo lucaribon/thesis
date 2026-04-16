@@ -47,12 +47,6 @@ In questo documento viene usata anche per riferirsi agli strumenti utilizzabili 
 Data Transfer Object, è un oggetto che permette di standardizzare l'accesso e il trasferimento, tra componenti software diversi, di dati che si vuole organizzare seguendo una struttura ben definita, che può essere rappresentata da una classe o da un'interfaccia.\
 Spesso i DTO garantiscono anche di imporre vincoli di tipo sui dati (parametri di funzione, tipi di ritorno, ecc.), vantaggio ampiamente sfruttato in questo progetto.
 
-== E
-
-== F
-
-== G
-
 == H
 === HTTP
 <glossary-HTTP>
@@ -90,10 +84,6 @@ Originariamente sviluppata nel settore manifatturiero, la filosofia Lean si basa
 <glossary-MQTT>
 Message Queuing Telemetry Transport, è un protocollo di messaggistica basata su un architettura publish/subscribe, progettato per essere leggero ed efficiente, particolarmente adatto per dispositivi con risorse limitate e reti con larghezza di banda ridotta.\
 
-== N
-
-== O
-
 == P
 === PEM
 <glossary-PEM>
@@ -117,8 +107,6 @@ Radio-Frequency Identification, è una tecnologia di identificazione che utilizz
 <glossary-RSSI>
 Received Signal Strength Indicator, è una misura della potenza del segnale ricevuto da un dispositivo, come un lettore RFID, che indica la forza del segnale radio tra il lettore e il tag RFID.\
 
-== S
-
 == T
 === Topic
 <glossary-topic>
@@ -130,15 +118,7 @@ Ogni topic consiste in una stringa che può essere suddivisa in livelli utilizza
 <glossary-uml>
 Unified Modeling Language, è un linguaggio di modellazione standardizzato utilizzato per visualizzare e documentare i componenti di un sistema software.\
 
-== V
-
 == W
 === Wildcard
 <glossary-wildcard>
 In MQTT, le wildcard sono caratteri speciali utilizzati nei topic per fare in modo che un client possa ricevere messaggi da più topic contemporaneamente, definendo un pattern gerarchico, dove uno o più livelli vengono resi variabili tramite i caratteri speciali "\#" per rappresentare più livelli e "\+" per rappresentare un singolo livello; per variabili si intende che ammettono qualsiasi stringa al loro posto.
-
-== X
-
-== Y
-
-== Z
