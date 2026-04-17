@@ -1,7 +1,9 @@
 #import "../config/constants.typ": abstract
 #import "../config/variables.typ": myName, myTitle, myCompany
 #import "../config/thesis-config.typ": gloss
+
 #set page(numbering: "i")
+#pagebreak(to:"odd")
 #counter(page).update(1)
 
 #v(10em)

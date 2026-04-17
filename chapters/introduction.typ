@@ -13,7 +13,7 @@ Il documento è strutturato in otto capitoli principali:
 + #link(<cap:descrizione-stage>)[*Descrizione dello stage*]: fornisce una descrizione dettagliata del progetto di stage, delle tecnologie utilizzate e un'analisi dei rischi che si sarebbero potuti presentare durante lo svolgimento del progetto;
 + #link(<cap:analisi-requisiti>)[*Analisi dei requisiti*]: presenta funzionalità implementate, casi d'uso e requisiti definiti dall'azienda ospitante;
 + #link(<cap:introduzione-teorica>)[*Introduzione teorica*]: espone concetti teorici, approfonditi durante lo svolgimento del progetto, utili per la comprensione del documento e mostra il processo di scelta delle tecnologie utilizzate;
-+ #link(<cap:architettura>)[*Architettura e Progettazione*]: descrive l'architettura del sistema implementato, con particolare attenzione alla comunicazione tra i componenti;
++ #link(<cap:architettura>)[*Architettura e progettazione*]: descrive l'architettura del sistema implementato, con particolare attenzione alla comunicazione tra i componenti;
 + #link(<cap:codifica>)[*Codifica*]: descrive e mostra, tramite l'inserimento di blocchi di codice, l'implementazione delle funzionalità sviluppate;
 + #link(<cap:verifica-validazione>)[*Verifica e validazione*]: descrive l'analisi statica del codice e le strategie di _testing_ adottate;
 + #link(<cap:conclusioni>)[*Conclusioni*]: presenta una riflessione personale sull'esperienza di stage, sui risultati raggiunti e su potenziali sviluppi futuri.
