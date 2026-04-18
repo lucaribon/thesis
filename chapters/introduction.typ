@@ -3,6 +3,15 @@
 
 #import "../config/thesis-config.typ": gloss
 
+#pagebreak()
+#set page(numbering: none)
+
+#v(1fr)
+
+#pagebreak()
+#counter(page).update(n => n - 1)
+#set page(numbering: "1.")
+
 = Introduzione // 2 pagine
 <cap:introduzione>
 

@@ -1,4 +1,12 @@
 #import "../config/constants.typ": figuresList, tablesList
+
+#pagebreak()
+#set page(numbering: none)
+
+#v(1fr)
+
+#pagebreak()
+#counter(page).update(n => n - 1)
 #set page(numbering: "i")
 #show link: it => it.body
 
@@ -14,14 +22,19 @@
   )
 ]
 
-#v(8em)
-
 #outline(
   title: figuresList,
   target: figure.where(kind: image)
 )
 
-#v(8em)
+#pagebreak()
+#set page(numbering: none)
+
+#v(1fr)
+
+#pagebreak()
+#counter(page).update(n => n - 1)
+#set page(numbering: "i")
 
 #outline(
     title: tablesList,

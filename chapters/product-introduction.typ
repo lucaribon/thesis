@@ -1,7 +1,5 @@
 #import "../config/thesis-config.typ": gloss
 
-#pagebreak(to: "odd")
-
 = Introduzione teorica // max 20 pagine indicativamente
 <cap:introduzione-teorica>
 
@@ -158,7 +156,7 @@ In questa sezione vengono elencati e descritti gli strumenti e le tecnologie gi�
 - *CodeIgniter*: framework MVC utilizzato come architettura di base nel codice legacy di KanbanBOX, che è ancora in fase di migrazione verso un'architettura più moderna basata su Symfony;
 - *Symfony*: framework PHP moderno verso cui si sta migrando in KanbanBOX; fornisce un'architettura modulare e _component-based_, con un ecosistema ricco di librerie che facilitano lo sviluppo di applicazioni web complesse e scalabili;
 - *Doctrine*: è un Object-Relational Mapper (ORM), ovvero una libreria che permette di mappare le entità del dominio di KanbanBOX a tabelle di un database relazionale, facilitando la gestione della persistenza dei dati e l'astrazione del database;
-- *Twig*: _template engine_ performante e flessibile utilizzato per la generazione di interfacce web dinamiche; permette di definire dei template HTML con una sintassi specifica e più intuitiva, i template vengono poi utilizzati nella logica di generazione delle pagine web di KanbanBOX. 
+- *Twig*: _template engine_ performante e flessibile utilizzato per la generazione di interfacce web dinamiche; permette di definire dei template HTML con una sintassi specifica e più intuitiva, i template vengono poi utilizzati nella logica di generazione delle pagine web di KanbanBOX.
 
 *Standard e Utility:*
 - *Composer*: gestore di dipendenze standard de facto per PHP, utilizzato per l'installazione, aggiornamento e integrazione di librerie esterne e per la gestione dell'_autoloading_ delle classi;
@@ -178,5 +176,5 @@ In questa sezione vengono elencati e descritti gli strumenti e le tecnologie gi�
 === Altre tecnologie
 - *MySQL*: database relazionale utilizzato per la persistenza dei dati in KanbanBOX;
 - *Make*: utility di automazione utile per gestire l'intero ciclo di vita del software, dalla fase di sviluppo a quella di testing e deployment, semplificando l'esecuzione di comandi complessi e ripetitivi che vengono raggruppati e mappati in comandi più semplici tramite un file di configurazione detto Makefile;
-- *AWS IAM*: servizio di gestione degli accessi di Amazon Web Services, utilizzato per configurare i ruoli e i relativi permessi di accesso alle varie funzionalità di AWS da parte dei servizi e degli sviluppatori di KanbanBOX; 
+- *AWS IAM*: servizio di gestione degli accessi di Amazon Web Services, utilizzato per configurare i ruoli e i relativi permessi di accesso alle varie funzionalità di AWS da parte dei servizi e degli sviluppatori di KanbanBOX;
 - *Reader Zebra*: dispositivi hardware prodotti dal Zebra Technologies; nel caso di questo progetto si ha interagito principalmente con i reader RFID della serie FX7500 e FX9600 ma in KanbanBOX sono ampiamente utilizzati anche dispositivi come barcode scanner e stampanti di etichette.\ Nello specifico i reader hanno il compito di leggere i tag RFID in prossimita, tramite delle antenne esterne, e di trasmettere i dati dei tag letti agli endpoint configurati.

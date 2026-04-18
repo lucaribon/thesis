@@ -1,8 +1,5 @@
-#pagebreak(to:"odd")
-
-<cap:conclusioni>
-
 = Conclusioni
+<cap:conclusioni>
 
 == Consuntivo finale
 <cap:consuntivo-finale>

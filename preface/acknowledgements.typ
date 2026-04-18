@@ -1,6 +1,14 @@
 #import "../config/variables.typ" : profTitle, myProf, myLocation, myTime, myName
 #import "../config/constants.typ" : acknowledgements
 
+#pagebreak()
+#set page(numbering: none)
+
+#v(1fr)
+
+#pagebreak()
+#counter(page).update(n => n - 1)
+
 #set par(first-line-indent: 0pt)
 #set page(numbering: "i")
 

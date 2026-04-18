@@ -1,6 +1,5 @@
 #import "../config/thesis-config.typ": gloss
 
-#pagebreak(to: "odd")
 
 = Descrizione dello stage // 2 pagine
 <cap:descrizione-stage>
