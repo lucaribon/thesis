@@ -2,7 +2,7 @@
 #let myLang = "it"
 #let myName = "Luca Ribon"
 #let myMatricola = "2075516"
-#let myTitle = "Migrazione al protocollo MQTT in un sistema di monitoraggio e tracciamento di linee produzione basato su dispositivi RFID"
+#let myTitle = "Migrazione al protocollo MQTT in un sistema di monitoraggio e tracciamento di linee di produzione basato su dispositivi RFID"
 #let myDegree = "Tesi di Laurea Triennale"
 #let myUni = "Università degli Studi di Padova"
 #let myDepartment = "Dipartimento di Matematica ''Tullio Levi-Civita''"

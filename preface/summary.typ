@@ -2,8 +2,9 @@
 #import "../config/variables.typ": myName, myTitle, myCompany
 #import "../config/thesis-config.typ": gloss
 
-#set page(numbering: "i")
+#set page(numbering: none)
 #pagebreak(to:"odd")
+#set page(numbering: "i")
 #counter(page).update(1)
 
 #v(10em)

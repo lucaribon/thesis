@@ -2,12 +2,11 @@
 #import "../config/constants.typ" : acknowledgements
 
 #pagebreak()
-#set page(numbering: none)
+#set page(numbering: "i")
 
 #v(1fr)
 
 #pagebreak()
-#counter(page).update(n => n - 1)
 
 #set par(first-line-indent: 0pt)
 #set page(numbering: "i")

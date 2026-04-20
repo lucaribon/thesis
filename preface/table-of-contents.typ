@@ -1,12 +1,11 @@
 #import "../config/constants.typ": figuresList, tablesList
 
 #pagebreak()
-#set page(numbering: none)
+#set page(numbering: "i")
 
 #v(1fr)
 
 #pagebreak()
-#counter(page).update(n => n - 1)
 #set page(numbering: "i")
 #show link: it => it.body
 
@@ -28,12 +27,10 @@
 )
 
 #pagebreak()
-#set page(numbering: none)
 
 #v(1fr)
 
 #pagebreak()
-#counter(page).update(n => n - 1)
 #set page(numbering: "i")
 
 #outline(
